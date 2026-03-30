@@ -165,7 +165,7 @@
             </ul>
 
             <div class="sidebar-footer">
-                <a href="login.html" class="sidebar-link" style="color: #ef4444;">
+                <a href="#" id="btnLogout" class="sidebar-link" style="color: #ef4444;">
                     <i data-lucide="log-out" width="18"></i> Sair
                 </a>
             </div>
@@ -177,18 +177,18 @@
             <header class="user-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;">
                 <div style="display: flex; align-items: center; gap: 16px;">
                     <div>
-                        <h2 style="font-size: 1.8rem; margin: 0;">Olá, Empresa XPTO! 👋</h2>
+                        <h2 style="font-size: 1.8rem; margin: 0;" id="clienteGeral_nome">Carregando... 👋</h2>
                         <p class="text-muted" style="margin: 4px 0 0 0;">Bem-vindo ao seu painel de controle.</p>
                     </div>
                 </div>
 
                 <div class="user-profile">
                     <div style="text-align: right; display: none; @media(min-width: 600px){display: block;}">
-                        <strong style="display: block; font-size: 0.95rem;">Empresa XPTO</strong>
-                        <span style="color: var(--text-muted); font-size: 0.85rem;">Plano Profissional</span>
+                        <strong style="display: block; font-size: 0.95rem;" id="clienteTop_nome">Buscando...</strong>
+                        <span style="color: var(--text-muted); font-size: 0.85rem;" id="clienteTop_plano">Aguarde...</span>
                     </div>
                     <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.5); display: flex; align-items: center; justify-content: center;">
-                        <span style="font-weight: 700; color: var(--primary);">EX</span>
+                        <span style="font-weight: 700; color: var(--primary);" id="clienteTop_sigla">--</span>
                     </div>
                 </div>
             </header>
@@ -196,47 +196,47 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 40px;">
                 
                 <!-- Status do Projeto Atual -->
-                <div class="glass-card" style="border-color: rgba(37,99,235,0.3);">
+                <div class="glass-card" style="border-color: rgba(37,99,235,0.3);" id="projContainer">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
                         <div>
                             <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; text-transform: uppercase;">Projeto em Andamento</span>
-                            <h3 style="margin: 8px 0 0 0; font-size: 1.2rem;">Loja Virtual XPTO</h3>
+                            <h3 style="margin: 8px 0 0 0; font-size: 1.2rem;" id="projAtual_nome">Buscando Projetos...</h3>
                         </div>
-                        <span style="background: rgba(37,99,235,0.2); color: #60a5fa; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">Em Desenvolvimento</span>
+                        <span id="projAtual_status" style="background: rgba(37,99,235,0.2); color: #60a5fa; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">Sincronizando</span>
                     </div>
                     
-                    <p class="text-muted" style="font-size: 0.9rem;">Fase 3: Integração de Meios de Pagamento e Correios.</p>
+                    <p class="text-muted" style="font-size: 0.9rem;" id="projAtual_fase">Por favor, aguarde.</p>
                     
                     <div class="progress-bar">
-                        <div class="progress-fill"></div>
+                        <div class="progress-fill" id="projAtual_barra" style="width: 0%; transition: width 1s;"></div>
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.8rem; color: var(--text-muted);">
-                        <span>Progresso: 65%</span>
-                        <span>Previsão: 20/05/2026</span>
+                        <span id="projAtual_progTexto">Progresso: 0%</span>
+                        <span id="projAtual_prazo">Previsão: TBD</span>
                     </div>
                 </div>
 
                 <!-- Fatura Pendente -->
-                <div class="glass-card">
+                <div class="glass-card" id="faturaContainer" style="display: none;">
                     <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
                         <div style="width: 40px; height: 40px; border-radius: 8px; background: rgba(239,68,68,0.1); color: #ef4444; display: flex; align-items: center; justify-content: center;">
                             <i data-lucide="alert-circle" width="20"></i>
                         </div>
                         <div>
                             <h3 style="margin: 0; font-size: 1.1rem;">Fatura em Aberto</h3>
-                            <span class="text-muted" style="font-size: 0.85rem;">Vencimento: 15/05/2026</span>
+                            <span class="text-muted" style="font-size: 0.85rem;" id="fatura_vencimento">Vencimento: --/--/----</span>
                         </div>
                     </div>
                     
                     <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;">
                         <div>
-                            <span style="font-size: 0.85rem; color: var(--text-muted);">Hospedagem + Manutenção</span>
-                            <h2 style="margin: 5px 0 0 0; font-size: 1.8rem; color: #fff;">R$ 149,90</h2>
+                            <span style="font-size: 0.85rem; color: var(--text-muted);" id="fatura_nome">Carregando...</span>
+                            <h2 style="margin: 5px 0 0 0; font-size: 1.8rem; color: #fff;" id="fatura_valor">R$ 0,00</h2>
                         </div>
                     </div>
 
                     <div style="display: flex; gap: 10px;">
-                        <button class="btn btn-primary" style="flex: 1; padding: 10px; justify-content: center; font-size: 0.9rem;">Pagar com Pix</button>
+                        <button class="btn btn-primary" id="btnPagarPix" style="flex: 1; padding: 10px; justify-content: center; font-size: 0.9rem;">Pagar com Pix</button>
                         <button class="btn btn-outline" style="flex: 1; padding: 10px; justify-content: center; font-size: 0.9rem;">Ver PDF</button>
                     </div>
                 </div>
@@ -255,7 +255,7 @@
 
                     <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 20px;">Precisa de alteração no site ou encontrou algum problema?</p>
                     
-                    <button class="btn btn-outline" style="width: 100%; justify-content: center; border-color: rgba(255,255,255,0.1);">
+                    <button class="btn btn-outline" id="btnAbrirChamado" style="width: 100%; justify-content: center; border-color: rgba(255,255,255,0.1);">
                         <i data-lucide="plus" width="16"></i> Abrir Novo Chamado
                     </button>
                 </div>
@@ -274,8 +274,9 @@
                             <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Renovação</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tabelaServicosDOM">
                         <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td colspan="4" style="padding: 16px 24px; color: var(--text-muted); text-align: center;">Carregando histórico de serviços...</td>
                             <td style="padding: 16px 24px; color: #fff; font-weight: 500;">Hospedagem Cloud Pro</td>
                             <td style="padding: 16px 24px; color: var(--text-muted);">empresaxpto.com.br</td>
                             <td style="padding: 16px 24px;"><span style="color: var(--success); font-size: 0.85rem; background: rgba(16,185,129,0.1); padding: 4px 10px; border-radius: 20px;">Ativo</span></td>
@@ -289,6 +290,50 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Modal UI: Pagar com Pix -->
+            <div id="modalPix" class="modal-overlay" style="display: none;">
+                <div class="modal-box" style="text-align: center;">
+                    <button class="btn-close" id="btnClosePix"><i data-lucide="x"></i></button>
+                    <h3 style="margin-bottom: 10px; font-size: 1.5rem;">Pagamento via Pix</h3>
+                    <p class="text-muted" style="margin-bottom: 20px; font-size: 0.95rem;">Escaneie o QR Code abaixo para pagar sua fatura de instante.</p>
+                    
+                    <div style="background: #fff; padding: 20px; border-radius: 12px; display: inline-block; margin-bottom: 20px;">
+                        <!-- QR Code Falso -->
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126420014br.gov.bcb.pix0120exemplo@webstart.com5204000053039865802BR5915WebStart Design6009Sao Paulo62070503***63041234" alt="QR Code Pix" style="width: 200px; height: 200px;">
+                    </div>
+                    
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Ou copie o código "Pix Copia e Cola" abaixo:</p>
+                    
+                    <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); display: flex; gap: 10px; align-items: center;">
+                        <input type="text" value="00020126420014br.gov.bcb.pix..." readonly style="flex: 1; background: transparent; border: none; color: #fff; outline: none;">
+                        <button class="btn btn-outline" style="padding: 6px 12px;" onclick="alert('Código copiado!')">Copiar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal UI: Abrir Chamado -->
+            <div id="modalChamado" class="modal-overlay" style="display: none;">
+                <div class="modal-box">
+                    <button class="btn-close" id="btnCloseChamado"><i data-lucide="x"></i></button>
+                    <h3 style="margin-bottom: 5px;">Abrir Novo Chamado</h3>
+                    <p class="text-muted" style="margin-bottom: 24px; font-size: 0.9rem;">Relate o que você precisa. Nossa equipe atenderá rapidamente.</p>
+                    
+                    <form id="formChamado" style="display: flex; flex-direction: column; gap: 16px;">
+                        <div>
+                            <label class="form-label">Assunto / Serviço Afetado</label>
+                            <input type="text" id="chamadoAssunto" class="form-input" placeholder="Ex: Alteração de imagem na Home" required>
+                        </div>
+                        <div>
+                            <label class="form-label">Descrição da Solicitação</label>
+                            <textarea id="chamadoMensagem" class="form-input" rows="4" placeholder="Descreva os detalhes..." required></textarea>
+                        </div>
+                        <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                            <button type="submit" class="btn btn-primary" id="btnSalvarChamado">Enviar Solicitação</button>
+                        </div>
+                    </form>
+                </div>
             </div>
 
         </main>
@@ -320,6 +365,184 @@
                 });
             });
         }
+    </script>
+    <script type="module">
+        import { auth, db, onAuthStateChanged, signOut, collection, query, where, onSnapshot, getDocs, addDoc } from './js/firebase-config.js';
+
+        // Elementos DOM
+        const clienteGeral_nome = document.getElementById('clienteGeral_nome');
+        const clienteTop_nome = document.getElementById('clienteTop_nome');
+        const clienteTop_plano = document.getElementById('clienteTop_plano');
+        const clienteTop_sigla = document.getElementById('clienteTop_sigla');
+        
+        const projAtual_nome = document.getElementById('projAtual_nome');
+        const projAtual_status = document.getElementById('projAtual_status');
+        const projAtual_fase = document.getElementById('projAtual_fase');
+        const projAtual_barra = document.getElementById('projAtual_barra');
+        const projAtual_progTexto = document.getElementById('projAtual_progTexto');
+        const projAtual_prazo = document.getElementById('projAtual_prazo');
+
+        const tabelaServicosDOM = document.getElementById('tabelaServicosDOM');
+
+        // Logout
+        document.getElementById('btnLogout').addEventListener('click', (e) => {
+            e.preventDefault();
+            signOut(auth).then(() => {
+                window.location.href = 'login.html';
+            });
+        });
+
+        // Autenticação Realtime
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Impede admin de entrar no painel de cliente e bagunçar a lógica
+            if(user.email.toLowerCase() === 'admin@webstart.com') {
+                window.location.href = 'admin.html';
+                return;
+            }
+
+            // 1. Puxar Dados do Cliente baseado no Email da Auth
+            const qCliente = query(collection(db, 'clientes'), where('email', '==', user.email));
+            const querySnapshot = await getDocs(qCliente);
+
+            let nomeDoClienteFiltro = "";
+
+            if (!querySnapshot.empty) {
+                const clienteData = querySnapshot.docs[0].data();
+                nomeDoClienteFiltro = clienteData.nome;
+
+                let primeiroNome = clienteData.nome.split(' ')[0];
+                let sigla = primeiroNome.substring(0, 2).toUpperCase();
+                
+                clienteGeral_nome.innerHTML = `Olá, ${primeiroNome}! 👋`;
+                clienteTop_nome.textContent = clienteData.nome;
+                clienteTop_plano.textContent = clienteData.plano;
+                clienteTop_sigla.textContent = sigla;
+            } else {
+                clienteGeral_nome.innerHTML = `Bem-vindo! 👋`;
+                clienteTop_nome.textContent = "Sua Conta";
+                clienteTop_plano.textContent = "Definindo Plano";
+                nomeDoClienteFiltro = "DESCONHECIDO"; // Segurança
+            }
+
+            // 2. Ouvinte: Projetos e Serviços do Cliente
+            const qProj = query(collection(db, 'projetos'), where('cliente', '==', nomeDoClienteFiltro));
+            onSnapshot(qProj, (snap) => {
+                tabelaServicosDOM.innerHTML = '';
+                
+                if (snap.empty) {
+                    projAtual_nome.textContent = "Nenhum projeto em vista";
+                    projAtual_fase.textContent = "Que tal solicitar um orçamento?";
+                    projAtual_status.textContent = "Livre";
+                    tabelaServicosDOM.innerHTML = '<tr><td colspan="4" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Você ainda não possui serviços.</td></tr>';
+                    return;
+                }
+
+                let primeiroProjetoPendente = null;
+
+                snap.forEach(docSnap => {
+                    const pj = docSnap.data();
+                    
+                    // Alimenta a tabela de "Meus Serviços" (Histórico Geral)
+                    let statusColor = pj.progresso >= 100 ? 'var(--success)' : 'var(--primary)';
+                    let statusText = pj.progresso >= 100 ? 'Entregue' : 'Em Andamento';
+
+                    const tr = document.createElement('tr');
+                    tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                    tr.innerHTML = `
+                        <td style="padding: 16px 24px; color: #fff; font-weight: 500;">${pj.servico}</td>
+                        <td style="padding: 16px 24px; color: var(--text-muted);">-</td>
+                        <td style="padding: 16px 24px;"><span style="color: ${statusColor}; font-size: 0.85rem; background: rgba(37,99,235,0.1); padding: 4px 10px; border-radius: 20px;">${statusText}</span></td>
+                        <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${pj.prazo}</td>
+                    `;
+                    tabelaServicosDOM.appendChild(tr);
+
+                    // Verifica se existe um projeto NÃO entregue para colocar no topo do Dashboard
+                    if (pj.progresso < 100 && !primeiroProjetoPendente) {
+                        primeiroProjetoPendente = pj;
+                    }
+                });
+
+                // Alimenta o Widget do Topo
+                if (primeiroProjetoPendente) {
+                    projAtual_nome.textContent = primeiroProjetoPendente.servico;
+                    projAtual_status.textContent = "Em Desenvolvimento";
+                    projAtual_status.style.color = "#60a5fa";
+                    projAtual_fase.textContent = "Trabalhando em novas funcionalidades...";
+                    projAtual_barra.style.width = primeiroProjetoPendente.progresso + "%";
+                    projAtual_progTexto.textContent = `Progresso: ${primeiroProjetoPendente.progresso}%`;
+                    projAtual_prazo.textContent = `Previsão: ${primeiroProjetoPendente.prazo}`;
+                } else {
+                    document.getElementById('projContainer').style.display = 'none'; // Some se acabou os projetos pendentes.
+                }
+
+            });
+        });
+
+        // ==========================================
+        // Lógica de Modais (Pix e Chamado)
+        // ==========================================
+        const modalPix = document.getElementById('modalPix');
+        const modalChamado = document.getElementById('modalChamado');
+        const btnPagarPix = document.getElementById('btnPagarPix');
+        const btnAbrirChamado = document.getElementById('btnAbrirChamado');
+
+        if(btnPagarPix) {
+            btnPagarPix.addEventListener('click', () => {
+                modalPix.style.display = 'flex';
+                lucide.createIcons(); // renderiza os icones do modal se necessário
+            });
+        }
+        document.getElementById('btnClosePix').addEventListener('click', () => modalPix.style.display = 'none');
+
+        if(btnAbrirChamado) {
+            btnAbrirChamado.addEventListener('click', () => {
+                modalChamado.style.display = 'flex';
+            });
+        }
+        document.getElementById('btnCloseChamado').addEventListener('click', () => modalChamado.style.display = 'none');
+
+        // Lógica de Envio de Chamado ao Firestore
+        const formChamado = document.getElementById('formChamado');
+        const btnSalvarChamado = document.getElementById('btnSalvarChamado');
+        
+        formChamado.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            btnSalvarChamado.textContent = 'Enviando...';
+            btnSalvarChamado.disabled = true;
+
+            const assunto = document.getElementById('chamadoAssunto').value;
+            const mensagem = document.getElementById('chamadoMensagem').value;
+            
+            // O nome do cliente é extraído do Dashboard renderizado, caso tenha carregado.
+            let clienteResponsavel = clienteTop_nome.textContent;
+
+            try {
+                await addDoc(collection(db, 'chamados'), {
+                    cliente: clienteResponsavel,
+                    assunto: assunto,
+                    mensagem: mensagem,
+                    status: 'Aberto',
+                    dataAbertura: new Date().toLocaleDateString('pt-BR')
+                });
+
+                alert('Chamado enviado com sucesso!');
+                formChamado.reset();
+                modalChamado.style.display = 'none';
+
+            } catch (error) {
+                console.error("Erro ao abrir chamado: ", error);
+                alert("Ocorreu um erro. Tente novamente.");
+            } finally {
+                btnSalvarChamado.textContent = 'Enviar Solicitação';
+                btnSalvarChamado.disabled = false;
+            }
+        });
+
     </script>
 </body>
 </html>
