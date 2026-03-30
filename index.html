@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebStart - Criação de Sites e Lojas Virtuais Profissionais</title>
+    <meta name="description" content="WebStart: Criamos seu site profissional com preço acessível. Entregamos seu site pronto para funcionar com domínio, hospedagem configurados.">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Ícones Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar" id="navbar">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="#" class="nav-brand">
+                <i data-lucide="rocket" style="color: var(--primary);"></i> WebStart
+            </a>
+
+            <!-- Menu Desktop -->
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#inicio" class="nav-link">Início</a></li>
+                <li><a href="#diferenciais" class="nav-link">Diferenciais</a></li>
+                <li><a href="#servicos" class="nav-link">Serviços</a></li>
+                <li><a href="#portfolio" class="nav-link">Portfólio</a></li>
+                <li><a href="#planos" class="nav-link">Planos</a></li>
+                <li>
+                    <a href="#contato" class="btn btn-primary" style="padding: 8px 20px; font-size: 0.9rem;">
+                        <i data-lucide="calculator" width="18" height="18"></i> Orçamento
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Botão Mobile -->
+            <button class="hamburger" id="hamburgerBtn">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ================= HERO SECTION ================= -->
+    <section id="inicio" style="padding: 160px 0 100px 0; min-height: 100vh; display: flex; align-items: center; position: relative;">
+        <!-- Background decorative elements -->
+        <div style="position: absolute; top: -10%; left: -10%; width: 50%; height: 50%; background: var(--primary); filter: blur(150px); opacity: 0.15; z-index: -1;"></div>
+        <div style="position: absolute; bottom: 0; right: -10%; width: 40%; height: 40%; background: var(--secondary); filter: blur(150px); opacity: 0.15; z-index: -1;"></div>
+
+        <div class="container">
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <h1 style="font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: -0.02em; margin-bottom: 24px;">
+                    Seu site profissional <br>
+                    <span class="text-gradient">pronto para funcionar.</span>
+                </h1>
+                
+                <p style="font-size: 1.2rem; color: var(--text-muted); margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    Na WebStart você recebe seu site com domínio, configuração, hospedagem e tudo 100% funcionando. 
+                    Rápido. Moderno. Sem dores de cabeça.
+                </p>
+                
+                <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                    <a href="#contato" class="btn btn-primary">
+                        Solicitar orçamento <i data-lucide="arrow-right" width="20" height="20"></i>
+                    </a>
+                    <a href="https://wa.me/55999999999" target="_blank" class="btn btn-outline" style="border-color: #25D366; color: #fff;">
+                        <i data-lucide="message-circle" width="20" height="20" style="color: #25D366;"></i> Falar no WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= DIFERENCIAIS ================= -->
+    <section class="section" id="diferenciais" style="background-color: rgba(255,255,255,0.02);">
+        <div class="container">
+            <div class="text-center mb-4">
+                <span style="color: var(--primary); font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Entregamos Completo</span>
+                <h2 style="font-size: 2.5rem; margin-top: 8px;">Por que escolher a WebStart?</h2>
+                <p class="text-muted">Esqueça os problemas de configuração técnica. Nós resolvemos tudo pela sua empresa.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 50px;">
+                <!-- Diferencial 1 -->
+                <div class="glass-card">
+                    <div style="width: 50px; height: 50px; border-radius: 12px; background: rgba(37, 99, 235, 0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--primary);">
+                        <i data-lucide="laptop"></i>
+                    </div>
+                    <h3 style="font-size: 1.25rem;">Site Entregue Pronto</h3>
+                    <p class="text-muted">Desenvolvido sob medida, testado e publicado, pronto para receber seus clientes no mesmo dia da entrega.</p>
+                </div>
+
+                <!-- Diferencial 2 -->
+                <div class="glass-card">
+                    <div style="width: 50px; height: 50px; border-radius: 12px; background: rgba(124, 58, 237, 0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--secondary);">
+                        <i data-lucide="globe"></i>
+                    </div>
+                    <h3 style="font-size: 1.25rem;">Domínio Configurado</h3>
+                    <p class="text-muted">Registramos e linkamos o "suaempresa.com.br". Todo o aspecto técnico do DNS resolvido por nossa equipe.</p>
+                </div>
+
+                <!-- Diferencial 3 -->
+                <div class="glass-card">
+                    <div style="width: 50px; height: 50px; border-radius: 12px; background: rgba(16, 185, 129, 0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--success);">
+                        <i data-lucide="server"></i>
+                    </div>
+                    <h3 style="font-size: 1.25rem;">Hospedagem Rápida</h3>
+                    <p class="text-muted">Servidores em nuvem de altíssima velocidade e estabilidade (99.9% uptime), essenciais para o SEO do Google.</p>
+                </div>
+                
+                <!-- Diferencial 4 -->
+                <div class="glass-card">
+                    <div style="width: 50px; height: 50px; border-radius: 12px; background: rgba(245, 158, 11, 0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--warning);">
+                        <i data-lucide="database"></i>
+                    </div>
+                    <h3 style="font-size: 1.25rem;">Banco de Dados Integrado</h3>
+                    <p class="text-muted">Estruturação de tabelas segura para armazenar seus formulários de contato, produtos, clientes e postagens.</p>
+                </div>
+
+                <!-- Diferencial 5 -->
+                <div class="glass-card">
+                    <div style="width: 50px; height: 50px; border-radius: 12px; background: rgba(239, 68, 68, 0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--error);">
+                        <i data-lucide="credit-card"></i>
+                    </div>
+                    <h3 style="font-size: 1.25rem;">Pagamento Online</h3>
+                    <p class="text-muted">Integração nativa com MercadoPago/Stripe em lojas virtuais. Receba por Pix, Cartão de Crédito e Boleto.</p>
+                </div>
+
+                <!-- Diferencial 6 -->
+                <div class="glass-card">
+                    <div style="width: 50px; height: 50px; border-radius: 12px; background: rgba(37, 99, 235, 0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--primary);">
+                        <i data-lucide="life-buoy"></i>
+                    </div>
+                    <h3 style="font-size: 1.25rem;">Suporte Premium</h3>
+                    <p class="text-muted">Apoio técnico inicial para garantir que você tenha 100% de controle. Oferecemos também pacotes de manutenção mensal.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SERVIÇOS ================= -->
+    <section class="section" id="servicos">
+        <div class="container">
+            <div class="text-center mb-4">
+                <span style="color: var(--secondary); font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">O Que Fazemos</span>
+                <h2 style="font-size: 2.5rem; margin-top: 8px;">Nossos Serviços</h2>
+                <p class="text-muted">Soluções digitais completas para colocar o seu negócio na internet com resultado.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 50px;">
+                <div class="glass-card text-center" style="padding: 40px 20px;">
+                    <i data-lucide="layout" width="48" height="48" style="color: var(--primary); margin-bottom: 20px;"></i>
+                    <h3>Site Institucional</h3>
+                    <p class="text-muted" style="margin-bottom: 20px; font-size: 0.95rem;">Apresente sua empresa ao mundo de forma totalmente profissional e otimizada (SEO).</p>
+                    <a href="#contato" style="font-weight: 600; display: inline-flex; align-items: center; gap: 5px;">Orçamento <i data-lucide="arrow-right" width="16" height="16"></i></a>
+                </div>
+
+                <div class="glass-card text-center" style="padding: 40px 20px; background: rgba(37, 99, 235, 0.05); border-color: rgba(37, 99, 235, 0.2);">
+                    <div style="position: absolute; top: -12px; right: 20px; background: var(--primary); color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">Mais Vendido</div>
+                    <i data-lucide="shopping-cart" width="48" height="48" style="color: var(--primary); margin-bottom: 20px;"></i>
+                    <h3>Loja Virtual</h3>
+                    <p class="text-muted" style="margin-bottom: 20px; font-size: 0.95rem;">Venda seus produtos físicos ou digitais 24h por dia com pagamentos e frete integrados.</p>
+                    <a href="#contato" style="font-weight: 600; display: inline-flex; align-items: center; gap: 5px;">Orçamento <i data-lucide="arrow-right" width="16" height="16"></i></a>
+                </div>
+
+                <div class="glass-card text-center" style="padding: 40px 20px;">
+                    <i data-lucide="mouse-pointer-click" width="48" height="48" style="color: var(--primary); margin-bottom: 20px;"></i>
+                    <h3>Landing Pages</h3>
+                    <p class="text-muted" style="margin-bottom: 20px; font-size: 0.95rem;">Páginas web únicas focadas em altíssima conversão de leads (vendas de infoprodutos ou serviços).</p>
+                    <a href="#contato" style="font-weight: 600; display: inline-flex; align-items: center; gap: 5px;">Orçamento <i data-lucide="arrow-right" width="16" height="16"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= PORTFÓLIO ================= -->
+    <section class="section" id="portfolio" style="background-color: rgba(255,255,255,0.02);">
+        <div class="container">
+            <div class="text-center mb-4">
+                <span class="text-gradient" style="font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Projetos Recentes</span>
+                <h2 style="font-size: 2.5rem; margin-top: 8px;">Explore nosso Portfólio</h2>
+                <p class="text-muted">Veja a qualidade do design e experiência que entregamos para diferentes nichos.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 50px;">
+                <!-- 1 -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="height: 220px; background: #2f3e54; position: relative;">
+                        <!-- Placeholder imagem -->
+                        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
+                            <i data-lucide="utensils" width="60" height="60"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 24px;">
+                        <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Institucional & Cardápio</span>
+                        <h3 style="margin: 8px 0; font-size: 1.3rem;">Site Restaurante Premium</h3>
+                        <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Layout limpo com fotos de alta qualidade, cardápio digital integrado e reserva de mesas pelo WhatsApp.</p>
+                        <a href="#" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                    </div>
+                </div>
+
+                <!-- 2 -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="height: 220px; background: #2f3e54; position: relative;">
+                        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
+                            <i data-lucide="dumbbell" width="60" height="60"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 24px;">
+                        <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Sistema e Membros</span>
+                        <h3 style="margin: 8px 0; font-size: 1.3rem;">Plataforma Personal Trainer</h3>
+                        <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Área restrita de login para alunos, venda de consultoria integrada (pagamento) e painel em vídeo.</p>
+                        <a href="#" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                    </div>
+                </div>
+
+                <!-- 3 -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="height: 220px; background: #2f3e54; position: relative;">
+                        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
+                            <i data-lucide="shopping-bag" width="60" height="60"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 24px;">
+                        <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">E-commerce</span>
+                        <h3 style="margin: 8px 0; font-size: 1.3rem;">Loja Virtual de Roupas</h3>
+                        <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Layout focado em fotos, zoom em produtos, carrinho lateral intuitivo e checkout transparente otimizado.</p>
+                        <a href="#" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                </div>
+
+                <!-- 4 -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="height: 220px; background: #2f3e54; position: relative;">
+                        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
+                            <i data-lucide="briefcase" width="60" height="60"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 24px;">
+                        <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Serviços B2B</span>
+                        <h3 style="margin: 8px 0; font-size: 1.3rem;">Site Empresa de Segurança</h3>
+                        <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Focado em confiança corporativa, cores sólidas, formulário de cotação dinâmico e chat flutuante.</p>
+                        <a href="#" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                    </div>
+                </div>
+
+                <!-- 5 -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="height: 220px; background: #2f3e54; position: relative;">
+                        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
+                            <i data-lucide="heart-pulse" width="60" height="60"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 24px;">
+                        <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Saúde</span>
+                        <h3 style="margin: 8px 0; font-size: 1.3rem;">Site Clínica Médica</h3>
+                        <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Apresentação do corpo clínico, especialidades, e recurso de agendamento online de consultas integrado.</p>
+                        <a href="#" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                    </div>
+                </div>
+
+                <!-- 6 -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="height: 220px; background: #2f3e54; position: relative;">
+                        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
+                            <i data-lucide="graduation-cap" width="60" height="60"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 24px;">
+                        <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Educação</span>
+                        <h3 style="margin: 8px 0; font-size: 1.3rem;">Plataforma Curso Online</h3>
+                        <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Landing Page de alta conversão + área de membros completa para hospedagem dos vídeos das aulas.</p>
+                        <a href="#" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center" style="margin-top: 50px;">
+                <a href="#" class="btn btn-outline" style="font-weight: 600;">Ver todos os 30+ Projetos</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= PLANOS E PREÇOS ================= -->
+    <section class="section" id="planos">
+        <div class="container">
+            <div class="text-center mb-4">
+                <span style="color: var(--success); font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Preços Transparentes</span>
+                <h2 style="font-size: 2.5rem; margin-top: 8px;">Planos Acessíveis</h2>
+                <p class="text-muted">Investimento justo para transformar a sua presença digital.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 50px; align-items: center;">
+                
+                <!-- Plano 1 -->
+                <div class="glass-card" style="padding: 40px 30px;">
+                    <h3 style="font-size: 1.5rem; margin-bottom: 8px;">Site Simples</h3>
+                    <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px; min-height: 40px;">Ideal para negócios locais e portfólios rápidos.</p>
+                    <div style="margin-bottom: 30px;">
+                        <span style="font-size: 1rem; color: var(--text-muted);">A partir de</span><br>
+                        <span style="font-size: 2.5rem; font-weight: 800; font-family: 'Outfit';">R$ 800</span>
+                    </div>
+                    
+                    <ul style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px;">
+                        <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem;"><i data-lucide="check-circle" style="color: var(--primary);" width="20"></i> Até 5 seções (One Page)</li>
+                        <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem;"><i data-lucide="check-circle" style="color: var(--primary);" width="20"></i> Design Responsivo</li>
+                        <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem;"><i data-lucide="check-circle" style="color: var(--primary);" width="20"></i> Botão WhatsApp</li>
+                        <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem;"><i data-lucide="check-circle" style="color: var(--primary);" width="20"></i> 1 Ano Domínio + Hospedagem</li>
+                    </ul>
+                    <a href="#contato" class="btn btn-outline" style="width: 100%; justify-content: center;">Quero Este</a>
+                </div>
+
+                <!-- Plano 2 (Destaque) -->
+                <div class="glass-card" style="padding: 50px 30px; background: linear-gradient(180deg, rgba(37,99,235,0.1) 0%, rgba(30,41,59,0.7) 100%); border-color: rgba(37,99,235,0.4); position: relative;">
+                    <div style="position: absolute; top: -16px; left: 50%; transform: translateX(-50%); background: var(--gradient-primary); color: #fff; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 700;">MAIS RECOMENDADO</div>
+                    
+                    <h3 style="font-size: 1.5rem; margin-bottom: 8px;">Site Profissional</h3>
+                    <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px; min-height: 40px;">Projeto completo com múltiplas páginas e blog integrado.</p>
+                    <div style="margin-bottom: 30px;">
+                        <span style="font-size: 1rem; color: var(--text-muted);">A partir de</span><br>
+                        <span style="font-size: 2.5rem; font-weight: 800; font-family: 'Outfit';">R$ 1.800</span>
+                    </div>
+                    
+                    <ul style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px;">
+                        <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem;"><i data-lucide="check-circle" style="color: var(--primary);" width="20"></i> Até 15 páginas internas</li>
+                        <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem;"><i data-lucide="check-circle" style="color: var(--primary);" width="20"></i> Painel Administrativo</li>
+                        <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem;"><i data-lucide="check-circle" style="color: var(--primary);" width="20"></i> Otimização SEO Avançada</li>
+                        <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem;"><i data-lucide="check-circle" style="color: var(--primary);" width="20"></i> Integração com Analytics + Chat</li>
+                    </ul>
+                    <a href="#contato" class="btn btn-primary" style="width: 100%; justify-content: center;">Quero Este</a>
+                </div>
+
+                <!-- Plano 3 -->
+                <div class="glass-card" style="padding: 40px 30px;">
+                    <h3 style="font-size: 1.5rem; margin-bottom: 8px;">Loja Virtual</h3>
+                    <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px; min-height: 40px;">Plataforma completa de vendas com checkout transparente.</p>
+                    <div style="margin-bottom: 30px;">
+                        <span style="font-size: 1rem; color: var(--text-muted);">A partir de</span><br>
+                        <span style="font-size: 2.5rem; font-weight: 800; font-family: 'Outfit';">R$ 3.500</span>
+                    </div>
+                    
+                    <ul style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px;">
+                        <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem;"><i data-lucide="check-circle" style="color: var(--primary);" width="20"></i> Cadastro inicial de 50 produtos</li>
+                        <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem;"><i data-lucide="check-circle" style="color: var(--primary);" width="20"></i> Pagamentos (Pix, Boleto, Cartões)</li>
+                        <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem;"><i data-lucide="check-circle" style="color: var(--primary);" width="20"></i> Cálculo Automático de Frete</li>
+                        <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem;"><i data-lucide="check-circle" style="color: var(--primary);" width="20"></i> Dashboard Financeiro</li>
+                    </ul>
+                    <a href="#contato" class="btn btn-outline" style="width: 100%; justify-content: center;">Quero Este</a>
+                </div>
+
+            </div>
+            
+            <p class="text-center text-muted" style="margin-top: 30px; font-size: 0.9rem;">
+                * Manutenção mensal opcional disponível a partir de R$80/mês para suporte técnico e atualizações.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================= CONTATO / FORMULÁRIO / CALCULADORA ================= -->
+    <section class="section" id="contato" style="background-color: var(--bg-body); position: relative; border-top: 1px solid rgba(255,255,255,0.05);">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start;">
+                
+                <div>
+                    <h2 style="font-size: 2.5rem; margin-bottom: 16px;">Pronto para iniciar?</h2>
+                    <p class="text-muted" style="margin-bottom: 40px; font-size: 1.1rem;">
+                        Utilize o formulário ou chame no WhatsApp. Retornamos seu contato em menos de 15 minutos de forma humana (não usamos robôs para vendas).
+                    </p>
+
+                    <div style="display: flex; flex-direction: column; gap: 24px;">
+                        <div style="display: flex; align-items: flex-start; gap: 16px;">
+                            <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(37,211,102,0.1); display: flex; align-items: center; justify-content: center; color: #25D366; flex-shrink: 0;">
+                                <i data-lucide="message-circle"></i>
+                            </div>
+                            <div>
+                                <h4 style="margin-bottom: 4px;">WhatsApp Direto</h4>
+                                <a href="https://wa.me/55999999999" target="_blank" style="color: #25D366; font-weight: 600;">(99) 99999-9999</a>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: flex-start; gap: 16px;">
+                            <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(37,99,235,0.1); display: flex; align-items: center; justify-content: center; color: var(--primary); flex-shrink: 0;">
+                                <i data-lucide="mail"></i>
+                            </div>
+                            <div>
+                                <h4 style="margin-bottom: 4px;">Envie um E-mail</h4>
+                                <a href="mailto:contato@webstart.com.br" style="color: var(--primary); font-weight: 600;">contato@webstart.com.br</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulário com Glassmorphism -->
+                <div class="glass-card" style="background: rgba(30,41,59,0.9); backdrop-filter: blur(20px);">
+                    <h3 style="margin-bottom: 24px; font-size: 1.4rem;">Solicite seu Orçamento</h3>
+                    
+                    <form id="contactForm" style="display: flex; flex-direction: column; gap: 16px;">
+                        
+                        <div>
+                            <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">Seu Nome</label>
+                            <input type="text" id="nome_input" required style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
+                        </div>
+
+                        <div>
+                            <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">WhatsApp com DDD</label>
+                            <input type="text" id="whats_input" required placeholder="(00) 00000-0000" style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
+                        </div>
+
+                        <div>
+                            <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">Tipo de Site</label>
+                            <select id="tipo_input" style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none; appearance: none;">
+                                <option value="Site Institucional">Site Institucional / Landing Page</option>
+                                <option value="Loja Virtual">Loja Virtual (E-commerce)</option>
+                                <option value="Sistema Personalizado">Sistema/Dashboard Personalizado</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">O que deseja vender / divulgar?</label>
+                            <textarea id="desc_input" rows="3" style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none; resize: vertical;"></textarea>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                            <input type="checkbox" id="dominio_input" style="width: 18px; height: 18px; accent-color: var(--primary);">
+                            <label for="dominio_input" style="font-size: 0.95rem; color: var(--text-muted);">Já possuo um domínio registrado</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="margin-top: 16px; width: 100%; padding: 16px; font-size: 1.05rem;">
+                            Enviar Solicitação <i data-lucide="send" width="18" height="18"></i>
+                        </button>
+                        
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Estilos responsivos simples para transformar grid em 1 coluna -->
+            <style>
+                @media (max-width: 900px) {
+                    #contato .container > div {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            </style>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer style="background-color: #080c14; padding: 60px 0 30px 0; border-top: 1px solid rgba(255,255,255,0.05);">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 50px;">
+                
+                <div style="grid-column: span 2;">
+                    <a href="#" class="nav-brand" style="margin-bottom: 16px;">
+                        <i data-lucide="rocket" style="color: var(--primary);"></i> WebStart
+                    </a>
+                    <p class="text-muted" style="max-width: 300px; font-size: 0.95rem;">
+                        Arquitetura, design e performance premium. Sites modernos e lojas virtuais focadas em alta conversão.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 style="margin-bottom: 20px; font-size: 1.1rem;">Navegação</h4>
+                    <ul style="display: flex; flex-direction: column; gap: 12px;">
+                        <li><a href="#inicio" class="text-muted">Início</a></li>
+                        <li><a href="#diferenciais" class="text-muted">Diferenciais</a></li>
+                        <li><a href="#servicos" class="text-muted">Serviços</a></li>
+                        <li><a href="#portfolio" class="text-muted">Portfólio</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 style="margin-bottom: 20px; font-size: 1.1rem;">Nossos Serviços</h4>
+                    <ul style="display: flex; flex-direction: column; gap: 12px;">
+                        <li><a href="#" class="text-muted">Landing Pages Otimizadas</a></li>
+                        <li><a href="#" class="text-muted">Criação de Sites Institucionais</a></li>
+                        <li><a href="#" class="text-muted">Desenvolvimento de E-commerces</a></li>
+                        <li><a href="#" class="text-muted">Áreas de Membros Inclusas</a></li>
+                    </ul>
+                </div>
+
+            </div>
+            
+            <div style="text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05);">
+                <p class="text-muted" style="font-size: 0.85rem;">&copy; 2026 WebStart Agency. Todos os direitos reservados. CNPJ: 00.000.000/0001-00</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="js/main.js"></script>
+    <script>
+        // Inicializar os ícones do Lucide
+        lucide.createIcons();
+    </script>
+</body>
+</html>

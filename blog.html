@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Corporativo - WebStart</title>
+    <meta name="description" content="Artigos, dicas de marketing digital, vendas online e estratégias para crescer seu negócio na internet.">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" class="nav-brand">
+                <i data-lucide="rocket" style="color: var(--primary);"></i> WebStart
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html#inicio" class="nav-link">Início</a></li>
+                <li><a href="servicos.html" class="nav-link">Serviços</a></li>
+                <li><a href="portfolio.html" class="nav-link">Portfólio</a></li>
+                <li><a href="blog.html" class="nav-link" style="color: var(--primary);">Blog</a></li>
+                <li><a href="contato.html" class="btn btn-primary" style="padding: 8px 20px; font-size: 0.9rem;">Orçamento</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- PAGE TITLE -->
+    <section style="padding: 160px 0 80px 0; background: linear-gradient(180deg, var(--bg-body) 0%, rgba(37,99,235,0.05) 100%); text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05);">
+        <div class="container">
+            <h1 style="font-size: 3rem; margin-bottom: 16px;">Blog <span class="text-gradient">WebStart</span></h1>
+            <p class="text-muted" style="font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+                Tudo o que você precisa saber sobre negócios digitais, e-commerce, web design e estratégias de conversão.
+            </p>
+            
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 40px;">
+                <input type="text" placeholder="Buscar artigos..." style="padding: 12px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; outline: none; width: 300px;">
+            </div>
+        </div>
+    </section>
+
+    <!-- BLOG GRID -->
+    <section class="section" id="blog" style="background-color: var(--bg-body);">
+        <div class="container">
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px;">
+
+                <!-- Artigo 1 -->
+                <a href="post.html" class="glass-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; border-color: rgba(37,99,235,0.3);">
+                    <div style="height: 200px; background: rgba(37,99,235,0.1); position: relative; display: flex; align-items: center; justify-content: center;">
+                        <i data-lucide="calculator" width="60" style="color: var(--primary);"></i>
+                        <span style="position: absolute; top: 15px; left: 15px; background: var(--primary); color: #fff; padding: 4px 12px; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">NEGÓCIOS</span>
+                    </div>
+                    <div style="padding: 24px;">
+                        <h3 style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 12px;">Quanto custa criar um site profissional em 2026?</h3>
+                        <p class="text-muted" style="font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5;">Desmistificamos todos os custos envolvidos (domínio, hospedagem, design, agência) para você não ser enganado na hora do orçamento.</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted);">
+                            <span><i data-lucide="calendar" width="14" style="display: inline; vertical-align: middle;"></i> 12 de Abril</span>
+                            <span>Ler artigo <i data-lucide="arrow-right" width="14" style="display: inline; vertical-align: middle;"></i></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Artigo 2 -->
+                <a href="post.html" class="glass-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; text-decoration: none;">
+                    <div style="height: 200px; background: rgba(124,58,237,0.1); position: relative; display: flex; align-items: center; justify-content: center;">
+                        <i data-lucide="trending-up" width="60" style="color: var(--secondary);"></i>
+                        <span style="position: absolute; top: 15px; left: 15px; background: var(--secondary); color: #fff; padding: 4px 12px; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">E-COMMERCE</span>
+                    </div>
+                    <div style="padding: 24px;">
+                        <h3 style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 12px;">Como vender pela internet: O Guia Definitivo</h3>
+                        <p class="text-muted" style="font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5;">Desde a escolha da plataforma até campanhas de tráfego pago. Um mapa completo para quem deseja faturar no digital.</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted);">
+                            <span><i data-lucide="calendar" width="14" style="display: inline; vertical-align: middle;"></i> 05 de Abril</span>
+                            <span>Ler artigo <i data-lucide="arrow-right" width="14" style="display: inline; vertical-align: middle;"></i></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Artigo 3 -->
+                <a href="post.html" class="glass-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; text-decoration: none;">
+                    <div style="height: 200px; background: rgba(16,185,129,0.1); position: relative; display: flex; align-items: center; justify-content: center;">
+                        <i data-lucide="shopping-cart" width="60" style="color: var(--success);"></i>
+                        <span style="position: absolute; top: 15px; left: 15px; background: var(--success); color: #fff; padding: 4px 12px; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">LOJA VIRTUAL</span>
+                    </div>
+                    <div style="padding: 24px;">
+                        <h3 style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 12px;">Passo a passo para criar uma loja virtual de sucesso</h3>
+                        <p class="text-muted" style="font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5;">Entenda a logística, integrações de pagamento e como subir seus produtos de forma eficiente e bonita.</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted);">
+                            <span><i data-lucide="calendar" width="14" style="display: inline; vertical-align: middle;"></i> 28 de Março</span>
+                            <span>Ler artigo <i data-lucide="arrow-right" width="14" style="display: inline; vertical-align: middle;"></i></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Artigo 4 -->
+                <a href="post.html" class="glass-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; text-decoration: none;">
+                    <div style="height: 200px; background: rgba(245,158,11,0.1); position: relative; display: flex; align-items: center; justify-content: center;">
+                        <i data-lucide="alert-triangle" width="60" style="color: var(--warning);"></i>
+                        <span style="position: absolute; top: 15px; left: 15px; background: var(--warning); color: #fff; padding: 4px 12px; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">TECNOLOGIA</span>
+                    </div>
+                    <div style="padding: 24px;">
+                        <h3 style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 12px;">5 Sinais de que a sua empresa precisa de um site novo urgente</h3>
+                        <p class="text-muted" style="font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5;">Seu site não abre bem no celular? Demora mais de 3 segundos para carregar? Cuidado, você está perdendo dinheiro.</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted);">
+                            <span><i data-lucide="calendar" width="14" style="display: inline; vertical-align: middle;"></i> 14 de Março</span>
+                            <span>Ler artigo <i data-lucide="arrow-right" width="14" style="display: inline; vertical-align: middle;"></i></span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="background-color: #080c14; padding: 60px 0 30px 0; border-top: 1px solid rgba(255,255,255,0.05);">
+        <div class="container text-center">
+            <p class="text-muted" style="font-size: 0.85rem;">&copy; 2026 WebStart Agency.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

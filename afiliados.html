@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Afiliado - WebStart</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .dashboard-layout { display: flex; min-height: 100vh; background-color: var(--bg-body); }
+        .sidebar { width: 260px; background: #080c14; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; padding: 0; position: fixed; height: 100vh; left: 0; top: 0; }
+        .sidebar-header { padding: 30px 24px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .sidebar-menu { list-style: none; padding: 24px 12px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: var(--text-muted); text-decoration: none; border-radius: 8px; font-size: 0.95rem; font-weight: 500; transition: var(--transition-fast); }
+        .sidebar-link:hover, .sidebar-link.active { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .main-content { margin-left: 260px; flex: 1; padding: 40px; width: calc(100% - 260px); }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="nav-brand" style="margin: 0; font-size: 1.4rem;">
+                    <i data-lucide="rocket" style="color: var(--success);"></i> Afiliado WS
+                </a>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#" class="sidebar-link active"><i data-lucide="pie-chart" width="18"></i> Relatórios</a></li>
+                <li><a href="#" class="sidebar-link"><i data-lucide="link" width="18"></i> Meus Links</a></li>
+                <li><a href="#" class="sidebar-link"><i data-lucide="credit-card" width="18"></i> Saques Mensais</a></li>
+                <li><a href="#" class="sidebar-link"><i data-lucide="megaphone" width="18"></i> Material MKT</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+                <div>
+                    <h2 style="font-size: 1.8rem; margin: 0;">Painel de Parcerias</h2>
+                    <p class="text-muted" style="margin: 4px 0 0 0;">Ganhe comissão indicando novos clientes para a agência.</p>
+                </div>
+            </header>
+
+            <div class="glass-card" style="margin-bottom: 40px; background: rgba(16,185,129,0.05); border-color: rgba(16,185,129,0.2);">
+                <h3 style="margin: 0 0 10px 0; font-size: 1.1rem; color: #fff;">Seu Link de Indicação (15% de Comissão nas vendas)</h3>
+                <div style="display: flex; gap: 15px;">
+                    <input type="text" value="https://webstart.com.br/?ref=parceiro01" readonly style="flex: 1; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: var(--success); font-family: 'Inter'; font-size: 1rem; outline: none;">
+                    <button class="btn btn-primary" style="background: var(--success); border: none;"><i data-lucide="copy" width="18"></i> Copiar</button>
+                    <button class="btn btn-outline" style="border-color: #25D366; color: #25D366;"><i data-lucide="share-2" width="18"></i></button>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 40px;">
+                <div class="glass-card" style="padding: 24px;">
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">Saldo Liberado para Saque</span>
+                    <div style="font-size: 2.2rem; font-family: 'Outfit'; font-weight: 700; margin: 10px 0; color: #fff;">R$ 850,00</div>
+                    <button class="btn btn-primary" style="width: 100%; justify-content: center; padding: 8px; font-size: 0.9rem; background: var(--success); border: none;">Solicitar Saque (Pix)</button>
+                </div>
+                
+                <div class="glass-card" style="padding: 24px;">
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">Vendas Realizadas (Mês)</span>
+                    <div style="font-size: 2.2rem; font-family: 'Outfit'; font-weight: 700; margin: 10px 0; color: #fff;">4</div>
+                    <div style="color: var(--text-muted); font-size: 0.85rem;">Total gerado: R$ 5.666,66</div>
+                </div>
+
+                <div class="glass-card" style="padding: 24px;">
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">Cliques no seu Link (Mês)</span>
+                    <div style="font-size: 2.2rem; font-family: 'Outfit'; font-weight: 700; margin: 10px 0; color: #fff;">245</div>
+                    <div style="color: var(--success); font-size: 0.85rem; display: flex; align-items: center; gap: 4px;">Taxa de conversão: 1.6%</div>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 20px; font-size: 1.2rem;">Últimas Indicações</h3>
+            <div class="glass-card" style="padding: 0; overflow: hidden;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <tr>
+                            <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Cliente</th>
+                            <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Serviço Contratado</th>
+                            <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Comissão (15%)</th>
+                            <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 16px 24px; color: #fff; font-weight: 500;">Padaria Pão Quente</td>
+                            <td style="padding: 16px 24px; color: var(--text-muted);">Site Institucional</td>
+                            <td style="padding: 16px 24px; color: var(--success); font-weight: 600;">+ R$ 120,00</td>
+                            <td style="padding: 16px 24px;"><span style="color: var(--success); font-size: 0.85rem; background: rgba(16,185,129,0.1); padding: 4px 10px; border-radius: 20px;">Pago</span></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 16px 24px; color: #fff; font-weight: 500;">E-commerce Silva</td>
+                            <td style="padding: 16px 24px; color: var(--text-muted);">Loja Virtual Completa</td>
+                            <td style="padding: 16px 24px; color: var(--success); font-weight: 600;">+ R$ 525,00</td>
+                            <td style="padding: 16px 24px;"><span style="color: var(--warning); font-size: 0.85rem; background: rgba(245,158,11,0.1); padding: 4px 10px; border-radius: 20px;">Aguardando Pgmt do Cliente</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+    </div>
+
+    <script> lucide.createIcons(); </script>
+</body>
+</html>

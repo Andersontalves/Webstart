@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfólio de Projetos - WebStart</title>
+    <meta name="description" content="Veja os projetos mais recentes da WebStart. Desenvolvemos sites e lojas virtuais para arquitetura, saúde, educação, B2B e varejo.">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" class="nav-brand">
+                <i data-lucide="rocket" style="color: var(--primary);"></i> WebStart
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html#inicio" class="nav-link">Início</a></li>
+                <li><a href="index.html#diferenciais" class="nav-link">Diferenciais</a></li>
+                <li><a href="servicos.html" class="nav-link">Serviços</a></li>
+                <li><a href="portfolio.html" class="nav-link" style="color: var(--primary);">Portfólio</a></li>
+                <li><a href="index.html#planos" class="nav-link">Planos</a></li>
+                <li>
+                    <a href="index.html#contato" class="btn btn-primary" style="padding: 8px 20px; font-size: 0.9rem;">
+                        <i data-lucide="calculator" width="18" height="18"></i> Orçamento
+                    </a>
+                </li>
+            </ul>
+            <button class="hamburger" id="hamburgerBtn">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ================= PAGE TITLE ================= -->
+    <section style="padding: 160px 0 80px 0; background: linear-gradient(180deg, var(--bg-body) 0%, rgba(124,58,237,0.05) 100%); text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05);">
+        <div class="container">
+            <h1 style="font-size: 3rem; margin-bottom: 16px;">Nosso <span class="text-gradient">Portfólio</span></h1>
+            <p class="text-muted" style="font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+                Projetos reais com resultados reais. Explore como ajudamos centenas de empresas a dominar o mercado digital através de um design intencional.
+            </p>
+            
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 40px;">
+                <button class="btn btn-primary" style="padding: 6px 16px; font-size: 0.9rem;">Todos</button>
+                <button class="btn btn-outline" style="padding: 6px 16px; font-size: 0.9rem;">Institucionais</button>
+                <button class="btn btn-outline" style="padding: 6px 16px; font-size: 0.9rem;">E-commerce</button>
+                <button class="btn btn-outline" style="padding: 6px 16px; font-size: 0.9rem;">Landing Pages</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= PORTFÓLIO GRID ================= -->
+    <section class="section" id="portfolio" style="background-color: var(--bg-body);">
+        <div class="container">
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
+                
+                <!-- 1 -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="height: 220px; background: #2f3e54; position: relative;">
+                        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
+                            <i data-lucide="utensils" width="60" height="60"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 24px;">
+                        <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Institucional & Cardápio</span>
+                        <h3 style="margin: 8px 0; font-size: 1.3rem;">Site Restaurante Premium</h3>
+                        <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Layout limpo com fotos de alta qualidade, cardápio digital integrado e reserva de mesas pelo WhatsApp.</p>
+                        <a href="#" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                    </div>
+                </div>
+
+                <!-- 2 -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="height: 220px; background: #2f3e54; position: relative;">
+                        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
+                            <i data-lucide="dumbbell" width="60" height="60"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 24px;">
+                        <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Sistema e Membros</span>
+                        <h3 style="margin: 8px 0; font-size: 1.3rem;">Plataforma Personal Trainer</h3>
+                        <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Área restrita de login para alunos, venda de consultoria integrada (pagamento) e painel em vídeo.</p>
+                        <a href="#" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                    </div>
+                </div>
+
+                <!-- 3 -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="height: 220px; background: #2f3e54; position: relative;">
+                        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
+                            <i data-lucide="shopping-bag" width="60" height="60"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 24px;">
+                        <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">E-commerce</span>
+                        <h3 style="margin: 8px 0; font-size: 1.3rem;">Loja Virtual de Roupas</h3>
+                        <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Layout focado em fotos, zoom em produtos, carrinho lateral intuitivo e checkout transparente otimizado.</p>
+                        <a href="#" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                    </div>
+                </div>
+
+                <!-- 4 -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="height: 220px; background: #2f3e54; position: relative;">
+                        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
+                            <i data-lucide="briefcase" width="60" height="60"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 24px;">
+                        <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Serviços B2B</span>
+                        <h3 style="margin: 8px 0; font-size: 1.3rem;">Site Empresa de Segurança</h3>
+                        <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Focado em confiança corporativa, cores sólidas, formulário de cotação dinâmico e chat flutuante.</p>
+                        <a href="#" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                    </div>
+                </div>
+
+                <!-- 5 -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="height: 220px; background: #2f3e54; position: relative;">
+                        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
+                            <i data-lucide="heart-pulse" width="60" height="60"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 24px;">
+                        <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Saúde</span>
+                        <h3 style="margin: 8px 0; font-size: 1.3rem;">Site Clínica Médica</h3>
+                        <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Apresentação do corpo clínico, especialidades, e recurso de agendamento online de consultas integrado.</p>
+                        <a href="#" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                    </div>
+                </div>
+
+                <!-- 6 -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="height: 220px; background: #2f3e54; position: relative;">
+                        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
+                            <i data-lucide="graduation-cap" width="60" height="60"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 24px;">
+                        <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Educação</span>
+                        <h3 style="margin: 8px 0; font-size: 1.3rem;">Plataforma Curso Online</h3>
+                        <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Landing Page de alta conversão + área de membros completa para hospedagem dos vídeos das aulas.</p>
+                        <a href="#" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                    </div>
+                </div>
+                
+                <!-- 7 (Extra Portfolio Item Demo) -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="height: 220px; background: #2f3e54; position: relative;">
+                        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
+                            <i data-lucide="camera" width="60" height="60"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 24px;">
+                        <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Portfólio Criativo</span>
+                        <h3 style="margin: 8px 0; font-size: 1.3rem;">Site para Fotógrafo</h3>
+                        <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Design minimalista onde a foto fala por si só. Carregamento ultra rápido da galeria em grid alvenaria.</p>
+                        <a href="#" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                    </div>
+                </div>
+
+                <!-- 8 (Extra Portfolio Item Demo) -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="height: 220px; background: #2f3e54; position: relative;">
+                        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
+                            <i data-lucide="home" width="60" height="60"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 24px;">
+                        <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Imobiliária</span>
+                        <h3 style="margin: 8px 0; font-size: 1.3rem;">Catálogo de Imóveis</h3>
+                        <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Filtros de busca avançados por localização, quartos e preço. Google Maps integrado em cada listagem.</p>
+                        <a href="#" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================= CTA ================= -->
+    <section class="section" style="background: var(--bg-surface-lighter); border-top: 1px solid rgba(255,255,255,0.05); text-align: center;">
+        <div class="container">
+            <h2 style="font-size: 2.5rem; margin-bottom: 16px;">Gostou do que viu?</h2>
+            <p class="text-muted" style="font-size: 1.1rem; max-width: 600px; margin: 0 auto 30px auto;">
+                O próximo site com design profissional pode ser o da sua empresa. Vamos conversar sobre o seu projeto?
+            </p>
+            <a href="index.html#contato" class="btn btn-primary" style="background: var(--gradient-primary);">Solicitar Orçamento <i data-lucide="arrow-right" width="16"></i></a>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer style="background-color: #080c14; padding: 60px 0 30px 0; border-top: 1px solid rgba(255,255,255,0.05);">
+        <div class="container">
+            <!-- (Mesmo Footer padronizado) -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 50px;">
+                <div style="grid-column: span 2;">
+                    <a href="index.html" class="nav-brand" style="margin-bottom: 16px;">
+                        <i data-lucide="rocket" style="color: var(--primary);"></i> WebStart
+                    </a>
+                    <p class="text-muted" style="max-width: 300px; font-size: 0.95rem;">
+                        Arquitetura, design e performance premium. Sites modernos e lojas virtuais focadas em alta conversão.
+                    </p>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 20px; font-size: 1.1rem;">Navegação</h4>
+                    <ul style="display: flex; flex-direction: column; gap: 12px;">
+                        <li><a href="index.html#inicio" class="text-muted">Início</a></li>
+                        <li><a href="index.html#diferenciais" class="text-muted">Diferenciais</a></li>
+                        <li><a href="servicos.html" class="text-muted">Serviços</a></li>
+                        <li><a href="portfolio.html" class="text-muted">Portfólio</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 20px; font-size: 1.1rem;">Nossos Serviços</h4>
+                    <ul style="display: flex; flex-direction: column; gap: 12px;">
+                        <li><a href="servicos.html" class="text-muted">Landing Pages Otimizadas</a></li>
+                        <li><a href="servicos.html" class="text-muted">Criação de Sites Institucionais</a></li>
+                        <li><a href="servicos.html" class="text-muted">Desenvolvimento de E-commerces</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05);">
+                <p class="text-muted" style="font-size: 0.85rem;">&copy; 2026 WebStart Agency. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="js/main.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

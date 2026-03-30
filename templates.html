@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja de Templates Profissionais - WebStart</title>
+    <meta name="description" content="Compre templates prontos para sites, lojas virtuais e landing pages. Otimizados para conversão e performance.">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" class="nav-brand">
+                <i data-lucide="rocket" style="color: var(--primary);"></i> WebStart
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html#inicio" class="nav-link">Início</a></li>
+                <li><a href="servicos.html" class="nav-link">Serviços</a></li>
+                <li><a href="templates.html" class="nav-link" style="color: var(--primary);">Templates</a></li>
+                <li><a href="portfolio.html" class="nav-link">Portfólio</a></li>
+                <li><a href="contato.html" class="nav-link">Contato</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- PAGE TITLE -->
+    <section style="padding: 160px 0 80px 0; background: linear-gradient(180deg, var(--bg-body) 0%, rgba(16,185,129,0.05) 100%); text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05);">
+        <div class="container">
+            <h1 style="font-size: 3rem; margin-bottom: 16px;">Loja de <span class="text-gradient">Templates</span></h1>
+            <p class="text-muted" style="font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+                Acelere o desenvolvimento do seu projeto. Templates HTML, React e WordPress desenvolvidos pela nossa equipe para alta performance.
+            </p>
+            
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 40px;">
+                <button class="btn btn-primary" style="padding: 6px 16px; font-size: 0.9rem;">Todos</button>
+                <button class="btn btn-outline" style="padding: 6px 16px; font-size: 0.9rem;">E-commerce</button>
+                <button class="btn btn-outline" style="padding: 6px 16px; font-size: 0.9rem;">Agências & B2B</button>
+                <button class="btn btn-outline" style="padding: 6px 16px; font-size: 0.9rem;">Infoprodutos</button>
+                <button class="btn btn-outline" style="padding: 6px 16px; font-size: 0.9rem;">Startups</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- TEMPLATES LIST -->
+    <section class="section" id="templates" style="background-color: var(--bg-body);">
+        <div class="container">
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px;">
+
+                <!-- Template 1 -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column;">
+                    <div style="height: 220px; background: #2f3e54; position: relative;">
+                        <!-- Placeholder imagem -->
+                        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
+                            <i data-lucide="shopping-cart" width="60" height="60"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 24px; flex: 1; display: flex; flex-direction: column;">
+                        <span style="color: var(--success); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; display: inline-block;">Loja Virtual (Shopify / HTML)</span>
+                        <h3 style="margin: 0 0 10px 0; font-size: 1.3rem;">Template StoreFlow</h3>
+                        <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 20px; flex: 1;">Criado para lojas de roupas e acessórios focadas no público jovem. Mega menu incluso, carrinho lateral rápido e layout moderno de PDP.</p>
+                        
+                        <div style="display: flex; gap: 10px; margin-bottom: 24px;">
+                            <span style="font-size: 0.8rem; padding: 4px 8px; background: rgba(255,255,255,0.05); border-radius: 4px; color: var(--text-muted);">Responsivo</span>
+                            <span style="font-size: 0.8rem; padding: 4px 8px; background: rgba(255,255,255,0.05); border-radius: 4px; color: var(--text-muted);">SEO Ready</span>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 1.5rem; font-weight: 700; font-family: 'Outfit';">R$ 199</span>
+                            <div style="display: flex; gap: 8px;">
+                                <a href="#" class="btn btn-outline" style="padding: 8px 12px; font-size: 0.85rem;" title="Ver Demonstração"><i data-lucide="eye" width="16"></i></a>
+                                <a href="#" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.85rem;"><i data-lucide="shopping-bag" width="16"></i> Comprar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Template 2 -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column;">
+                    <div style="height: 220px; background: #2f3e54; position: relative;">
+                        <!-- Placeholder imagem -->
+                        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
+                            <i data-lucide="rocket" width="60" height="60"></i>
+                        </div>
+                        <div style="position: absolute; top: 12px; right: 12px; background: var(--primary); color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;">+ Vendido</div>
+                    </div>
+                    <div style="padding: 24px; flex: 1; display: flex; flex-direction: column;">
+                        <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; display: inline-block;">Agência / SaaS (React)</span>
+                        <h3 style="margin: 0 0 10px 0; font-size: 1.3rem;">Template TechStart</h3>
+                        <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 20px; flex: 1;">Para startups de tecnologia e agências. Possui animações sofisticadas em scroll, tabelas de preços e área de login.</p>
+                        
+                        <div style="display: flex; gap: 10px; margin-bottom: 24px;">
+                            <span style="font-size: 0.8rem; padding: 4px 8px; background: rgba(255,255,255,0.05); border-radius: 4px; color: var(--text-muted);">Dark Mode</span>
+                            <span style="font-size: 0.8rem; padding: 4px 8px; background: rgba(255,255,255,0.05); border-radius: 4px; color: var(--text-muted);">Framer Motion</span>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 1.5rem; font-weight: 700; font-family: 'Outfit';">R$ 249</span>
+                            <div style="display: flex; gap: 8px;">
+                                <a href="#" class="btn btn-outline" style="padding: 8px 12px; font-size: 0.85rem;" title="Ver Demonstração"><i data-lucide="eye" width="16"></i></a>
+                                <a href="#" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.85rem;"><i data-lucide="shopping-bag" width="16"></i> Comprar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Template 3 -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column;">
+                    <div style="height: 220px; background: #2f3e54; position: relative;">
+                        <!-- Placeholder imagem -->
+                        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
+                            <i data-lucide="user-check" width="60" height="60"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 24px; flex: 1; display: flex; flex-direction: column;">
+                        <span style="color: var(--warning); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; display: inline-block;">Infoproduto (HTML)</span>
+                        <h3 style="margin: 0 0 10px 0; font-size: 1.3rem;">Template Venda Direta</h3>
+                        <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 20px; flex: 1;">Landing Page pura desenvolvida para vendas rápidas. Contador regresivo, seções de FAQ dinâmico e prova social com reviews falsos ou reais.</p>
+                        
+                        <div style="display: flex; gap: 10px; margin-bottom: 24px;">
+                            <span style="font-size: 0.8rem; padding: 4px 8px; background: rgba(255,255,255,0.05); border-radius: 4px; color: var(--text-muted);">High Conversion</span>
+                            <span style="font-size: 0.8rem; padding: 4px 8px; background: rgba(255,255,255,0.05); border-radius: 4px; color: var(--text-muted);">Leve</span>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 1.5rem; font-weight: 700; font-family: 'Outfit';">R$ 149</span>
+                            <div style="display: flex; gap: 8px;">
+                                <a href="#" class="btn btn-outline" style="padding: 8px 12px; font-size: 0.85rem;" title="Ver Demonstração"><i data-lucide="eye" width="16"></i></a>
+                                <a href="#" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.85rem;"><i data-lucide="shopping-bag" width="16"></i> Comprar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- NEED HELP SECTION -->
+    <section class="section" style="background: var(--bg-surface-lighter); border-top: 1px solid rgba(255,255,255,0.05); text-align: center;">
+        <div class="container">
+            <h2 style="font-size: 2.5rem; margin-bottom: 16px;">Não quer colocar a mão no código?</h2>
+            <p class="text-muted" style="font-size: 1.1rem; max-width: 600px; margin: 0 auto 30px auto;">
+                Nossa equipe instala, configura no seu domínio e personaliza o template escolhido com as suas cores e textos por uma pequena taxa extra.
+            </p>
+            <a href="contato.html" class="btn btn-primary" style="background: var(--gradient-primary);">Contratar Instalação <i data-lucide="arrow-right" width="16"></i></a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="background-color: #080c14; padding: 60px 0 30px 0; border-top: 1px solid rgba(255,255,255,0.05);">
+        <div class="container">
+            <div style="text-align: center;">
+                <p class="text-muted" style="font-size: 0.85rem;">&copy; 2026 WebStart Agency. Todos os direitos reservados. CNPJ: 00.000.000/0001-00</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

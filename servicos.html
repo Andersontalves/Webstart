@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviços Completos - WebStart</title>
+    <meta name="description" content="Conheça todos os serviços de criação de sites, lojas virtuais e landing pages da WebStart.">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" class="nav-brand">
+                <i data-lucide="rocket" style="color: var(--primary);"></i> WebStart
+            </a>
+
+            <!-- Menu Desktop -->
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html#inicio" class="nav-link">Início</a></li>
+                <li><a href="index.html#diferenciais" class="nav-link">Diferenciais</a></li>
+                <li><a href="servicos.html" class="nav-link" style="color: var(--primary);">Serviços</a></li>
+                <li><a href="portfolio.html" class="nav-link">Portfólio</a></li>
+                <li><a href="index.html#planos" class="nav-link">Planos</a></li>
+                <li>
+                    <a href="index.html#contato" class="btn btn-primary" style="padding: 8px 20px; font-size: 0.9rem;">
+                        <i data-lucide="calculator" width="18" height="18"></i> Orçamento
+                    </a>
+                </li>
+            </ul>
+
+            <button class="hamburger" id="hamburgerBtn">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ================= PAGE TITLE ================= -->
+    <section style="padding: 160px 0 80px 0; background: linear-gradient(180deg, var(--bg-body) 0%, rgba(37,99,235,0.05) 100%); text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05);">
+        <div class="container">
+            <h1 style="font-size: 3rem; margin-bottom: 16px;">Nossos <span class="text-gradient">Serviços</span></h1>
+            <p class="text-muted" style="font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+                Desenvolvemos soluções digitais de alto impacto que convertem visitantes em clientes fiéis para a sua empresa.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================= DETALHE SERVIÇOS ================= -->
+    <section class="section" id="detalhes-servicos" style="background-color: var(--bg-body);">
+        <div class="container">
+            <div style="display: flex; flex-direction: column; gap: 40px;">
+
+                <!-- Serviço 1 -->
+                <div class="glass-card" style="display: flex; gap: 30px; align-items: center; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 300px;">
+                        <div style="width: 60px; height: 60px; border-radius: 12px; background: rgba(37, 99, 235, 0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--primary);">
+                            <i data-lucide="layout" width="32" height="32"></i>
+                        </div>
+                        <h2 style="font-size: 2rem; margin-bottom: 16px;">Sites Institucionais</h2>
+                        <p class="text-muted" style="margin-bottom: 20px; font-size: 1.05rem;">
+                            Ideal para empresas, indústrias e profissionais de serviços que precisam marcar presença na internet. Sites focados em mostrar sua autoridade, equipe, serviços prestados e localização, tudo otimizado para que o Google encontre você com facilidade.
+                        </p>
+                        <ul style="margin-bottom: 24px; display: flex; flex-direction: column; gap: 10px;">
+                            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem; color: var(--text-main);"><i data-lucide="check" style="color: var(--success);" width="18"></i> Páginas ilimitadas (Sobre, Serviços, Contato)</li>
+                            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem; color: var(--text-main);"><i data-lucide="check" style="color: var(--success);" width="18"></i> Área de Blog integrada para Marketing de Conteúdo</li>
+                            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem; color: var(--text-main);"><i data-lucide="check" style="color: var(--success);" width="18"></i> SEO base, rápido load e versão Móbile Nativa</li>
+                        </ul>
+                        <a href="index.html#contato" class="btn btn-primary">Fazer Orçamento <i data-lucide="arrow-right" width="16"></i></a>
+                    </div>
+                    <div style="flex: 1; min-width: 300px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); background: #1E293B; height: 350px; display: flex; align-items: center; justify-content: center;">
+                        <i data-lucide="globe" width="100" height="100" style="color: rgba(255,255,255,0.1);"></i>
+                    </div>
+                </div>
+
+                <!-- Serviço 2 -->
+                <div class="glass-card" style="display: flex; gap: 30px; align-items: center; flex-wrap: wrap-reverse;">
+                    <div style="flex: 1; min-width: 300px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); background: #1E293B; height: 350px; display: flex; align-items: center; justify-content: center;">
+                        <i data-lucide="shopping-cart" width="100" height="100" style="color: rgba(255,255,255,0.1);"></i>
+                    </div>
+                    <div style="flex: 1; min-width: 300px;">
+                        <div style="width: 60px; height: 60px; border-radius: 12px; background: rgba(124, 58, 237, 0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--secondary);">
+                            <i data-lucide="shopping-bag" width="32" height="32"></i>
+                        </div>
+                        <h2 style="font-size: 2rem; margin-bottom: 16px;">Lojas Virtuais (E-commerces)</h2>
+                        <p class="text-muted" style="margin-bottom: 20px; font-size: 1.05rem;">
+                            Venda produtos físicos ou digitais de forma segura, 24 horas por dia. Nossa estrutura é montada para não te dar dor de cabeça: cuidamos de toda integração de pagamento e cálculo de frete.
+                        </p>
+                        <ul style="margin-bottom: 24px; display: flex; flex-direction: column; gap: 10px;">
+                            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem; color: var(--text-main);"><i data-lucide="check" style="color: var(--success);" width="18"></i> Layout com super zoom de imagens e galerias</li>
+                            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem; color: var(--text-main);"><i data-lucide="check" style="color: var(--success);" width="18"></i> Integração com Correios, MelhorEnvio e transportadoras</li>
+                            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem; color: var(--text-main);"><i data-lucide="check" style="color: var(--success);" width="18"></i> Checkout transparente via MercadoPago ou Stripe</li>
+                        </ul>
+                        <a href="index.html#contato" class="btn btn-primary" style="background: var(--gradient-primary);">Fazer Orçamento <i data-lucide="arrow-right" width="16"></i></a>
+                    </div>
+                </div>
+
+                <!-- Serviço 3 -->
+                <div class="glass-card" style="display: flex; gap: 30px; align-items: center; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 300px;">
+                        <div style="width: 60px; height: 60px; border-radius: 12px; background: rgba(16, 185, 129, 0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--success);">
+                            <i data-lucide="target" width="32" height="32"></i>
+                        </div>
+                        <h2 style="font-size: 2rem; margin-bottom: 16px;">Landing Pages (Alta Conversão)</h2>
+                        <p class="text-muted" style="margin-bottom: 20px; font-size: 1.05rem;">
+                            Vai lançar um ebook, curso online ou focar em Captar Leads (Contatos)? Landing Pages são páginas únicas extremamente rápidas e diretas ao ponto, projetadas puramente para o botão de compra/cadastro.
+                        </p>
+                        <ul style="margin-bottom: 24px; display: flex; flex-direction: column; gap: 10px;">
+                            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem; color: var(--text-main);"><i data-lucide="check" style="color: var(--success);" width="18"></i> Focadas 100% em copywriting (texto persuasivo)</li>
+                            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem; color: var(--text-main);"><i data-lucide="check" style="color: var(--success);" width="18"></i> Estrutura sem distrações (sem menu de saída)</li>
+                            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem; color: var(--text-main);"><i data-lucide="check" style="color: var(--success);" width="18"></i> Carregamento ultrarrápido (Score > 95 no Google PageSpeed)</li>
+                        </ul>
+                        <a href="index.html#contato" class="btn btn-primary">Fazer Orçamento <i data-lucide="arrow-right" width="16"></i></a>
+                    </div>
+                    <div style="flex: 1; min-width: 300px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); background: #1E293B; height: 350px; display: flex; align-items: center; justify-content: center;">
+                        <i data-lucide="mouse-pointer-2" width="100" height="100" style="color: rgba(255,255,255,0.1);"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= CTA ================= -->
+    <section class="section" style="background: linear-gradient(135deg, rgba(37,99,235,0.1) 0%, rgba(124,58,237,0.1) 100%); text-align: center;">
+        <div class="container">
+            <h2 style="font-size: 2.5rem; margin-bottom: 16px;">Não achou o que procurava?</h2>
+            <p class="text-muted" style="font-size: 1.1rem; max-width: 600px; margin: 0 auto 30px auto;">
+                Também realizamos manutenção de sites antigos, otimização de velocidade de sites WordPress e desenvolvemos sistemas web exclusivos sob medida (SaaS).
+            </p>
+            <a href="index.html#contato" class="btn btn-outline" style="background: rgba(255,255,255,0.05);">Conversar com um Especialista</a>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer style="background-color: #080c14; padding: 60px 0 30px 0; border-top: 1px solid rgba(255,255,255,0.05);">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 50px;">
+                <div style="grid-column: span 2;">
+                    <a href="index.html" class="nav-brand" style="margin-bottom: 16px;">
+                        <i data-lucide="rocket" style="color: var(--primary);"></i> WebStart
+                    </a>
+                    <p class="text-muted" style="max-width: 300px; font-size: 0.95rem;">
+                        Arquitetura, design e performance premium. Sites modernos e lojas virtuais focadas em alta conversão.
+                    </p>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 20px; font-size: 1.1rem;">Navegação</h4>
+                    <ul style="display: flex; flex-direction: column; gap: 12px;">
+                        <li><a href="index.html#inicio" class="text-muted">Início</a></li>
+                        <li><a href="index.html#diferenciais" class="text-muted">Diferenciais</a></li>
+                        <li><a href="servicos.html" class="text-muted">Serviços</a></li>
+                        <li><a href="portfolio.html" class="text-muted">Portfólio</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 20px; font-size: 1.1rem;">Nossos Serviços</h4>
+                    <ul style="display: flex; flex-direction: column; gap: 12px;">
+                        <li><a href="servicos.html" class="text-muted">Landing Pages Otimizadas</a></li>
+                        <li><a href="servicos.html" class="text-muted">Criação de Sites Institucionais</a></li>
+                        <li><a href="servicos.html" class="text-muted">Desenvolvimento de E-commerces</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05);">
+                <p class="text-muted" style="font-size: 0.85rem;">&copy; 2026 WebStart Agency. Todos os direitos reservados. CNPJ: 00.000.000/0001-00</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="js/main.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

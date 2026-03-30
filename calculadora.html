@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Preço - WebStart</title>
+    <meta name="description" content="Simule o orçamento do seu novo site ou loja virtual e gere o PDF na hora.">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- jsPDF para gerar PDF localmente via JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" class="nav-brand">
+                <i data-lucide="rocket" style="color: var(--primary);"></i> WebStart
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html#inicio" class="nav-link">Início</a></li>
+                <li><a href="servicos.html" class="nav-link">Serviços</a></li>
+                <li><a href="portfolio.html" class="nav-link">Portfólio</a></li>
+                <li><a href="contato.html" class="nav-link">Contato</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ================= SIMULADOR ================= -->
+    <section style="padding: 160px 0 100px 0; background-color: var(--bg-body); min-height: 100vh;">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h1 style="font-size: 3rem; margin-bottom: 16px;">Simulador de <span class="text-gradient">Orçamento</span></h1>
+                <p class="text-muted" style="font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+                    Monte o pacote perfeito para o seu negócio e veja o valor na hora. Baixe o orçamento em PDF completo.
+                </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px; margin-top: 50px; align-items: start;">
+                
+                <!-- Formulário Base Custo -->
+                <div class="glass-card" style="padding: 40px;">
+                    
+                    <h3 style="margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
+                        <span style="background: var(--primary); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem;">1</span>
+                        Qual o tipo base do projeto?
+                    </h3>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 40px;">
+                        <!-- Opção Base -->
+                        <label class="sim-option" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; cursor: pointer; background: rgba(0,0,0,0.2); transition: var(--transition-fast);">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <input type="radio" name="base_type" value="800" data-label="Site Institucional Simples" checked style="width: 20px; height: 20px; accent-color: var(--primary);">
+                                <div>
+                                    <h4 style="margin: 0; font-size: 1.1rem;">Site Institucional Simples</h4>
+                                    <span style="color: var(--text-muted); font-size: 0.9rem;">Até 5 seções (One Page)</span>
+                                </div>
+                            </div>
+                            <span style="font-weight: 700;">R$ 800</span>
+                        </label>
+                        
+                        <label class="sim-option" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; cursor: pointer; background: rgba(0,0,0,0.2); transition: var(--transition-fast);">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <input type="radio" name="base_type" value="1800" data-label="Site Profissional (Multi-paginas)" style="width: 20px; height: 20px; accent-color: var(--primary);">
+                                <div>
+                                    <h4 style="margin: 0; font-size: 1.1rem;">Site Profissional (Multi-paginas)</h4>
+                                    <span style="color: var(--text-muted); font-size: 0.9rem;">Até 15 Páginas internas otimizadas</span>
+                                </div>
+                            </div>
+                            <span style="font-weight: 700;">R$ 1.800</span>
+                        </label>
+
+                        <label class="sim-option" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; cursor: pointer; background: rgba(0,0,0,0.2); transition: var(--transition-fast);">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <input type="radio" name="base_type" value="3500" data-label="Loja Virtual Completa" style="width: 20px; height: 20px; accent-color: var(--primary);">
+                                <div>
+                                    <h4 style="margin: 0; font-size: 1.1rem;">Loja Virtual Completa</h4>
+                                    <span style="color: var(--text-muted); font-size: 0.9rem;">E-commerce com pagamentos ativos</span>
+                                </div>
+                            </div>
+                            <span style="font-weight: 700;">R$ 3.500</span>
+                        </label>
+                    </div>
+
+                    <h3 style="margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
+                        <span style="background: var(--primary); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem;">2</span>
+                        Adicionar Recursos Extras
+                    </h3>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;" id="extras_container">
+                        <label style="display: flex; align-items: center; gap: 12px; padding: 16px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; background: rgba(0,0,0,0.1);">
+                            <input type="checkbox" class="extra-check" value="500" data-label="Área de Login de Usuários" style="width: 18px; height: 18px; accent-color: var(--primary);">
+                            <span>Área de Login (+ R$500)</span>
+                        </label>
+
+                        <label style="display: flex; align-items: center; gap: 12px; padding: 16px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; background: rgba(0,0,0,0.1);">
+                            <input type="checkbox" class="extra-check" value="500" data-label="Integração Pix/Pagamento" style="width: 18px; height: 18px; accent-color: var(--secondary);">
+                            <span>Pagamento Online (+ R$500)</span>
+                        </label>
+
+                        <label style="display: flex; align-items: center; gap: 12px; padding: 16px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; background: rgba(0,0,0,0.1);">
+                            <input type="checkbox" class="extra-check" value="300" data-label="Blog de Notícias" style="width: 18px; height: 18px; accent-color: var(--primary);">
+                            <span>Blog de Notícias (+ R$300)</span>
+                        </label>
+
+                        <label style="display: flex; align-items: center; gap: 12px; padding: 16px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; background: rgba(0,0,0,0.1);">
+                            <input type="checkbox" class="extra-check" value="1000" data-label="Área de Membros (Cursos)" style="width: 18px; height: 18px; accent-color: var(--secondary);">
+                            <span>Membros/Cursos (+ R$1000)</span>
+                        </label>
+                        
+                        <label style="display: flex; align-items: center; gap: 12px; padding: 16px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; background: rgba(0,0,0,0.1);">
+                            <input type="checkbox" class="extra-check" value="500" data-label="Otimização SEO Avançada" style="width: 18px; height: 18px; accent-color: var(--primary);">
+                            <span>SEO Avançado (+ R$500)</span>
+                        </label>
+                    </div>
+
+                    <h3 style="margin-top: 40px; margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
+                        <span style="background: var(--primary); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem;">3</span>
+                        Seus Dados para o Orçamento
+                    </h3>
+                    <div style="display: flex; gap: 15px;">
+                        <input type="text" id="client_name" placeholder="Nome da Empresa / Cliente" style="flex: 1; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
+                    </div>
+                </div>
+
+                <!-- Painel Flutuante Total -->
+                <div class="glass-card" style="padding: 30px; position: sticky; top: 100px; border-color: rgba(37,99,235,0.4); background: linear-gradient(180deg, rgba(37,99,235,0.05) 0%, rgba(30,41,59,0.9) 100%);">
+                    <h3 style="margin-bottom: 20px; font-size: 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">Resumo do Projeto</h3>
+                    
+                    <ul id="resumo_lista" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; font-size: 0.95rem; color: var(--text-muted); min-height: 150px;">
+                        <!-- Será preenchido via JS -->
+                    </ul>
+                    
+                    <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; margin-bottom: 30px;">
+                        <span style="font-size: 1rem; color: var(--text-muted);">Investimento Estimado</span>
+                        <h2 id="total_price" style="font-size: 2.8rem; font-family: 'Outfit'; margin-top: 5px; color: var(--text-main);">R$ 800</h2>
+                    </div>
+
+                    <button id="btn_gerar_pdf" class="btn btn-primary" style="width: 100%; justify-content: center; margin-bottom: 15px;">
+                        Baixar Orçamento (PDF) <i data-lucide="download" width="18"></i>
+                    </button>
+                    <a href="https://wa.me/55999999999" target="_blank" class="btn btn-outline" style="width: 100%; justify-content: center; border-color: #25D366; color: #25D366;">
+                        Enviar via WhatsApp <i data-lucide="message-circle" width="18"></i>
+                    </a>
+                </div>
+
+            </div>
+            
+            <style>
+                @media (max-width: 900px) {
+                    section .container > div {
+                        grid-template-columns: 1fr;
+                    }
+                    #extras_container {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            </style>
+        </div>
+    </section>
+
+    <!-- SCRIPTS -->
+    <script src="js/main.js"></script>
+    <script>
+        lucide.createIcons();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const baseTypes = document.querySelectorAll('input[name="base_type"]');
+            const extras = document.querySelectorAll('.extra-check');
+            const totalPriceEl = document.getElementById('total_price');
+            const resumoLista = document.getElementById('resumo_lista');
+            const btnPdf = document.getElementById('btn_gerar_pdf');
+            const clientNameInput = document.getElementById('client_name');
+
+            function atualizarResumo() {
+                let total = 0;
+                resumoLista.innerHTML = '';
+                
+                // Base
+                let baseSelecionada = document.querySelector('input[name="base_type"]:checked');
+                if(baseSelecionada) {
+                    total += parseFloat(baseSelecionada.value);
+                    resumoLista.innerHTML += `<li style="display:flex; justify-content:space-between;"><span>${baseSelecionada.dataset.label}</span> <span>R$ ${baseSelecionada.value}</span></li>`;
+                }
+
+                // Extras
+                extras.forEach(box => {
+                    if(box.checked) {
+                        total += parseFloat(box.value);
+                        resumoLista.innerHTML += `<li style="display:flex; justify-content:space-between; color: var(--text-main);"><span>+ ${box.dataset.label}</span> <span>R$ ${box.value}</span></li>`;
+                    }
+                });
+
+                // Inclusos padrão
+                resumoLista.innerHTML += `<li style="display:flex; justify-content:space-between; color: var(--success); margin-top: 10px; font-size: 0.85rem;"><span>✔ Domínio + Hospedagem 1 Ano</span> <span>Incluso</span></li>`;
+
+                totalPriceEl.innerText = `R$ ${total.toLocaleString('pt-BR')}`;
+            }
+
+            baseTypes.forEach(el => el.addEventListener('change', atualizarResumo));
+            extras.forEach(el => el.addEventListener('change', atualizarResumo));
+            atualizarResumo();
+
+            // Gerar PDF usando jsPDF
+            btnPdf.addEventListener('click', () => {
+                const { jsPDF } = window.jspdf;
+                if(!jsPDF) {
+                    alert("Erro ao carregar o gerador de PDF. Tente novamente em instantes.");
+                    return;
+                }
+                
+                const doc = new jsPDF();
+                const totalText = totalPriceEl.innerText;
+                const clientName = clientNameInput.value || "Cliente";
+                
+                // Cores e Estilos PDF (Simples)
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(22);
+                doc.setTextColor(37, 99, 235); // Azul WebStart
+                doc.text("WebStart Agency", 20, 30);
+                
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(12);
+                doc.setTextColor(50, 50, 50);
+                doc.text(`Proposta Comercial de Desenvolvimento Web.`, 20, 40);
+                doc.text(`Elaborado para: ${clientName}`, 20, 48);
+                
+                doc.line(20, 55, 190, 55); // Linha
+
+                let y = 65;
+                doc.setFontSize(14);
+                doc.setFont("helvetica", "bold");
+                doc.text("Escopo do Projeto:", 20, y);
+                y += 10;
+                
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "normal");
+
+                // Base
+                let base = document.querySelector('input[name="base_type"]:checked');
+                doc.text(`- ${base.dataset.label} (R$ ${base.value})`, 20, y);
+                y += 8;
+
+                // Extras
+                extras.forEach(box => {
+                    if(box.checked) {
+                        doc.text(`- ${box.dataset.label} (R$ ${box.value})`, 25, y);
+                        y += 8;
+                    }
+                });
+
+                y += 5;
+                doc.setFillColor(230, 240, 255);
+                doc.rect(20, y, 170, 20, 'F');
+                doc.setFont("helvetica", "bold");
+                doc.setTextColor(10, 10, 10);
+                doc.text(`Investimento Estimado: ${totalText}`, 25, y + 13);
+                
+                y += 35;
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(10);
+                doc.text("Orçamento válido por 7 dias. Não inclui taxas por transações em catões.", 20, y);
+                doc.text("Entre em contato para aprovar a proposta e iniciarmos o desenvolvimento.", 20, y + 6);
+                doc.text("WhatsApp: (99) 99999-9999 | contato@webstart.com.br", 20, y + 12);
+
+                doc.save(`Orcamento_WebStart_${clientName.replace(/\s+/g, '_')}.pdf`);
+            });
+        });
+    </script>
+</body>
+</html>

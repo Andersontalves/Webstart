@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Cliente - WebStart</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+            background-color: var(--bg-body);
+        }
+        
+        /* SIDEBAR */
+        .sidebar {
+            width: 260px;
+            background: #080c14;
+            border-right: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+        }
+
+        .sidebar-header {
+            padding: 30px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 24px 12px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: var(--transition-fast);
+        }
+
+        .sidebar-link:hover, .sidebar-link.active {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+        }
+
+        .sidebar-footer {
+            padding: 24px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 40px;
+            width: calc(100% - 260px);
+        }
+
+        .user-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            width: 65%;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+                z-index: 100;
+                transition: transform 0.3s ease;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 24px;
+            }
+            .mobile-toggle {
+                display: block !important;
+            }
+        }
+        
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-layout">
+        
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="nav-brand" style="margin: 0; font-size: 1.4rem;">
+                    <i data-lucide="rocket" style="color: var(--primary);"></i> WebStart
+                </a>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="#" class="sidebar-link active">
+                        <i data-lucide="layout-dashboard" width="18"></i> Visão Geral
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-link">
+                        <i data-lucide="server" width="18"></i> Meus Serviços
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-link">
+                        <i data-lucide="credit-card" width="18"></i> Faturas
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-link">
+                        <i data-lucide="headphones" width="18"></i> Suporte Técnico
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <a href="login.html" class="sidebar-link" style="color: #ef4444;">
+                    <i data-lucide="log-out" width="18"></i> Sair
+                </a>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            
+            <header class="user-header">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <button class="mobile-toggle" id="toggleMenu">
+                        <i data-lucide="menu"></i>
+                    </button>
+                    <div>
+                        <h2 style="font-size: 1.8rem; margin: 0;">Olá, Empresa XPTO! 👋</h2>
+                        <p class="text-muted" style="margin: 4px 0 0 0;">Bem-vindo ao seu painel de controle.</p>
+                    </div>
+                </div>
+
+                <div class="user-profile">
+                    <div style="text-align: right; display: none; @media(min-width: 600px){display: block;}">
+                        <strong style="display: block; font-size: 0.95rem;">Empresa XPTO</strong>
+                        <span style="color: var(--text-muted); font-size: 0.85rem;">Plano Profissional</span>
+                    </div>
+                    <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.5); display: flex; align-items: center; justify-content: center;">
+                        <span style="font-weight: 700; color: var(--primary);">EX</span>
+                    </div>
+                </div>
+            </header>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 40px;">
+                
+                <!-- Status do Projeto Atual -->
+                <div class="glass-card" style="border-color: rgba(37,99,235,0.3);">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                        <div>
+                            <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; text-transform: uppercase;">Projeto em Andamento</span>
+                            <h3 style="margin: 8px 0 0 0; font-size: 1.2rem;">Loja Virtual XPTO</h3>
+                        </div>
+                        <span style="background: rgba(37,99,235,0.2); color: #60a5fa; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">Em Desenvolvimento</span>
+                    </div>
+                    
+                    <p class="text-muted" style="font-size: 0.9rem;">Fase 3: Integração de Meios de Pagamento e Correios.</p>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.8rem; color: var(--text-muted);">
+                        <span>Progresso: 65%</span>
+                        <span>Previsão: 20/05/2026</span>
+                    </div>
+                </div>
+
+                <!-- Fatura Pendente -->
+                <div class="glass-card">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div style="width: 40px; height: 40px; border-radius: 8px; background: rgba(239,68,68,0.1); color: #ef4444; display: flex; align-items: center; justify-content: center;">
+                            <i data-lucide="alert-circle" width="20"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.1rem;">Fatura em Aberto</h3>
+                            <span class="text-muted" style="font-size: 0.85rem;">Vencimento: 15/05/2026</span>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;">
+                        <div>
+                            <span style="font-size: 0.85rem; color: var(--text-muted);">Hospedagem + Manutenção</span>
+                            <h2 style="margin: 5px 0 0 0; font-size: 1.8rem; color: #fff;">R$ 149,90</h2>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-primary" style="flex: 1; padding: 10px; justify-content: center; font-size: 0.9rem;">Pagar com Pix</button>
+                        <button class="btn btn-outline" style="flex: 1; padding: 10px; justify-content: center; font-size: 0.9rem;">Ver PDF</button>
+                    </div>
+                </div>
+
+                <!-- Chamado Suporte Rápido -->
+                <div class="glass-card">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div style="width: 40px; height: 40px; border-radius: 8px; background: rgba(16,185,129,0.1); color: var(--success); display: flex; align-items: center; justify-content: center;">
+                            <i data-lucide="life-buoy" width="20"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.1rem;">Suporte Técnico</h3>
+                            <span class="text-muted" style="font-size: 0.85rem;">Atendimento em até 2h</span>
+                        </div>
+                    </div>
+
+                    <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 20px;">Precisa de alteração no site ou encontrou algum problema?</p>
+                    
+                    <button class="btn btn-outline" style="width: 100%; justify-content: center; border-color: rgba(255,255,255,0.1);">
+                        <i data-lucide="plus" width="16"></i> Abrir Novo Chamado
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Lista de Serviços Contratados -->
+            <h3 style="margin-bottom: 20px; font-size: 1.3rem;">Serviços Ativos</h3>
+            <div class="glass-card" style="padding: 0; overflow: hidden;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <tr>
+                            <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Serviço</th>
+                            <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Domínio</th>
+                            <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Status</th>
+                            <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Renovação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 16px 24px; color: #fff; font-weight: 500;">Hospedagem Cloud Pro</td>
+                            <td style="padding: 16px 24px; color: var(--text-muted);">empresaxpto.com.br</td>
+                            <td style="padding: 16px 24px;"><span style="color: var(--success); font-size: 0.85rem; background: rgba(16,185,129,0.1); padding: 4px 10px; border-radius: 20px;">Ativo</span></td>
+                            <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">12/08/2026</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 16px 24px; color: #fff; font-weight: 500;">Manutenção Mensal VIP</td>
+                            <td style="padding: 16px 24px; color: var(--text-muted);">-</td>
+                            <td style="padding: 16px 24px;"><span style="color: var(--success); font-size: 0.85rem; background: rgba(16,185,129,0.1); padding: 4px 10px; border-radius: 20px;">Ativo</span></td>
+                            <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">Renovação Mensal</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Menu Toggle para Mobile
+        const toggleBtn = document.getElementById('toggleMenu');
+        const sidebar = document.getElementById('sidebar');
+
+        if(toggleBtn && sidebar) {
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+            });
+        }
+    </script>
+</body>
+</html>
