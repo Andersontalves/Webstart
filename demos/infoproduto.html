@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio Produtividade Extrema - Masterclass</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&display=swap');
+        body { font-family: 'Space Grotesk', sans-serif; background-color: #030014; color: #fff; overflow-x: hidden; }
+        .glow { box-shadow: 0 0 60px -15px rgba(236,72,153, 0.5); }
+        .text-gradient { background: linear-gradient(to right, #ec4899, #8b5cf6, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="relative">
+    
+    <a href="../portfolio.html" class="absolute top-5 left-5 z-50 bg-white/10 backdrop-blur-md border border-white/20 text-white px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 hover:bg-white/20 transition">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Portfólio
+    </a>
+
+    <!-- Bg effects -->
+    <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-purple-600 rounded-full blur-[150px] opacity-20 -z-10 animate-pulse"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-pink-600 rounded-full blur-[150px] opacity-20 -z-10 animate-pulse"></div>
+
+    <section class="min-h-screen flex flex-col items-center justify-center text-center px-4 pt-20">
+        <div class="bg-white/5 border border-white/10 px-6 py-2 rounded-full text-sm font-bold text-pink-400 mb-8 inline-flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-pink-500 animate-pulse"></span> INSCRIÇÕES ABERTAS - VAGAS LIMITADAS
+        </div>
+        
+        <h1 class="text-6xl md:text-8xl font-black mb-6 leading-tight max-w-5xl mx-auto">
+            DESBLOQUEIE SUA <br>
+            <span class="text-gradient">PRODUTIVIDADE MÁXIMA</span>
+        </h1>
+        
+        <p class="text-xl text-slate-300 max-w-2xl mx-auto mb-12 leading-relaxed">
+            Descubra o método testado por grandes CEOs para fazer em 4 horas o que a maioria das pessoas leva uma semana inteira para concluir.
+        </p>
+        
+        <div class="bg-white/5 border border-white/20 p-8 rounded-3xl max-w-xl mx-auto backdrop-blur-xl glow w-full">
+            <h3 class="text-2xl font-bold mb-6">Masterclass Gratuita + PDF</h3>
+            <form class="flex flex-col gap-4">
+                <input type="text" placeholder="Seu Primeiro Nome" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-white placeholder-slate-500 focus:outline-none focus:border-pink-500">
+                <input type="email" placeholder="Seu Melhor E-mail" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-white placeholder-slate-500 focus:outline-none focus:border-pink-500">
+                <button type="button" class="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-black text-lg px-8 py-5 rounded-xl uppercase tracking-wider transform hover:-translate-y-1 transition duration-300 shadow-xl shadow-pink-500/25">
+                    Garantir Minha Vaga Agora
+                </button>
+                <div class="flex items-center justify-center gap-2 text-xs text-slate-400 mt-2">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-green-400"></i> Seus dados estão 100% seguros.
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 text-center text-slate-600 text-sm">
+        <p>Demonstração Landing Page de Alta Conversão - <strong class="text-pink-500">WebStart Agency</strong></p>
+    </footer>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

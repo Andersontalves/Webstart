@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabor VIP - Restaurante Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        h1, h2, h3, .serif { font-family: 'Playfair Display', serif; }
+        .hero { background: linear-gradient(rgba(15,23,42,0.7), rgba(15,23,42,0.9)), url('https://images.unsplash.com/photo-1544148103-0773bf10d330?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover; }
+    </style>
+</head>
+<body>
+    
+    <!-- WEBSTART RETURN BADGE -->
+    <a href="../portfolio.html" class="fixed top-5 left-5 z-50 bg-white/10 backdrop-blur-md border border-white/20 text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2 hover:bg-white/20 transition">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Portfólio
+    </a>
+
+    <!-- Navbar -->
+    <nav class="flex justify-between items-center px-10 py-6 absolute w-full z-10">
+        <div class="text-2xl font-bold serif tracking-wider text-amber-500">SABOR VIP</div>
+        <ul class="hidden md:flex gap-8 text-sm uppercase tracking-widest text-slate-300">
+            <li class="hover:text-amber-500 cursor-pointer transition">Menu</li>
+            <li class="hover:text-amber-500 cursor-pointer transition">Experiência</li>
+            <li class="hover:text-amber-500 cursor-pointer transition">Reservas</li>
+        </ul>
+        <button class="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 uppercase text-sm tracking-wider transition">Reservar Mesa</button>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero h-screen flex flex-col items-center justify-center text-center px-4">
+        <span class="text-amber-500 tracking-[0.3em] uppercase text-sm mb-4">Alta Gastronomia</span>
+        <h1 class="text-5xl md:text-7xl font-bold italic mb-6">Uma Experiência<br>Inesquecível</h1>
+        <p class="text-slate-300 max-w-lg mx-auto text-lg mb-10">Sabores autênticos, ingredientes frescos e um ambiente preparado para celebrar momentos únicos.</p>
+        <button class="border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-slate-900 transition px-8 py-3 uppercase tracking-widest text-sm">Ver Cardápio</button>
+    </section>
+
+    <!-- Destaque -->
+    <section class="py-24 px-10 bg-slate-900 flex flex-col md:flex-row gap-16 items-center max-w-7xl mx-auto">
+        <div class="flex-1">
+            <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Prato" class="rounded-t-full max-h-[600px] object-cover mx-auto">
+        </div>
+        <div class="flex-1 space-y-6 text-center md:text-left">
+            <h2 class="text-4xl serif text-amber-500">A Arte do Sabor</h2>
+            <p class="text-slate-400 leading-relaxed">Cada prato é uma obra de arte pensada pelo nosso Chef Executivo. Unimos a tradição culinária com técnicas modernas para trazer à sua mesa não apenas comida, mas sentimentos.</p>
+            <div class="pt-6">
+                <div class="font-bold serif text-xl border-b border-slate-700 pb-2 mb-2">Horário de Funcionamento</div>
+                <p class="text-slate-400">Terça a Domingo<br>18:30 às 23:30</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Mock -->
+    <footer class="bg-black py-12 text-center text-slate-500 text-sm">
+        <p>Desenvolvido como demonstração por <strong class="text-amber-500">WebStart Agency</strong></p>
+    </footer>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>

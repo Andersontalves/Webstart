@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oliveira & Associados - Advocacia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap');
+        body { font-family: 'Lato', sans-serif; background-color: #0f1115; color: #e2e8f0; }
+        h1, h2, h3, .serif { font-family: 'Cinzel', serif; }
+        .hero { background: linear-gradient(rgba(15,17,21,0.8), rgba(15,17,21,0.95)), url('https://images.unsplash.com/photo-1589829085413-56de8ae18c73?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover; }
+    </style>
+</head>
+<body>
+    <a href="../portfolio.html" class="fixed top-5 left-5 z-50 bg-white/5 backdrop-blur-md border border-white/20 text-white px-4 py-2 rounded-sm text-sm font-semibold flex items-center gap-2 hover:bg-white/10 transition">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Portfólio
+    </a>
+
+    <!-- Navbar -->
+    <nav class="flex justify-between items-center px-12 py-8 absolute w-full z-10 border-b border-white/10">
+        <div class="text-xl serif tracking-[0.3em] uppercase text-white">Oliveira & Associados</div>
+        <ul class="hidden md:flex gap-10 text-xs uppercase tracking-[0.2em] text-gray-400">
+            <li class="hover:text-amber-500 cursor-pointer transition">O Escritório</li>
+            <li class="hover:text-amber-500 cursor-pointer transition">Atuação</li>
+            <li class="hover:text-amber-500 cursor-pointer transition">Sócios</li>
+        </ul>
+        <button class="border border-amber-600 text-amber-500 hover:bg-amber-600 hover:text-white px-6 py-2 uppercase text-xs tracking-[0.2em] transition">Fale Conosco</button>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero min-h-screen flex flex-col justify-center px-12 md:px-32">
+        <div class="max-w-3xl border-l-2 border-amber-600 pl-8">
+            <span class="text-amber-500 tracking-[0.3em] uppercase text-xs mb-6 block font-bold">Direito Empresarial e Tributário</span>
+            <h1 class="text-5xl md:text-7xl font-bold mb-8 serif leading-tight text-white">Excelência <br>Jurídica para<br>Grandes Negócios.</h1>
+            <p class="text-gray-400 max-w-lg text-lg mb-10 leading-relaxed font-light">Mais de duas décadas defendendo o patrimônio e as operações das maiores corporações do Brasil com precisão e ética.</p>
+            <div class="flex gap-6">
+                <button class="bg-amber-600 text-white px-10 py-4 uppercase tracking-[0.2em] text-xs font-bold hover:bg-amber-700 transition">Agendar Consulta</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#0a0b0e] py-16 text-center text-gray-500 text-xs tracking-widest uppercase border-t border-white/5">
+        WebStart Agency &copy; Demonstração Advocatícia
+    </footer>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
