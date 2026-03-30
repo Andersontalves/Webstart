@@ -110,27 +110,8 @@
                                 <th style="padding: 12px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.85rem;">Prazo</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                                <td style="padding: 16px 24px; color: #fff; font-size: 0.9rem;">Empresa XPTO</td>
-                                <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">Loja Virtual</td>
-                                <td style="padding: 16px 24px;">
-                                    <div style="width: 100px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
-                                        <div style="width: 65%; height: 100%; background: var(--secondary);"></div>
-                                    </div>
-                                </td>
-                                <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.85rem;">20/05/2026</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                                <td style="padding: 16px 24px; color: #fff; font-size: 0.9rem;">Clínica Med</td>
-                                <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">Landing Page</td>
-                                <td style="padding: 16px 24px;">
-                                    <div style="width: 100px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
-                                        <div style="width: 90%; height: 100%; background: var(--success);"></div>
-                                    </div>
-                                </td>
-                                <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.85rem;">15/05/2026</td>
-                            </tr>
+                        <tbody id="listaProjetosDOM">
+                            <tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 16px;">Carregando projetos do banco de dados...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -266,6 +247,34 @@
         </div>
     </div>
 
+    <!-- MODAL NOVO PROJETO -->
+    <div id="modalNovoProjeto" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+        <div class="glass-card" style="width: 100%; max-width: 500px; padding: 40px; position: relative; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+            <button id="closeModalProjeto" style="position: absolute; right: 20px; top: 20px; background: none; border: none; color: var(--text-muted); cursor: pointer; transition: 0.2s;"><i data-lucide="x"></i></button>
+            <h3 style="margin: 0 0 25px 0; font-size: 1.5rem; text-align: center;">Criar Novo Projeto</h3>
+            
+            <form id="formNovoProjeto" style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="input-group">
+                    <label>Selecionar Cliente</label>
+                    <select id="projCliente" class="input" required style="background: var(--bg-body); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+                        <option value="">Carregando clientes...</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Serviço Contratado</label>
+                    <input type="text" id="projServico" class="input" required placeholder="Ex: Loja Virtual, Landing Page...">
+                </div>
+                <div class="input-group" style="display: flex; gap: 15px;">
+                    <div style="flex: 1;">
+                        <label>Prazo de Entrega</label>
+                        <input type="date" id="projPrazo" class="input" required style="color-scheme: dark;">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 15px; justify-content: center; background: var(--gradient-secondary); font-size: 1.05rem; padding: 14px;">Iniciar Projeto <i data-lucide="play-circle" width="18"></i></button>
+            </form>
+        </div>
+    </div>
+
     <script type="module">
         import { db } from './js/firebase-config.js';
         import { collection, addDoc, onSnapshot, serverTimestamp, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
@@ -378,8 +387,20 @@
                 return;
             }
 
+            const projClienteSelect = document.getElementById('projCliente');
+            if(projClienteSelect) projClienteSelect.innerHTML = '<option value="">Selecione o Cliente...</option>';
+
             snapshot.forEach((docSnap) => {
                 const cliente = docSnap.data();
+                
+                // Popula o select do modal de Projetos automaticamente!
+                if(projClienteSelect) {
+                    const opt = document.createElement('option');
+                    opt.value = cliente.nome;
+                    opt.textContent = cliente.nome;
+                    projClienteSelect.appendChild(opt);
+                }
+
                 const tr = document.createElement('tr');
                 tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
                 tr.innerHTML = `
@@ -413,6 +434,122 @@
                 }
             }
         });
+
+        /* Lógica do Modal Novo Projeto */
+        const btnNovoProjetoTop = document.getElementById('btnNovoProjetoTop');
+        const modalNovoProjeto = document.getElementById('modalNovoProjeto');
+        const closeModalProjeto = document.getElementById('closeModalProjeto');
+        
+        if (btnNovoProjetoTop && modalNovoProjeto) {
+            btnNovoProjetoTop.addEventListener('click', () => {
+                modalNovoProjeto.style.display = 'flex';
+                lucide.createIcons();
+            });
+            closeModalProjeto.addEventListener('click', () => {
+                modalNovoProjeto.style.display = 'none';
+            });
+            modalNovoProjeto.addEventListener('click', (e) => {
+                if (e.target === modalNovoProjeto) modalNovoProjeto.style.display = 'none';
+            });
+        }
+
+        /* Lógica de Gravação e Leitura de Projetos no Firestore */
+        const projetosRef = collection(db, 'projetos');
+        const formNovoProjeto = document.getElementById('formNovoProjeto');
+        const listaProjetosDOM = document.getElementById('listaProjetosDOM');
+        
+        if (formNovoProjeto) {
+            formNovoProjeto.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btnSubmit = formNovoProjeto.querySelector('button[type="submit"]');
+                const originalText = btnSubmit.innerHTML;
+                btnSubmit.innerHTML = 'Iniciando...';
+                
+                const cliente = document.getElementById('projCliente').value;
+                const servico = document.getElementById('projServico').value;
+                const prazoOriginal = document.getElementById('projPrazo').value;
+                
+                // Formata YYYY-MM-DD pra formato local
+                const dateParts = prazoOriginal.split('-');
+                const prazo = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+                
+                try {
+                    await addDoc(projetosRef, {
+                        cliente: cliente,
+                        servico: servico,
+                        progresso: 10, // Novo projeto sempre nasce com 10%
+                        prazo: prazo,
+                        status: 'Andamento',
+                        createdAt: serverTimestamp()
+                    });
+                    
+                    formNovoProjeto.reset();
+                    modalNovoProjeto.style.display = 'none';
+                } catch (error) {
+                    console.error("Erro ao salvar projeto: ", error);
+                    alert("Erro ao criar projeto: " + error.message);
+                } finally {
+                    btnSubmit.innerHTML = originalText;
+                }
+            });
+        }
+
+        // Leitura em Tempo Real (Real-time listener Projetos)
+        onSnapshot(projetosRef, (snapshot) => {
+            if(!listaProjetosDOM) return;
+            listaProjetosDOM.innerHTML = '';
+            
+            if (snapshot.empty) {
+                listaProjetosDOM.innerHTML = '<tr><td colspan="4" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Ufa, caixas limpas! Nenhum projeto em andamento.</td></tr>';
+                return;
+            }
+
+            snapshot.forEach((docSnap) => {
+                const proj = docSnap.data();
+                
+                // Cor inteligente baseada no progresso
+                let barColor = 'var(--primary)';
+                if(proj.progresso >= 100) barColor = 'var(--success)';
+                if(proj.progresso < 30) barColor = 'var(--secondary)';
+                
+                const tr = document.createElement('tr');
+                tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                tr.innerHTML = `
+                    <td style="padding: 16px 24px; color: #fff; font-size: 0.9rem;">${proj.cliente}</td>
+                    <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${proj.servico}</td>
+                    <td style="padding: 16px 24px;">
+                        <div style="width: 100%; max-width: 150px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; position: relative;">
+                            <div style="position: absolute; left: 0; top: 0; width: ${proj.progresso}%; height: 100%; background: ${barColor}; transition: 0.5s;"></div>
+                        </div>
+                    </td>
+                    <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
+                        ${proj.prazo}
+                        <button class="btn btn-outline btn-delete-proj" data-id="${docSnap.id}" style="padding: 4px; border: none; color: #ef4444;" title="Arquivar / Excluir"><i data-lucide="archive" width="14"></i></button>
+                    </td>
+                `;
+                listaProjetosDOM.appendChild(tr);
+            });
+            
+            // Re-injeta icones nos botoes criados dinamicamente
+            lucide.createIcons();
+        });
+
+        // Event Delegation para Botoes de Arquivar/Excluir Projeto
+        if (listaProjetosDOM) {
+            listaProjetosDOM.addEventListener('click', async (e) => {
+                const btn = e.target.closest('.btn-delete-proj');
+                if (btn) {
+                    if (confirm('Tem certeza que deseja deletar ou arquivar este projeto?')) {
+                        const id = btn.getAttribute('data-id');
+                        try {
+                            await deleteDoc(doc(db, 'projetos', id));
+                        } catch (error) {
+                            alert("Erro ao excluir: " + error.message);
+                        }
+                    }
+                }
+            });
+        }
 
     </script>
 </body>
