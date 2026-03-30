@@ -84,7 +84,7 @@
                 <p class="text-muted">Esqueça os problemas de configuração técnica. Nós resolvemos tudo pela sua empresa.</p>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 50px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px;">
                 <!-- Diferencial 1 -->
                 <div class="glass-card">
                     <div style="width: 50px; height: 50px; border-radius: 12px; background: rgba(37, 99, 235, 0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--primary);">
@@ -186,7 +186,7 @@
                 <p class="text-muted">Veja a qualidade do design e experiência que entregamos para diferentes nichos.</p>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 50px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px;">
                 <!-- 1 -->
                 <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
                     <div style="height: 220px; background: #2f3e54; position: relative;">
@@ -294,7 +294,7 @@
                 <p class="text-muted">Investimento justo para transformar a sua presença digital.</p>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 50px; align-items: center;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px; align-items: center;">
                 
                 <!-- Plano 1 -->
                 <div class="glass-card" style="padding: 40px 30px;">
@@ -363,7 +363,7 @@
     <!-- ================= CONTATO / FORMULÁRIO / CALCULADORA ================= -->
     <section class="section" id="contato" style="background-color: var(--bg-body); position: relative; border-top: 1px solid rgba(255,255,255,0.05);">
         <div class="container">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start;">
+            <div class="contact-grid">
                 
                 <div>
                     <h2 style="font-size: 2.5rem; margin-bottom: 16px;">Pronto para iniciar?</h2>
@@ -439,9 +439,16 @@
             
             <!-- Estilos responsivos simples para transformar grid em 1 coluna -->
             <style>
+                .contact-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 60px;
+                    align-items: start;
+                }
                 @media (max-width: 900px) {
-                    #contato .container > div {
+                    .contact-grid {
                         grid-template-columns: 1fr;
+                        gap: 30px;
                     }
                 }
             </style>
