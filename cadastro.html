@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - WebStart Área do Cliente</title>
+    <title>Criar Conta - WebStart</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -25,11 +25,20 @@
             <a href="index.html" class="nav-brand" style="justify-content: center; font-size: 2rem;">
                 <i data-lucide="rocket" style="color: var(--primary); width: 32px; height: 32px;"></i> WebStart
             </a>
-            <p class="text-muted" style="margin-top: 10px;">Área exclusiva do cliente</p>
+            <p class="text-muted" style="margin-top: 10px;">Crie sua conta para acessar o painel</p>
         </div>
 
-        <form id="loginForm" style="display: flex; flex-direction: column; gap: 20px;">
+        <form id="registerForm" style="display: flex; flex-direction: column; gap: 20px;">
             <div id="errorBox" style="display: none; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; padding: 12px; border-radius: 8px; font-size: 0.85rem; text-align: center;"></div>
+            <div id="successBox" style="display: none; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--success); padding: 12px; border-radius: 8px; font-size: 0.85rem; text-align: center;">Conta criada com sucesso! Redirecionando...</div>
+
+            <div>
+                <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">Nome da Empresa ou Usuário</label>
+                <div style="position: relative;">
+                    <i data-lucide="user" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);" width="18"></i>
+                    <input type="text" id="name" placeholder="Sua Empresa" required style="width: 100%; padding: 14px 16px 14px 45px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
+                </div>
+            </div>
 
             <div>
                 <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">E-mail</label>
@@ -40,23 +49,20 @@
             </div>
 
             <div>
-                <label style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">
-                    Senha
-                    <a href="#" style="color: var(--primary); text-decoration: none;">Esqueceu?</a>
-                </label>
+                <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">Senha</label>
                 <div style="position: relative;">
                     <i data-lucide="lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);" width="18"></i>
-                    <input type="password" id="password" placeholder="••••••••" required style="width: 100%; padding: 14px 16px 14px 45px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
+                    <input type="password" id="password" placeholder="••••••••" required minlength="6" style="width: 100%; padding: 14px 16px 14px 45px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
                 </div>
             </div>
 
             <button type="submit" id="btnSubmit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 16px; margin-top: 10px; background: var(--gradient-primary);">
-                Acessar Painel <i data-lucide="arrow-right" width="18"></i>
+                Criar Conta Agora <i data-lucide="arrow-right" width="18"></i>
             </button>
         </form>
 
         <div style="text-align: center; margin-top: 30px; font-size: 0.95rem; color: var(--text-muted);">
-            Não tem uma conta? <a href="cadastro.html" style="color: #fff; font-weight: 600;">Criar uma conta grátis</a>
+            Já possui uma conta? <a href="login.html" style="color: #fff; font-weight: 600;">Faça o login</a>
         </div>
     </div>
 
@@ -65,49 +71,54 @@
     </script>
     <script type="module">
         import { auth } from './js/firebase-config.js';
-        import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+        import { createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
-        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
         const btnSubmit = document.getElementById('btnSubmit');
         const errorBox = document.getElementById('errorBox');
+        const successBox = document.getElementById('successBox');
 
-        loginForm.addEventListener('submit', async (e) => {
+        registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             errorBox.style.display = 'none';
-            btnSubmit.innerHTML = 'Conectando... <i data-lucide="loader" class="spin" style="animation: spin 1s linear infinite;"></i>';
+            successBox.style.display = 'none';
+            btnSubmit.innerHTML = 'Criando... <i data-lucide="loader" class="spin" style="animation: spin 1s linear infinite;"></i>';
             lucide.createIcons();
             
+            const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
             try {
-                // Tenta logar no Firebase Authentication
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                // Cria a conta no Firebase Authentication
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
                 
-                // Redireciona com base no tipo de usuário (futuramente validado via Firestore)
-                if(email.includes('admin@')) {
-                    window.location.href = 'admin.html';
-                } else {
+                // Grava o Nome Fantasia no Perfil do Auth
+                await updateProfile(user, { displayName: name });
+                
+                successBox.style.display = 'block';
+                
+                // Redireciona pro Dashboard em 1 segundo
+                setTimeout(() => {
                     window.location.href = 'dashboard-cliente.html';
-                }
+                }, 1500);
 
             } catch (error) {
-                console.error("Erro no login:", error);
+                console.error("Erro no cadastro:", error);
                 errorBox.style.display = 'block';
                 
-                // Lidando com mensagens de erro específicas
-                if(error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-                    errorBox.innerText = 'Email ou senha inválidos. Tente novamente.';
+                if(error.code === 'auth/email-already-in-use') {
+                    errorBox.innerText = 'Esse e-mail já está em uso.';
+                } else if(error.code === 'auth/weak-password') {
+                    errorBox.innerText = 'A senha precisa ter pelo menos 6 caracteres.';
                 } else if(error.code === 'auth/operation-not-allowed') {
-                    errorBox.innerText = 'Este método de login não foi ativado lá no Firebase Console!';
-                } else if(error.message && error.message.includes("fetch")) {
-                     errorBox.innerText = 'Erro de rede ou domínio local bloqueado. Você está usando Live Server?';
+                    errorBox.innerText = 'O método E-mail/Senha não está ativado no Firebase Console!';
                 } else {
                     errorBox.innerText = `Erro: ${error.code || error.message}`;
                 }
                 
-                btnSubmit.innerHTML = 'Acessar Painel <i data-lucide="arrow-right"></i>';
+                btnSubmit.innerHTML = 'Criar Conta Agora <i data-lucide="arrow-right"></i>';
                 lucide.createIcons();
             }
         });
