@@ -52,7 +52,17 @@
                 <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">Senha</label>
                 <div style="position: relative;">
                     <i data-lucide="lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);" width="18"></i>
-                    <input type="password" id="password" placeholder="••••••••" required minlength="6" style="width: 100%; padding: 14px 16px 14px 45px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
+                    <input type="password" id="password" placeholder="••••••••" required minlength="6" style="width: 100%; padding: 14px 45px 14px 45px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
+                    <i data-lucide="eye" id="togglePassword" style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer;" width="18"></i>
+                </div>
+            </div>
+
+            <div>
+                <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">Confirmar Senha</label>
+                <div style="position: relative;">
+                    <i data-lucide="lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);" width="18"></i>
+                    <input type="password" id="confirmPassword" placeholder="••••••••" required minlength="6" style="width: 100%; padding: 14px 45px 14px 45px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
+                    <i data-lucide="eye" id="toggleConfirmPassword" style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer;" width="18"></i>
                 </div>
             </div>
 
@@ -88,6 +98,15 @@
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                errorBox.innerText = 'As senhas digitadas não coincidem!';
+                errorBox.style.display = 'block';
+                btnSubmit.innerHTML = 'Criar Conta Agora <i data-lucide="arrow-right"></i>';
+                lucide.createIcons();
+                return;
+            }
 
             try {
                 // Cria a conta no Firebase Authentication
@@ -121,6 +140,25 @@
                 btnSubmit.innerHTML = 'Criar Conta Agora <i data-lucide="arrow-right"></i>';
                 lucide.createIcons();
             }
+        });
+
+        // Lógica de Olho Mágico (Revelar Senha)
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('password');
+        togglePassword.addEventListener('click', () => {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            togglePassword.setAttribute('data-lucide', type === 'password' ? 'eye' : 'eye-off');
+            lucide.createIcons();
+        });
+
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+        const confirmPasswordField = document.getElementById('confirmPassword');
+        toggleConfirmPassword.addEventListener('click', () => {
+            const type = confirmPasswordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPasswordField.setAttribute('type', type);
+            toggleConfirmPassword.setAttribute('data-lucide', type === 'password' ? 'eye' : 'eye-off');
+            lucide.createIcons();
         });
     </script>
     <style>
