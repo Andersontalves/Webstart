@@ -101,44 +101,44 @@
             border-radius: 4px;
         }
 
-        @media (max-width: 900px) {
-            .sidebar {
-                transform: translateX(-100%);
-                z-index: 100;
-                transition: transform 0.3s ease;
-            }
-            .sidebar.open {
-                transform: translateX(0);
-            }
-            .main-content {
-                margin-left: 0;
-                width: 100%;
-                padding: 24px;
-            }
-            .mobile-toggle {
-                display: block !important;
-            }
+        .mobile-toggle { display: none; background: none; border: none; color: white; cursor: pointer; padding: 10px; }
+        .close-sidebar { display: none; background: none; border: none; color: white; cursor: pointer; }
+        .grid-dashboard { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; gap: 20px; }
+        .header-buttons { display: flex; gap: 15px; }
+
+        @media (max-width: 1000px) {
+            .grid-dashboard { grid-template-columns: 1fr; }
+            .header-content { flex-direction: column; align-items: flex-start; }
+            .header-buttons { display: flex; width: 100%; justify-content: space-between; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+            .header-buttons button { flex: 1; text-align: center; justify-content: center; }
         }
-        
-        .mobile-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: #fff;
-            cursor: pointer;
+
+        @media (max-width: 900px) {
+            .sidebar { transform: translateX(-100%); z-index: 1000; transition: transform 0.3s ease; }
+            .sidebar.active { transform: translateX(0); }
+            .main-content { margin-left: 0; width: 100%; padding: 20px; margin-top: 60px; overflow-x: hidden; }
+            .mobile-toggle { display: flex; position: fixed; top: 15px; left: 15px; z-index: 999; border-radius: 8px; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.1); align-items: center; justify-content: center; width: 45px; height: 45px; }
+            .close-sidebar { display: block; position: absolute; right: 15px; top: 25px; }
+            .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 998; backdrop-filter: blur(2px); opacity: 0; pointer-events: none; transition: 0.3s; }
+            .sidebar-overlay.active { opacity: 1; pointer-events: all; }
         }
     </style>
 </head>
 <body>
 
+    <button class="mobile-toggle" id="btnToggleSidebar"><i data-lucide="menu"></i></button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <div class="dashboard-layout">
         
         <!-- SIDEBAR -->
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
+            <div class="sidebar-header" style="display: flex; justify-content: space-between; align-items: center;">
                 <a href="index.html" class="nav-brand" style="margin: 0; font-size: 1.4rem;">
                     <i data-lucide="rocket" style="color: var(--primary);"></i> WebStart
                 </a>
+                <button class="close-sidebar" id="btnCloseSidebar"><i data-lucide="x"></i></button>
             </div>
             
             <ul class="sidebar-menu">
@@ -174,11 +174,8 @@
         <!-- MAIN CONTENT -->
         <main class="main-content">
             
-            <header class="user-header">
+            <header class="user-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;">
                 <div style="display: flex; align-items: center; gap: 16px;">
-                    <button class="mobile-toggle" id="toggleMenu">
-                        <i data-lucide="menu"></i>
-                    </button>
                     <div>
                         <h2 style="font-size: 1.8rem; margin: 0;">Olá, Empresa XPTO! 👋</h2>
                         <p class="text-muted" style="margin: 4px 0 0 0;">Bem-vindo ao seu painel de controle.</p>
@@ -267,8 +264,8 @@
 
             <!-- Lista de Serviços Contratados -->
             <h3 style="margin-bottom: 20px; font-size: 1.3rem;">Serviços Ativos</h3>
-            <div class="glass-card" style="padding: 0; overflow: hidden;">
-                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <div class="glass-card" style="padding: 0; overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 600px;">
                     <thead style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);">
                         <tr>
                             <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Serviço</th>
@@ -300,13 +297,27 @@
     <script>
         lucide.createIcons();
 
-        // Menu Toggle para Mobile
-        const toggleBtn = document.getElementById('toggleMenu');
+        /* Lógica Mobile Sidebar */
         const sidebar = document.getElementById('sidebar');
+        const btnToggleSidebar = document.getElementById('btnToggleSidebar');
+        const btnCloseSidebar = document.getElementById('btnCloseSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const links = document.querySelectorAll('.sidebar-link');
 
-        if(toggleBtn && sidebar) {
-            toggleBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('open');
+        function toggleSidebarMobile() {
+            if(sidebar) sidebar.classList.toggle('active');
+            if(sidebarOverlay) sidebarOverlay.classList.toggle('active');
+        }
+
+        if(btnToggleSidebar) btnToggleSidebar.addEventListener('click', toggleSidebarMobile);
+        if(btnCloseSidebar) btnCloseSidebar.addEventListener('click', toggleSidebarMobile);
+        if(sidebarOverlay) sidebarOverlay.addEventListener('click', toggleSidebarMobile);
+
+        if (links) {
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    if(window.innerWidth <= 900) toggleSidebarMobile();
+                });
             });
         }
     </script>

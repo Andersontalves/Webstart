@@ -18,23 +18,44 @@
         .metric-value { font-size: 2rem; font-family: 'Outfit'; font-weight: 700; margin: 10px 0; }
         .stat-up { color: var(--success); font-size: 0.85rem; display: flex; align-items: center; gap: 4px; }
         
+        .mobile-toggle { display: none; background: none; border: none; color: white; cursor: pointer; padding: 10px; }
+        .close-sidebar { display: none; background: none; border: none; color: white; cursor: pointer; }
+        .grid-dashboard { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; gap: 20px; }
+        .header-buttons { display: flex; gap: 15px; }
+
+        @media (max-width: 1000px) {
+            .grid-dashboard { grid-template-columns: 1fr; }
+            .header-content { flex-direction: column; align-items: flex-start; }
+            .header-buttons { display: flex; width: 100%; justify-content: space-between; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+            .header-buttons button { flex: 1; text-align: center; justify-content: center; }
+        }
+        
         @media (max-width: 900px) {
-            .sidebar { transform: translateX(-100%); z-index: 100; transition: transform 0.3s ease; }
-            .sidebar.open { transform: translateX(0); }
-            .main-content { margin-left: 0; width: 100%; padding: 24px; }
+            .sidebar { transform: translateX(-100%); z-index: 1000; transition: transform 0.3s ease; }
+            .sidebar.active { transform: translateX(0); }
+            .main-content { margin-left: 0; width: 100%; padding: 20px; margin-top: 60px; overflow-x: hidden; }
+            .mobile-toggle { display: flex; position: fixed; top: 15px; left: 15px; z-index: 999; border-radius: 8px; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.1); align-items: center; justify-content: center; width: 45px; height: 45px; }
+            .close-sidebar { display: block; position: absolute; right: 15px; top: 25px; }
+            .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 998; backdrop-filter: blur(2px); opacity: 0; pointer-events: none; transition: 0.3s; }
+            .sidebar-overlay.active { opacity: 1; pointer-events: all; }
         }
     </style>
 </head>
 <body>
 
+    <button class="mobile-toggle" id="btnToggleSidebar"><i data-lucide="menu"></i></button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <div class="dashboard-layout">
         
         <!-- SIDEBAR -->
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
+            <div class="sidebar-header" style="display: flex; justify-content: space-between; align-items: center;">
                 <a href="index.html" class="nav-brand" style="margin: 0; font-size: 1.4rem;">
                     <i data-lucide="rocket" style="color: var(--secondary);"></i> WebStart Admin
                 </a>
+                <button class="close-sidebar" id="btnCloseSidebar"><i data-lucide="x"></i></button>
             </div>
             
             <ul class="sidebar-menu">
@@ -53,12 +74,12 @@
             
             <!-- VIEW: DASHBOARD (Visão Geral) -->
             <div id="view-dashboard" class="content-view active-view" style="display: block; opacity: 1; transition: opacity 0.3s ease;">
-                <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+                <header class="header-content">
                     <div>
                         <h2 style="font-size: 1.8rem; margin: 0;">Visão Geral da Agência</h2>
                         <p class="text-muted" style="margin: 4px 0 0 0;">Desempenho financeiro e operacional.</p>
                     </div>
-                    <div style="display: flex; gap: 15px;">
+                    <div class="header-buttons">
                         <button class="btn btn-outline" style="padding: 10px 16px;"><i data-lucide="download" width="18"></i> Relatório</button>
                         <button class="btn btn-primary" id="btnNovoProjetoTop" style="background: var(--gradient-secondary); padding: 10px 16px;"><i data-lucide="plus" width="18"></i> Novo Projeto</button>
                     </div>
@@ -93,11 +114,11 @@
             </div>
 
             <!-- TABELAS RECENTES -->
-            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px; @media(max-width: 1000px){grid-template-columns: 1fr;}">
+            <div class="grid-dashboard">
                 
                 <!-- Projetos -->
-                <div class="glass-card" style="padding: 0; overflow: hidden;">
-                    <div style="padding: 24px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
+                <div class="glass-card" style="padding: 0; overflow-x: auto;">
+                    <div style="padding: 24px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; min-width: 500px;">
                         <h3 style="margin: 0; font-size: 1.1rem;">Projetos em Andamento</h3>
                         <a href="#" style="color: var(--secondary); font-size: 0.85rem; text-decoration: none;">Ver todos</a>
                     </div>
@@ -146,16 +167,18 @@
 
             <!-- VIEW: CLIENTES -->
             <div id="view-clientes" class="content-view" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
-                <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+                <header class="header-content">
                     <div>
                         <h2 style="font-size: 1.8rem; margin: 0;">Gestão de Clientes</h2>
                         <p class="text-muted" style="margin: 4px 0 0 0;">Cadastre e gerencie a carteira da agência.</p>
                     </div>
-                    <button class="btn btn-primary" id="btnNovoCliente" style="background: var(--gradient-primary); padding: 10px 16px;"><i data-lucide="user-plus" width="18"></i> Novo Cliente</button>
+                    <div class="header-buttons">
+                        <button class="btn btn-primary" id="btnNovoCliente" style="background: var(--gradient-primary); padding: 10px 16px;"><i data-lucide="user-plus" width="18"></i> Novo Cliente</button>
+                    </div>
                 </header>
                 
-                <div class="glass-card" style="padding: 0; overflow: hidden;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left;" id="tabelaClientes">
+                <div class="glass-card" style="padding: 0; overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 600px;" id="tabelaClientes">
                         <thead style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);">
                             <tr>
                                 <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Nome / Empresa</th>
@@ -184,14 +207,16 @@
 
             <!-- VIEW: PROJETOS -->
             <div id="view-projetos" class="content-view" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
-                <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+                <header class="header-content">
                     <div>
                         <h2 style="font-size: 1.8rem; margin: 0;">Projetos e Entregas</h2>
                         <p class="text-muted" style="margin: 4px 0 0 0;">Acompanhe o workflow dos novos sites e lojas.</p>
                     </div>
-                    <button class="btn btn-primary" style="background: var(--gradient-primary); padding: 10px 16px;"><i data-lucide="folder-plus" width="18"></i> Criar Projeto</button>
+                    <div class="header-buttons">
+                        <button class="btn btn-primary" style="background: var(--gradient-primary); padding: 10px 16px;"><i data-lucide="folder-plus" width="18"></i> Criar Projeto</button>
+                    </div>
                 </header>
-                <div class="glass-card">
+                <div class="glass-card" style="overflow-x: auto;">
                     <p class="text-muted">Lista de Kanban/Projetos do Firestore aqui...</p>
                 </div>
             </div>
@@ -548,6 +573,30 @@
                         }
                     }
                 }
+            });
+        }
+
+        /* Lógica Mobile Sidebar */
+        const sidebar = document.getElementById('sidebar');
+        const btnToggleSidebar = document.getElementById('btnToggleSidebar');
+        const btnCloseSidebar = document.getElementById('btnCloseSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        function toggleSidebarMobile() {
+            if(sidebar) sidebar.classList.toggle('active');
+            if(sidebarOverlay) sidebarOverlay.classList.toggle('active');
+        }
+
+        if(btnToggleSidebar) btnToggleSidebar.addEventListener('click', toggleSidebarMobile);
+        if(btnCloseSidebar) btnCloseSidebar.addEventListener('click', toggleSidebarMobile);
+        if(sidebarOverlay) sidebarOverlay.addEventListener('click', toggleSidebarMobile);
+
+        // Ao clicar em link da sidebar, fecha-a no mobile
+        if (links) {
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    if(window.innerWidth <= 900) toggleSidebarMobile();
+                });
             });
         }
 
