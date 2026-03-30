@@ -90,26 +90,26 @@
                 
                 <div class="metric-card">
                     <span style="color: var(--text-muted); font-size: 0.9rem;">Receita Mensal (MRR)</span>
-                    <div class="metric-value" style="color: #fff;">R$ 14.500</div>
-                    <div class="stat-up"><i data-lucide="trending-up" width="14"></i> +12% em relação ao mês anterior</div>
+                    <div class="metric-value" style="color: #fff;" id="dash-receita">R$ 0</div>
+                    <div class="stat-up" id="dash-receita-sub"><i data-lucide="trending-up" width="14"></i> Carregando...</div>
                 </div>
 
                 <div class="metric-card">
-                    <span style="color: var(--text-muted); font-size: 0.9rem;">Projetos Entregues</span>
-                    <div class="metric-value" style="color: #fff;">8</div>
-                    <div class="stat-up"><i data-lucide="trending-up" width="14"></i> +2 nesta semana</div>
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">Projetos em Andamento</span>
+                    <div class="metric-value" style="color: #fff;" id="dash-projetos">0</div>
+                    <div class="stat-up"><i data-lucide="trending-up" width="14"></i> Sincronizado</div>
                 </div>
 
                 <div class="metric-card">
-                    <span style="color: var(--text-muted); font-size: 0.9rem;">Clientes Ativos (Manutenção)</span>
-                    <div class="metric-value" style="color: #fff;">45</div>
-                    <div style="color: var(--text-muted); font-size: 0.85rem;">R$ 4.500 recorrente/mês</div>
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">Clientes Ativos</span>
+                    <div class="metric-value" style="color: #fff;" id="dash-clientes">0</div>
+                    <div style="color: var(--text-muted); font-size: 0.85rem;" id="dash-clientes-sub">Atendimento contínuo</div>
                 </div>
 
                 <div class="metric-card">
                     <span style="color: var(--text-muted); font-size: 0.9rem;">Chamados Abertos</span>
-                    <div class="metric-value" style="color: var(--warning);">3</div>
-                    <div style="color: #ef4444; font-size: 0.85rem; display: flex; align-items: center; gap: 4px;">1 atrasado</div>
+                    <div class="metric-value" style="color: var(--warning);" id="dash-chamados">0</div>
+                    <div style="color: #ef4444; font-size: 0.85rem; display: flex; align-items: center; gap: 4px;">Nenhum atrasado</div>
                 </div>
             </div>
 
@@ -141,23 +141,8 @@
                 <div class="glass-card">
                     <h3 style="margin: 0 0 20px 0; font-size: 1.1rem; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">Lembretes de Faturamento</h3>
                     
-                    <div style="display: flex; flex-direction: column; gap: 15px;">
-                        <div style="display: flex; align-items: flex-start; gap: 12px;">
-                            <div style="width: 8px; height: 8px; background: #ef4444; border-radius: 50%; margin-top: 6px;"></div>
-                            <div>
-                                <strong style="display: block; font-size: 0.9rem; color: #fff;">Fatura Atrasada - R$ 149,90</strong>
-                                <span style="font-size: 0.85rem; color: var(--text-muted);">Restaurante Saboroso (Em aberto há 5 dias)</span>
-                                <a href="#" style="display: block; margin-top: 5px; font-size: 0.8rem; color: var(--primary);">Enviar Cobrança WhatsApp</a>
-                            </div>
-                        </div>
-
-                        <div style="display: flex; align-items: flex-start; gap: 12px;">
-                            <div style="width: 8px; height: 8px; background: var(--warning); border-radius: 50%; margin-top: 6px;"></div>
-                            <div>
-                                <strong style="display: block; font-size: 0.9rem; color: #fff;">Renovação de Domínio - R$ 40,00</strong>
-                                <span style="font-size: 0.85rem; color: var(--text-muted);">Empresa Logística (Vence em 10 dias)</span>
-                            </div>
-                        </div>
+                    <div style="display: flex; flex-direction: column; gap: 15px;" id="listaLembretesDOM">
+                        <p class="text-muted" style="font-size: 0.9rem;">Carregando do banco de dados...</p>
                     </div>
                 </div>
 
@@ -407,40 +392,54 @@
         onSnapshot(clientesRef, (snapshot) => {
             listaClientesDOM.innerHTML = '';
             
+            // Dados para o Dashboard
+            let totalClientes = 0;
+            let totalReceita = 0;
+
             if (snapshot.empty) {
                 listaClientesDOM.innerHTML = '<tr><td colspan="5" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum cliente cadastrado no banco ainda.</td></tr>';
-                return;
+            } else {
+                const projClienteSelect = document.getElementById('projCliente');
+                if(projClienteSelect) projClienteSelect.innerHTML = '<option value="">Selecione o Cliente...</option>';
+
+                snapshot.forEach((docSnap) => {
+                    const cliente = docSnap.data();
+                    totalClientes++;
+                    
+                    // Lógica de Receita Baseada no Plano
+                    if(cliente.plano === 'Hospedagem Standard') totalReceita += 80;
+                    else if(cliente.plano === 'Manutenção VIP') totalReceita += 250;
+
+                    // Popula o select do modal de Projetos automaticamente!
+                    if(projClienteSelect) {
+                        const opt = document.createElement('option');
+                        opt.value = cliente.nome;
+                        opt.textContent = cliente.nome;
+                        projClienteSelect.appendChild(opt);
+                    }
+
+                    const tr = document.createElement('tr');
+                    tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                    tr.innerHTML = `
+                        <td style="padding: 16px 24px; color: #fff;">${cliente.nome}</td>
+                        <td style="padding: 16px 24px; color: var(--text-muted);">${cliente.email}</td>
+                        <td style="padding: 16px 24px; color: var(--text-muted);">${cliente.plano}</td>
+                        <td style="padding: 16px 24px;"><span style="color: var(--success); font-size: 0.85rem; background: rgba(16,185,129,0.1); padding: 4px 10px; border-radius: 20px;">${cliente.status || 'Ativo'}</span></td>
+                        <td style="padding: 16px 24px; text-align: center;">
+                            <button class="btn btn-outline btn-delete" data-id="${docSnap.id}" style="padding: 6px; border: none; color: #ef4444;" title="Excluir"><i data-lucide="trash-2" width="16"></i></button>
+                        </td>
+                    `;
+                    listaClientesDOM.appendChild(tr);
+                });
             }
-
-            const projClienteSelect = document.getElementById('projCliente');
-            if(projClienteSelect) projClienteSelect.innerHTML = '<option value="">Selecione o Cliente...</option>';
-
-            snapshot.forEach((docSnap) => {
-                const cliente = docSnap.data();
-                
-                // Popula o select do modal de Projetos automaticamente!
-                if(projClienteSelect) {
-                    const opt = document.createElement('option');
-                    opt.value = cliente.nome;
-                    opt.textContent = cliente.nome;
-                    projClienteSelect.appendChild(opt);
-                }
-
-                const tr = document.createElement('tr');
-                tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
-                tr.innerHTML = `
-                    <td style="padding: 16px 24px; color: #fff;">${cliente.nome}</td>
-                    <td style="padding: 16px 24px; color: var(--text-muted);">${cliente.email}</td>
-                    <td style="padding: 16px 24px; color: var(--text-muted);">${cliente.plano}</td>
-                    <td style="padding: 16px 24px;"><span style="color: var(--success); font-size: 0.85rem; background: rgba(16,185,129,0.1); padding: 4px 10px; border-radius: 20px;">${cliente.status || 'Ativo'}</span></td>
-                    <td style="padding: 16px 24px; text-align: center;">
-                        <button class="btn btn-outline btn-delete" data-id="${docSnap.id}" style="padding: 6px; border: none; color: #ef4444;" title="Excluir"><i data-lucide="trash-2" width="16"></i></button>
-                    </td>
-                `;
-                listaClientesDOM.appendChild(tr);
-            });
             
-            lucide.createIcons(); // Força render dos lixeirinhos
+            // Atualiza Dashboard
+            const formatMoeda = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+            if(document.getElementById('dash-clientes')) document.getElementById('dash-clientes').textContent = totalClientes;
+            if(document.getElementById('dash-receita')) document.getElementById('dash-receita').textContent = formatMoeda.format(totalReceita);
+            if(document.getElementById('dash-receita-sub')) document.getElementById('dash-receita-sub').innerHTML = `<i data-lucide="trending-up" width="14"></i> Somatória MRR`;
+
+            lucide.createIcons();
         });
 
         // Adiciona evento de excluir com delegação (Resolve erro do lixeirinho não clicar)
@@ -524,39 +523,87 @@
             if(!listaProjetosDOM) return;
             listaProjetosDOM.innerHTML = '';
             
+            let andamentoCount = 0;
+
             if (snapshot.empty) {
                 listaProjetosDOM.innerHTML = '<tr><td colspan="4" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Ufa, caixas limpas! Nenhum projeto em andamento.</td></tr>';
+            } else {
+                snapshot.forEach((docSnap) => {
+                    const proj = docSnap.data();
+                    andamentoCount++;
+                    
+                    // Cor inteligente baseada no progresso
+                    let barColor = 'var(--primary)';
+                    if(proj.progresso >= 100) barColor = 'var(--success)';
+                    if(proj.progresso < 30) barColor = 'var(--secondary)';
+                    
+                    const tr = document.createElement('tr');
+                    tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                    tr.innerHTML = `
+                        <td style="padding: 16px 24px; color: #fff; font-size: 0.9rem;">${proj.cliente}</td>
+                        <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${proj.servico}</td>
+                        <td style="padding: 16px 24px;">
+                            <div style="width: 100%; max-width: 150px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; position: relative;">
+                                <div style="position: absolute; left: 0; top: 0; width: ${proj.progresso}%; height: 100%; background: ${barColor}; transition: 0.5s;"></div>
+                            </div>
+                        </td>
+                        <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
+                            ${proj.prazo}
+                            <button class="btn btn-outline btn-delete-proj" data-id="${docSnap.id}" style="padding: 4px; border: none; color: #ef4444;" title="Arquivar / Excluir"><i data-lucide="archive" width="14"></i></button>
+                        </td>
+                    `;
+                    listaProjetosDOM.appendChild(tr);
+                });
+            }
+            
+            // Dashboard
+            if(document.getElementById('dash-projetos')) document.getElementById('dash-projetos').textContent = andamentoCount;
+
+            lucide.createIcons();
+        });
+
+        /* Lógica para "Faturas/Lembretes" e "Chamados" */
+        const faturasRef = collection(db, 'faturas');
+        const listaLembretesDOM = document.getElementById('listaLembretesDOM');
+
+        onSnapshot(faturasRef, (snapshot) => {
+            if(!listaLembretesDOM) return;
+            listaLembretesDOM.innerHTML = '';
+
+            if (snapshot.empty) {
+                listaLembretesDOM.innerHTML = '<p class="text-muted" style="font-size: 0.9rem;">Nenhuma pendência financeira.</p>';
                 return;
             }
 
             snapshot.forEach((docSnap) => {
-                const proj = docSnap.data();
+                const fatura = docSnap.data();
                 
-                // Cor inteligente baseada no progresso
-                let barColor = 'var(--primary)';
-                if(proj.progresso >= 100) barColor = 'var(--success)';
-                if(proj.progresso < 30) barColor = 'var(--secondary)';
+                let dotColor = 'var(--warning)';
+                if (fatura.status === 'Atrasada') dotColor = '#ef4444';
                 
-                const tr = document.createElement('tr');
-                tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
-                tr.innerHTML = `
-                    <td style="padding: 16px 24px; color: #fff; font-size: 0.9rem;">${proj.cliente}</td>
-                    <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${proj.servico}</td>
-                    <td style="padding: 16px 24px;">
-                        <div style="width: 100%; max-width: 150px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; position: relative;">
-                            <div style="position: absolute; left: 0; top: 0; width: ${proj.progresso}%; height: 100%; background: ${barColor}; transition: 0.5s;"></div>
-                        </div>
-                    </td>
-                    <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
-                        ${proj.prazo}
-                        <button class="btn btn-outline btn-delete-proj" data-id="${docSnap.id}" style="padding: 4px; border: none; color: #ef4444;" title="Arquivar / Excluir"><i data-lucide="archive" width="14"></i></button>
-                    </td>
+                const div = document.createElement('div');
+                div.style.display = 'flex';
+                div.style.alignItems = 'flex-start';
+                div.style.gap = '12px';
+                
+                div.innerHTML = `
+                    <div style="width: 8px; height: 8px; background: ${dotColor}; border-radius: 50%; margin-top: 6px;"></div>
+                    <div>
+                        <strong style="display: block; font-size: 0.9rem; color: #fff;">Fatura ${fatura.status} - R$ ${fatura.valor}</strong>
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">${fatura.cliente} (Vence em ${fatura.vencimento})</span>
+                        ${fatura.status === 'Atrasada' ? '<a href="#" style="display: block; margin-top: 5px; font-size: 0.8rem; color: var(--primary);">Enviar Cobrança WhatsApp</a>' : ''}
+                    </div>
                 `;
-                listaProjetosDOM.appendChild(tr);
+                listaLembretesDOM.appendChild(div);
             });
-            
-            // Re-injeta icones nos botoes criados dinamicamente
-            lucide.createIcons();
+        });
+
+        // Mock para Chamados Abertos apenas no painel
+        const chamadosRef = collection(db, 'chamados');
+        onSnapshot(chamadosRef, (snapshot) => {
+            if(document.getElementById('dash-chamados')) {
+                document.getElementById('dash-chamados').textContent = snapshot.size;
+            }
         });
 
         // Event Delegation para Botoes de Arquivar/Excluir Projeto
