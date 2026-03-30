@@ -117,10 +117,11 @@
                 await updateProfile(user, { displayName: name });
                 
                 successBox.style.display = 'block';
+                const safeEmail = email.trim().toLowerCase();
                 
                 // Redireciona com base no e-mail (Admin vs Cliente)
                 setTimeout(() => {
-                    if(email === 'anderson.tadeu.alves@gmail.com' || email.includes('admin@')) {
+                    if(safeEmail === 'anderson.tadeu.alves@gmail.com' || safeEmail.includes('admin@')) {
                         window.location.href = 'admin.html';
                     } else {
                         window.location.href = 'dashboard-cliente.html';

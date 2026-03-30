@@ -87,9 +87,10 @@
                 // Tenta logar no Firebase Authentication
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
+                const safeEmail = email.trim().toLowerCase();
                 
                 // Redireciona com base no e-mail master (Admin)
-                if(email === 'anderson.tadeu.alves@gmail.com' || email.includes('admin@')) {
+                if(safeEmail === 'anderson.tadeu.alves@gmail.com' || safeEmail.includes('admin@')) {
                     window.location.href = 'admin.html';
                 } else {
                     window.location.href = 'dashboard-cliente.html';
