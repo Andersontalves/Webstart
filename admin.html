@@ -395,16 +395,23 @@
             });
             
             lucide.createIcons(); // Força render dos lixeirinhos
+        });
 
-            // Adiciona evento de excluir nos lixeirinhos
-            document.querySelectorAll('.btn-delete').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
-                    if(confirm('Tem certeza que deseja apagar esse cliente para sempre?')) {
-                        const id = e.currentTarget.getAttribute('data-id');
+        // Adiciona evento de excluir com delegação (Resolve erro do lixeirinho não clicar)
+        listaClientesDOM.addEventListener('click', async (e) => {
+            const btn = e.target.closest('.btn-delete');
+            if (btn) {
+                if (confirm('Tem certeza que deseja apagar esse cliente para sempre?')) {
+                    const id = btn.getAttribute('data-id');
+                    try {
                         await deleteDoc(doc(db, 'clientes', id));
+                        // Não precisa de alert, a tabela exibe instantaneamente que sumiu!
+                    } catch (error) {
+                        console.error("Erro na exclusão: ", error);
+                        alert("Não foi possível excluir: " + error.message);
                     }
-                });
-            });
+                }
+            }
         });
 
     </script>
