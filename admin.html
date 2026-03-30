@@ -170,10 +170,34 @@
                         <h2 style="font-size: 1.8rem; margin: 0;">Gestão de Clientes</h2>
                         <p class="text-muted" style="margin: 4px 0 0 0;">Cadastre e gerencie a carteira da agência.</p>
                     </div>
-                    <button class="btn btn-primary" style="background: var(--gradient-primary); padding: 10px 16px;"><i data-lucide="user-plus" width="18"></i> Novo Cliente</button>
+                    <button class="btn btn-primary" id="btnNovoCliente" style="background: var(--gradient-primary); padding: 10px 16px;"><i data-lucide="user-plus" width="18"></i> Novo Cliente</button>
                 </header>
-                <div class="glass-card">
-                    <p class="text-muted">A tabela dinâmica do Firebase será carregada aqui...</p>
+                
+                <div class="glass-card" style="padding: 0; overflow: hidden;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;" id="tabelaClientes">
+                        <thead style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <tr>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Nome / Empresa</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">E-mail / Login</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Plano</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Status</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem; text-align: center;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listaClientesDOM">
+                            <!-- Placeholder visual -->
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <td style="padding: 16px 24px; color: #fff;">Empresa XPTO</td>
+                                <td style="padding: 16px 24px; color: var(--text-muted);">contato@xpto.com</td>
+                                <td style="padding: 16px 24px; color: var(--text-muted);">Hospedagem Pro</td>
+                                <td style="padding: 16px 24px;"><span style="color: var(--success); font-size: 0.85rem; background: rgba(16,185,129,0.1); padding: 4px 10px; border-radius: 20px;">Ativo</span></td>
+                                <td style="padding: 16px 24px; text-align: center;">
+                                    <button class="btn btn-outline" style="padding: 6px; border: none;" title="Editar"><i data-lucide="edit-2" width="16"></i></button>
+                                    <button class="btn btn-outline" style="padding: 6px; border: none; color: #ef4444;" title="Excluir"><i data-lucide="trash-2" width="16"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -210,6 +234,36 @@
             </div>
 
         </main>
+    </div>
+
+    <!-- MODAL NOVO CLIENTE -->
+    <div id="modalNovoCliente" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+        <div class="glass-card" style="width: 100%; max-width: 500px; padding: 40px; position: relative; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+            <button id="closeModalCliente" style="position: absolute; right: 20px; top: 20px; background: none; border: none; color: var(--text-muted); cursor: pointer; transition: 0.2s;"><i data-lucide="x"></i></button>
+            <h3 style="margin: 0 0 25px 0; font-size: 1.5rem; text-align: center;">Cadastrar Novo Cliente</h3>
+            
+            <form id="formNovoCliente" style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="input-group">
+                    <label>Nome do Cliente / Empresa</label>
+                    <input type="text" id="cliNome" class="input" required placeholder="Ex: Clínica Med">
+                </div>
+                <div class="input-group">
+                    <label>E-mail (Login do Dashboard)</label>
+                    <input type="email" id="cliEmail" class="input" required placeholder="Ex: admin@clinica.com">
+                </div>
+                <div class="input-group" style="display: flex; gap: 15px;">
+                    <div style="flex: 1;">
+                        <label>Plano Contratado</label>
+                        <select id="cliPlano" class="input" required style="background: var(--bg-body); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+                            <option value="Hospedagem Standard">Hospedagem Standard</option>
+                            <option value="Manutenção VIP">Manutenção VIP</option>
+                            <option value="Projetos (Site Novo)">Sem plano Recorrente</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 15px; justify-content: center; background: var(--gradient-primary); font-size: 1.05rem; padding: 14px;">Salvar no Banco (Firestore) <i data-lucide="hard-drive" width="18"></i></button>
+            </form>
+        </div>
     </div>
 
     <script type="module">
@@ -254,6 +308,25 @@
             });
         });
         
+        /* Lógica do Modal Novo Cliente */
+        const btnNovoCliente = document.getElementById('btnNovoCliente');
+        const modalNovoCliente = document.getElementById('modalNovoCliente');
+        const closeModalCliente = document.getElementById('closeModalCliente');
+        
+        if (btnNovoCliente && modalNovoCliente) {
+            btnNovoCliente.addEventListener('click', () => {
+                modalNovoCliente.style.display = 'flex';
+                lucide.createIcons(); // ensure close button icon renders
+            });
+            closeModalCliente.addEventListener('click', () => {
+                modalNovoCliente.style.display = 'none';
+            });
+            modalNovoCliente.addEventListener('click', (e) => {
+                if (e.target === modalNovoCliente) {
+                    modalNovoCliente.style.display = 'none';
+                }
+            });
+        }
     </script>
 </body>
 </html>
