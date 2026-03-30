@@ -42,11 +42,11 @@
                 Projetos reais com resultados reais. Explore como ajudamos centenas de empresas a dominar o mercado digital através de um design intencional.
             </p>
             
-            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 40px;">
-                <button class="btn btn-primary" style="padding: 6px 16px; font-size: 0.9rem;">Todos</button>
-                <button class="btn btn-outline" style="padding: 6px 16px; font-size: 0.9rem;">Institucionais</button>
-                <button class="btn btn-outline" style="padding: 6px 16px; font-size: 0.9rem;">E-commerce</button>
-                <button class="btn btn-outline" style="padding: 6px 16px; font-size: 0.9rem;">Landing Pages</button>
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 40px;" id="portfolioFilters">
+                <button class="btn btn-primary filter-btn active" data-filter="all" style="padding: 6px 16px; font-size: 0.9rem;">Todos</button>
+                <button class="btn btn-outline filter-btn" data-filter="institucionais" style="padding: 6px 16px; font-size: 0.9rem;">Institucionais</button>
+                <button class="btn btn-outline filter-btn" data-filter="ecommerce" style="padding: 6px 16px; font-size: 0.9rem;">E-commerce</button>
+                <button class="btn btn-outline filter-btn" data-filter="landing" style="padding: 6px 16px; font-size: 0.9rem;">Landing Pages</button>
             </div>
         </div>
     </section>
@@ -58,7 +58,7 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
                 
                 <!-- 1 -->
-                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                <div class="portfolio-item" data-category="institucionais" style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;">
                     <div style="height: 220px; background: url('images/mockups/portfolio_restaurante_pt.png') center/cover; position: relative;">
                     </div>
                     <div style="padding: 24px;">
@@ -70,7 +70,7 @@
                 </div>
 
                 <!-- 2 -->
-                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                <div class="portfolio-item" data-category="landing" style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;">
                     <div style="height: 220px; background: url('images/mockups/portfolio_fitness_pt.png') center/cover; position: relative;">
                     </div>
                     <div style="padding: 24px;">
@@ -82,7 +82,7 @@
                 </div>
 
                 <!-- 3 -->
-                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                <div class="portfolio-item" data-category="ecommerce" style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;">
                     <div style="height: 220px; background: url('images/mockups/portfolio_ecommerce_pt.png') center/cover; position: relative;">
                     </div>
                     <div style="padding: 24px;">
@@ -94,7 +94,7 @@
                 </div>
 
                 <!-- 4 -->
-                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                <div class="portfolio-item" data-category="institucionais" style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;">
                     <div style="height: 220px; background: url('images/mockups/portfolio_advocacia_pt.png') center/cover; position: relative;">
                     </div>
                     <div style="padding: 24px;">
@@ -106,7 +106,7 @@
                 </div>
 
                 <!-- 5 -->
-                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                <div class="portfolio-item" data-category="institucionais" style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;">
                     <div style="height: 220px; background: url('images/mockups/portfolio_clinica_pt.png') center/cover; position: relative;">
                     </div>
                     <div style="padding: 24px;">
@@ -118,7 +118,7 @@
                 </div>
 
                 <!-- 6 -->
-                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                <div class="portfolio-item" data-category="landing" style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;">
                     <div style="height: 220px; background: url('images/mockups/portfolio_landing_pt.png') center/cover; position: relative;">
                     </div>
                     <div style="padding: 24px;">
@@ -130,7 +130,7 @@
                 </div>
                 
                 <!-- 7 (Extra Portfolio Item Demo) -->
-                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                <div class="portfolio-item" data-category="institucionais" style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;">
                     <div style="height: 220px; background: url('images/mockups/portfolio_fotografo_pt.png') center/cover; position: relative;">
                     </div>
                     <div style="padding: 24px;">
@@ -142,7 +142,7 @@
                 </div>
 
                 <!-- 8 (Extra Portfolio Item Demo) -->
-                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                <div class="portfolio-item" data-category="ecommerce" style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;">
                     <div style="height: 220px; background: url('images/mockups/portfolio_imobiliaria_pt.png') center/cover; position: relative;">
                     </div>
                     <div style="padding: 24px;">
@@ -231,6 +231,38 @@
     <script src="js/main.js"></script>
     <script>
         lucide.createIcons();
+
+        // Filtro de Categorias do Portfólio
+        document.addEventListener('DOMContentLoaded', () => {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remover classe ativa de todos
+                    filterBtns.forEach(b => {
+                        b.classList.remove('btn-primary', 'active');
+                        b.classList.add('btn-outline');
+                    });
+                    
+                    // Adicionar classe ativa no clicado
+                    btn.classList.add('btn-primary', 'active');
+                    btn.classList.remove('btn-outline');
+
+                    const filterValue = btn.getAttribute('data-filter');
+
+                    portfolioItems.forEach(item => {
+                        if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+                            item.style.display = 'block';
+                            setTimeout(() => { item.style.opacity = '1'; }, 50);
+                        } else {
+                            item.style.opacity = '0';
+                            setTimeout(() => { item.style.display = 'none'; }, 300);
+                        }
+                    });
+                });
+            });
+        });
 
         // Funcionalidade "Ver Demonstração"
         const modalDemo = document.getElementById('modalDemo');
