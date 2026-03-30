@@ -66,6 +66,7 @@
                 <li><a href="#" class="sidebar-link" data-target="view-produtos"><i data-lucide="layout-template" width="18"></i> Templates e Produtos</a></li>
                 <li><a href="#" class="sidebar-link" data-target="view-chamados"><i data-lucide="message-square" width="18"></i> Chamados de Suporte</a></li>
                 <li><a href="#" class="sidebar-link" data-target="view-blog"><i data-lucide="file-text" width="18"></i> Gestão do Blog</a></li>
+                <li><a href="#" class="sidebar-link" data-target="view-leads"><i data-lucide="calculator" width="18"></i> Leads e Orçamentos</a></li>
                 <li><a href="#" class="sidebar-link" data-target="view-config"><i data-lucide="settings" width="18"></i> Configurações</a></li>
             </ul>
         </aside>
@@ -254,6 +255,33 @@
                 </div>
             </div>
 
+            <!-- VIEW: LEADS -->
+            <div id="view-leads" class="content-view" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
+                <header class="header-content">
+                    <div>
+                        <h2 style="font-size: 1.8rem; margin: 0;">Leads e Orçamentos</h2>
+                        <p class="text-muted" style="margin: 4px 0 0 0;">Contatos capturados via Simulador de Preço.</p>
+                    </div>
+                </header>
+                
+                <div class="glass-card" style="padding: 0; overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 800px;">
+                        <thead style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <tr>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Cliente</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Projeto</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Valor</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Data</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem; text-align: center;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listaLeadsDOM">
+                            <tr><td colspan="5" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Carregando leads...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </main>
     </div>
 
@@ -352,7 +380,7 @@
 
     <script type="module">
         import { db } from './js/firebase-config.js';
-        import { collection, addDoc, onSnapshot, serverTimestamp, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { collection, addDoc, onSnapshot, serverTimestamp, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
         // Compatibiliza injeção modular com lucide global
         window.lucide = lucide;
@@ -770,6 +798,48 @@
                     }
                 }
             }
+        });
+
+        /* Lógica de Leads da Calculadora */
+        const leadsRef = collection(db, 'leads');
+        const listaLeadsDOM = document.getElementById('listaLeadsDOM');
+
+        onSnapshot(query(leadsRef, orderBy('createdAt', 'desc')), (snapshot) => {
+            if(!listaLeadsDOM) return;
+            listaLeadsDOM.innerHTML = '';
+            
+            if(snapshot.empty) {
+                listaLeadsDOM.innerHTML = '<tr><td colspan="5" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum lead capturado ainda.</td></tr>';
+                return;
+            }
+
+            snapshot.forEach(docSnap => {
+                const lead = docSnap.data();
+                const tr = document.createElement('tr');
+                tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                
+                const dataFormatada = lead.createdAt ? new Date(lead.createdAt.seconds * 1000).toLocaleDateString('pt-BR') : 'Recente';
+                
+                tr.innerHTML = `
+                    <td style="padding: 16px 24px;">
+                        <strong style="display: block; color: #fff;">${lead.nome}</strong>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">${lead.email}</span>
+                    </td>
+                    <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.85rem;">
+                        ${lead.tipoProjeto}
+                        <br><small style="color: var(--primary);">${lead.extras ? lead.extras.join(', ') : ''}</small>
+                    </td>
+                    <td style="padding: 16px 24px; color: #fff; font-weight: 600;">${lead.valorTotal}</td>
+                    <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.85rem;">${dataFormatada}</td>
+                    <td style="padding: 16px 24px; text-align: center;">
+                        <a href="https://wa.me/55${lead.whatsapp ? lead.whatsapp.replace(/\D/g, '') : ''}" target="_blank" class="btn btn-outline" style="padding: 6px 12px; border-color: #25D366; color: #25D366; font-size: 0.8rem;" title="Chamar no WhatsApp">
+                            <i data-lucide="message-circle" width="14"></i> Contato
+                        </a>
+                    </td>
+                `;
+                listaLeadsDOM.appendChild(tr);
+            });
+            lucide.createIcons();
         });
 
         /* Lógica Mobile Sidebar */

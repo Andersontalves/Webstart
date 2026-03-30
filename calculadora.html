@@ -119,8 +119,12 @@
                         <span style="background: var(--primary); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem;">3</span>
                         Seus Dados para o Orçamento
                     </h3>
-                    <div style="display: flex; gap: 15px;">
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
                         <input type="text" id="client_name" placeholder="Nome da Empresa / Cliente" style="flex: 1; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
+                        <div style="display: flex; gap: 15px;">
+                            <input type="email" id="client_email" placeholder="E-mail para contato" style="flex: 1; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
+                            <input type="text" id="client_whatsapp" placeholder="WhatsApp (DDD + Número)" style="flex: 1; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
+                        </div>
                     </div>
                 </div>
 
@@ -162,7 +166,10 @@
 
     <!-- SCRIPTS -->
     <script src="js/main.js"></script>
-    <script>
+    <script type="module">
+        import { db } from './js/firebase-config.js';
+        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
         lucide.createIcons();
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -172,6 +179,8 @@
             const resumoLista = document.getElementById('resumo_lista');
             const btnPdf = document.getElementById('btn_gerar_pdf');
             const clientNameInput = document.getElementById('client_name');
+            const clientEmailInput = document.getElementById('client_email');
+            const clientWhatsappInput = document.getElementById('client_whatsapp');
 
             function atualizarResumo() {
                 let total = 0;
@@ -202,22 +211,56 @@
             extras.forEach(el => el.addEventListener('change', atualizarResumo));
             atualizarResumo();
 
-            // Gerar PDF usando jsPDF
-            btnPdf.addEventListener('click', () => {
+            // Gerar PDF e Salvar Lead
+            btnPdf.addEventListener('click', async () => {
+                const clientName = clientNameInput.value;
+                const clientEmail = clientEmailInput.value;
+                const clientWhatsapp = clientWhatsappInput.value;
+
+                if(!clientName || !clientEmail || !clientWhatsapp) {
+                    alert("Por favor, preencha seus dados de contato primeiro.");
+                    return;
+                }
+
+                const originalBtnText = btnPdf.innerHTML;
+                btnPdf.disabled = true;
+                btnPdf.innerHTML = 'Processando... <i data-lucide="loader" class="spin"></i>';
+                lucide.createIcons();
+
+                // 1. Salvar no Firestore (Coleção Leads)
+                let selecionadoBase = document.querySelector('input[name="base_type"]:checked').dataset.label;
+                let selecionadosExtras = [];
+                extras.forEach(e => { if(e.checked) selecionadosExtras.push(e.dataset.label); });
+
+                try {
+                    await addDoc(collection(db, 'leads'), {
+                        nome: clientName,
+                        email: clientEmail,
+                        whatsapp: clientWhatsapp,
+                        tipoProjeto: selecionadoBase,
+                        extras: selecionadosExtras,
+                        valorTotal: totalPriceEl.innerText,
+                        createdAt: serverTimestamp()
+                    });
+                } catch (error) {
+                    console.error("Erro ao salvar lead:", error);
+                }
+
+                // 2. Gerar PDF usando jsPDF
                 const { jsPDF } = window.jspdf;
                 if(!jsPDF) {
-                    alert("Erro ao carregar o gerador de PDF. Tente novamente em instantes.");
+                    alert("Erro ao carregar o gerador de PDF.");
+                    btnPdf.disabled = false;
+                    btnPdf.innerHTML = originalBtnText;
                     return;
                 }
                 
                 const doc = new jsPDF();
                 const totalText = totalPriceEl.innerText;
-                const clientName = clientNameInput.value || "Cliente";
                 
-                // Cores e Estilos PDF (Simples)
                 doc.setFont("helvetica", "bold");
                 doc.setFontSize(22);
-                doc.setTextColor(37, 99, 235); // Azul WebStart
+                doc.setTextColor(37, 99, 235);
                 doc.text("WebStart Agency", 20, 30);
                 
                 doc.setFont("helvetica", "normal");
@@ -226,7 +269,7 @@
                 doc.text(`Proposta Comercial de Desenvolvimento Web.`, 20, 40);
                 doc.text(`Elaborado para: ${clientName}`, 20, 48);
                 
-                doc.line(20, 55, 190, 55); // Linha
+                doc.line(20, 55, 190, 55);
 
                 let y = 65;
                 doc.setFontSize(14);
@@ -260,11 +303,14 @@
                 y += 35;
                 doc.setFont("helvetica", "normal");
                 doc.setFontSize(10);
-                doc.text("Orçamento válido por 7 dias. Não inclui taxas por transações em catões.", 20, y);
-                doc.text("Entre em contato para aprovar a proposta e iniciarmos o desenvolvimento.", 20, y + 6);
+                doc.text("Orçamento válido por 7 dias. Não inclui taxas por transações em cartões.", 20, y);
                 doc.text("WhatsApp: (15) 99669-6096 | anderson.tadeu.alves@gmail.com", 20, y + 12);
 
                 doc.save(`Orcamento_WebStart_${clientName.replace(/\s+/g, '_')}.pdf`);
+                
+                btnPdf.disabled = false;
+                btnPdf.innerHTML = originalBtnText;
+                lucide.createIcons();
             });
         });
     </script>
