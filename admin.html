@@ -38,29 +38,31 @@
             </div>
             
             <ul class="sidebar-menu">
-                <li><a href="#" class="sidebar-link active"><i data-lucide="line-chart" width="18"></i> Dashboard</a></li>
-                <li><a href="#" class="sidebar-link"><i data-lucide="users" width="18"></i> Clientes</a></li>
-                <li><a href="#" class="sidebar-link"><i data-lucide="briefcase" width="18"></i> Projetos em Andamento</a></li>
-                <li><a href="#" class="sidebar-link"><i data-lucide="dollar-sign" width="18"></i> Faturamento</a></li>
-                <li><a href="#" class="sidebar-link"><i data-lucide="layout-template" width="18"></i> Templates & Produtos</a></li>
-                <li><a href="#" class="sidebar-link"><i data-lucide="message-square" width="18"></i> Chamados (Suporte)</a></li>
-                <li><a href="#" class="sidebar-link"><i data-lucide="settings" width="18"></i> Configurações</a></li>
+                <li><a href="#" class="sidebar-link active" data-target="view-dashboard"><i data-lucide="line-chart" width="18"></i> Dashboard</a></li>
+                <li><a href="#" class="sidebar-link" data-target="view-clientes"><i data-lucide="users" width="18"></i> Clientes</a></li>
+                <li><a href="#" class="sidebar-link" data-target="view-projetos"><i data-lucide="briefcase" width="18"></i> Projetos e Automações</a></li>
+                <li><a href="#" class="sidebar-link" data-target="view-faturamento"><i data-lucide="dollar-sign" width="18"></i> Faturamento</a></li>
+                <li><a href="#" class="sidebar-link" data-target="view-produtos"><i data-lucide="layout-template" width="18"></i> Templates e Produtos</a></li>
+                <li><a href="#" class="sidebar-link" data-target="view-chamados"><i data-lucide="message-square" width="18"></i> Chamados de Suporte</a></li>
+                <li><a href="#" class="sidebar-link" data-target="view-config"><i data-lucide="settings" width="18"></i> Configurações</a></li>
             </ul>
         </aside>
 
         <!-- MAIN CONTENT -->
         <main class="main-content">
             
-            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
-                <div>
-                    <h2 style="font-size: 1.8rem; margin: 0;">Visão Geral da Agência</h2>
-                    <p class="text-muted" style="margin: 4px 0 0 0;">Desempenho financeiro e operacional.</p>
-                </div>
-                <div style="display: flex; gap: 15px;">
-                    <button class="btn btn-outline" style="padding: 10px 16px;"><i data-lucide="download" width="18"></i> Relatório</button>
-                    <button class="btn btn-primary" style="background: var(--gradient-secondary); padding: 10px 16px;"><i data-lucide="plus" width="18"></i> Novo Projeto</button>
-                </div>
-            </header>
+            <!-- VIEW: DASHBOARD (Visão Geral) -->
+            <div id="view-dashboard" class="content-view active-view" style="display: block; opacity: 1; transition: opacity 0.3s ease;">
+                <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; margin: 0;">Visão Geral da Agência</h2>
+                        <p class="text-muted" style="margin: 4px 0 0 0;">Desempenho financeiro e operacional.</p>
+                    </div>
+                    <div style="display: flex; gap: 15px;">
+                        <button class="btn btn-outline" style="padding: 10px 16px;"><i data-lucide="download" width="18"></i> Relatório</button>
+                        <button class="btn btn-primary" id="btnNovoProjetoTop" style="background: var(--gradient-secondary); padding: 10px 16px;"><i data-lucide="plus" width="18"></i> Novo Projeto</button>
+                    </div>
+                </header>
 
             <!-- METRICS GRID -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-bottom: 40px;">
@@ -159,9 +161,99 @@
 
             </div>
 
+            </div> <!-- Fim de VIEW DASHBOARD -->
+
+            <!-- VIEW: CLIENTES -->
+            <div id="view-clientes" class="content-view" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
+                <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; margin: 0;">Gestão de Clientes</h2>
+                        <p class="text-muted" style="margin: 4px 0 0 0;">Cadastre e gerencie a carteira da agência.</p>
+                    </div>
+                    <button class="btn btn-primary" style="background: var(--gradient-primary); padding: 10px 16px;"><i data-lucide="user-plus" width="18"></i> Novo Cliente</button>
+                </header>
+                <div class="glass-card">
+                    <p class="text-muted">A tabela dinâmica do Firebase será carregada aqui...</p>
+                </div>
+            </div>
+
+            <!-- VIEW: PROJETOS -->
+            <div id="view-projetos" class="content-view" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
+                <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; margin: 0;">Projetos e Entregas</h2>
+                        <p class="text-muted" style="margin: 4px 0 0 0;">Acompanhe o workflow dos novos sites e lojas.</p>
+                    </div>
+                    <button class="btn btn-primary" style="background: var(--gradient-primary); padding: 10px 16px;"><i data-lucide="folder-plus" width="18"></i> Criar Projeto</button>
+                </header>
+                <div class="glass-card">
+                    <p class="text-muted">Lista de Kanban/Projetos do Firestore aqui...</p>
+                </div>
+            </div>
+
+            <!-- OUTRAS VIEWS PLACEHOLDERS -->
+            <div id="view-faturamento" class="content-view" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
+                <h2 style="font-size: 1.8rem; margin-bottom: 20px;">Faturamento</h2>
+                <div class="glass-card"><p class="text-muted">Módulo financeiro de recebimentos...</p></div>
+            </div>
+            <div id="view-produtos" class="content-view" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
+                <h2 style="font-size: 1.8rem; margin-bottom: 20px;">Templates Ativos</h2>
+                <div class="glass-card"><p class="text-muted">Upload de zip e controle da Loja de templates...</p></div>
+            </div>
+            <div id="view-chamados" class="content-view" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
+                <h2 style="font-size: 1.8rem; margin-bottom: 20px;">Tickets de Suporte</h2>
+                <div class="glass-card"><p class="text-muted">Chat de suporte unificado e mensagens de clientes...</p></div>
+            </div>
+            <div id="view-config" class="content-view" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
+                <h2 style="font-size: 1.8rem; margin-bottom: 20px;">Configurações</h2>
+                <div class="glass-card"><p class="text-muted">Chaves de API, Perfil e Dados Bancários...</p></div>
+            </div>
+
         </main>
     </div>
 
-    <script> lucide.createIcons(); </script>
+    <script type="module">
+        // Compatibiliza injeção modular com lucide global
+        window.lucide = lucide;
+        lucide.createIcons();
+
+        /* Lógica de Navegação da Sidebar (SPA) */
+        const links = document.querySelectorAll('.sidebar-link');
+        const views = document.querySelectorAll('.content-view');
+        
+        links.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('data-target');
+                if(!targetId) return;
+
+                // Destaca botão ativo
+                links.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+
+                // Esconde todas as abas
+                views.forEach(v => {
+                    v.style.opacity = '0';
+                    setTimeout(() => {
+                        v.style.display = 'none';
+                        v.classList.remove('active-view');
+                    }, 300); // 300ms transition time
+                });
+                
+                // Exibe a aba correta com fade in
+                setTimeout(() => {
+                    const targetView = document.getElementById(targetId);
+                    if(targetView) {
+                        targetView.style.display = 'block';
+                        // força reflow pra CSS pegar o opacidade
+                        void targetView.offsetWidth; 
+                        targetView.style.opacity = '1';
+                        targetView.classList.add('active-view');
+                    }
+                }, 310);
+            });
+        });
+        
+    </script>
 </body>
 </html>
