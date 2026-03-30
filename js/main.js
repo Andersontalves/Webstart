@@ -64,8 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Formatando o texto de envio automático
             const text = `Olá equipe WebStart! 👋\n\nMeu nome é *${nome}*.\nMeu WhatsApp é: ${whats}.\n\nTenho interesse em: *${tipo}*.\n\n*Detalhes do meu projeto:*\n"${desc}"\n\nGostaria de entender melhor como vocês podem me ajudar!`;
             
-            // Substitua aqui pelo número de telefone da agência WebStart com DDI e DDD ex: 5511999999999
-            const numeroDestino = "5511999999999"; 
+            // Redireciona para o número de WhatsApp oficial
+            const numeroDestino = "5515996696096";
             
             const url = `https://wa.me/${numeroDestino}?text=${encodeURIComponent(text)}`;
             window.open(url, '_blank');
