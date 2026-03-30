@@ -65,6 +65,7 @@
                 <li><a href="#" class="sidebar-link" data-target="view-faturamento"><i data-lucide="dollar-sign" width="18"></i> Faturamento</a></li>
                 <li><a href="#" class="sidebar-link" data-target="view-produtos"><i data-lucide="layout-template" width="18"></i> Templates e Produtos</a></li>
                 <li><a href="#" class="sidebar-link" data-target="view-chamados"><i data-lucide="message-square" width="18"></i> Chamados de Suporte</a></li>
+                <li><a href="#" class="sidebar-link" data-target="view-blog"><i data-lucide="file-text" width="18"></i> Gestão do Blog</a></li>
                 <li><a href="#" class="sidebar-link" data-target="view-config"><i data-lucide="settings" width="18"></i> Configurações</a></li>
             </ul>
         </aside>
@@ -224,6 +225,35 @@
                 <div class="glass-card"><p class="text-muted">Chaves de API, Perfil e Dados Bancários...</p></div>
             </div>
 
+            <!-- VIEW: BLOG CMS -->
+            <div id="view-blog" class="content-view" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
+                <header class="header-content">
+                    <div>
+                        <h2 style="font-size: 1.8rem; margin: 0;">Gestão do Blog</h2>
+                        <p class="text-muted" style="margin: 4px 0 0 0;">Publique e gerencie artigos para SEO.</p>
+                    </div>
+                    <div class="header-buttons">
+                        <button class="btn btn-primary" id="btnNovoPost" style="background: var(--gradient-secondary); padding: 10px 16px;"><i data-lucide="plus" width="18"></i> Novo Artigo</button>
+                    </div>
+                </header>
+                
+                <div class="glass-card" style="padding: 0; overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 600px;">
+                        <thead style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <tr>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Título</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Categoria</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Data</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem; text-align: center;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listaPostsDOM">
+                            <tr><td colspan="4" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Carregando artigos...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </main>
     </div>
 
@@ -281,6 +311,41 @@
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary" style="margin-top: 15px; justify-content: center; background: var(--gradient-secondary); font-size: 1.05rem; padding: 14px;">Iniciar Projeto <i data-lucide="play-circle" width="18"></i></button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL NOVO POST -->
+    <div id="modalNovoPost" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+        <div class="glass-card" style="width: 100%; max-width: 700px; padding: 40px; position: relative; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); max-height: 90vh; overflow-y: auto;">
+            <button id="closeModalPost" style="position: absolute; right: 20px; top: 20px; background: none; border: none; color: var(--text-muted); cursor: pointer;"><i data-lucide="x"></i></button>
+            <h3 style="margin: 0 0 25px 0; font-size: 1.5rem; text-align: center;">Publicar Novo Artigo</h3>
+            
+            <form id="formNovoPost" style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="input-group">
+                    <label>Título do Artigo</label>
+                    <input type="text" id="postTitulo" class="input" required placeholder="Ex: 5 Dicas para Lojas Virtuais">
+                </div>
+                <div style="display: flex; gap: 15px;">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Categoria</label>
+                        <select id="postCategoria" class="input" required style="background: var(--bg-body); color: #fff; border: 1px solid rgba(255,255,255,0.1);">
+                            <option value="NEGÓCIOS">Negócios</option>
+                            <option value="TECNOLOGIA">Tecnologia</option>
+                            <option value="E-COMMERCE">E-Commerce</option>
+                            <option value="DICAS">Dicas</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Resumo (aparece na lista)</label>
+                    <textarea id="postResumo" class="input" required rows="2" placeholder="Uma breve descrição sobre o artigo..." style="background: var(--bg-body); border: 1px solid rgba(255,255,255,0.1); color: #fff;"></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Conteúdo (Aceita HTML básico)</label>
+                    <textarea id="postConteudo" class="input" required rows="8" placeholder="Escreva o conteúdo completo aqui..." style="background: var(--bg-body); border: 1px solid rgba(255,255,255,0.1); color: #fff;"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px; padding: 15px;">Publicar no Site <i data-lucide="send" width="18"></i></button>
             </form>
         </div>
     </div>
@@ -622,6 +687,90 @@
                 }
             });
         }
+
+        /* Lógica do Blog CMS */
+        const blogRef = collection(db, 'posts');
+        const btnNovoPost = document.getElementById('btnNovoPost');
+        const modalNovoPost = document.getElementById('modalNovoPost');
+        const closeModalPost = document.getElementById('closeModalPost');
+        const formNovoPost = document.getElementById('formNovoPost');
+        const listaPostsDOM = document.getElementById('listaPostsDOM');
+
+        if(btnNovoPost) {
+            btnNovoPost.addEventListener('click', () => {
+                modalNovoPost.style.display = 'flex';
+                lucide.createIcons();
+            });
+            closeModalPost.addEventListener('click', () => modalNovoPost.style.display = 'none');
+        }
+
+        if(formNovoPost) {
+            formNovoPost.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = formNovoPost.querySelector('button[type="submit"]');
+                btn.disabled = true;
+                btn.textContent = 'Publicando...';
+
+                try {
+                    await addDoc(blogRef, {
+                        titulo: document.getElementById('postTitulo').value,
+                        categoria: document.getElementById('postCategoria').value,
+                        resumo: document.getElementById('postResumo').value,
+                        conteudo: document.getElementById('postConteudo').value,
+                        data: new Date().toLocaleDateString('pt-BR'),
+                        createdAt: serverTimestamp()
+                    });
+                    formNovoPost.reset();
+                    modalNovoPost.style.display = 'none';
+                } catch (error) {
+                    alert('Erro ao publicar post: ' + error.message);
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = 'Publicar no Site';
+                }
+            });
+        }
+
+        onSnapshot(blogRef, (snapshot) => {
+            if(!listaPostsDOM) return;
+            listaPostsDOM.innerHTML = '';
+            
+            if(snapshot.empty) {
+                listaPostsDOM.innerHTML = '<tr><td colspan="4" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum post publicado.</td></tr>';
+                return;
+            }
+
+            snapshot.forEach(docSnap => {
+                const post = docSnap.data();
+                const tr = document.createElement('tr');
+                tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                tr.innerHTML = `
+                    <td style="padding: 16px 24px; color: #fff; font-size: 0.9rem;">${post.titulo}</td>
+                    <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.85rem;">${post.categoria}</td>
+                    <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.85rem;">${post.data}</td>
+                    <td style="padding: 16px 24px; text-align: center;">
+                        <button class="btn btn-outline btn-delete-post" data-id="${docSnap.id}" style="padding: 6px; border: none; color: #ef4444;" title="Excluir Post"><i data-lucide="trash-2" width="16"></i></button>
+                    </td>
+                `;
+                listaPostsDOM.appendChild(tr);
+            });
+            lucide.createIcons();
+        });
+
+        // Delegação de evento para deletar post
+        listaPostsDOM.addEventListener('click', async (e) => {
+            const btn = e.target.closest('.btn-delete-post');
+            if(btn) {
+                if(confirm('Deseja realmente excluir este artigo?')) {
+                    const id = btn.getAttribute('data-id');
+                    try {
+                        await deleteDoc(doc(db, 'posts', id));
+                    } catch (error) {
+                        alert('Erro ao excluir post: ' + error.message);
+                    }
+                }
+            }
+        });
 
         /* Lógica Mobile Sidebar */
         const sidebar = document.getElementById('sidebar');
