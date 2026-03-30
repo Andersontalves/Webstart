@@ -118,9 +118,13 @@
                 
                 successBox.style.display = 'block';
                 
-                // Redireciona pro Dashboard em 1 segundo
+                // Redireciona com base no e-mail (Admin vs Cliente)
                 setTimeout(() => {
-                    window.location.href = 'dashboard-cliente.html';
+                    if(email === 'anderson.tadeu.alves@gmail.com' || email.includes('admin@')) {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'dashboard-cliente.html';
+                    }
                 }, 1500);
 
             } catch (error) {
