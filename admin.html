@@ -267,6 +267,9 @@
     </div>
 
     <script type="module">
+        import { db } from './js/firebase-config.js';
+        import { collection, addDoc, onSnapshot, serverTimestamp, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
         // Compatibiliza injeção modular com lucide global
         window.lucide = lucide;
         lucide.createIcons();
@@ -327,6 +330,83 @@
                 }
             });
         }
+
+        /* Lógica de Gravação e Leitura no Firestore */
+        const clientesRef = collection(db, 'clientes');
+        const formNovoCliente = document.getElementById('formNovoCliente');
+        const listaClientesDOM = document.getElementById('listaClientesDOM');
+
+        // Salvar novo Cliente
+        if (formNovoCliente) {
+            formNovoCliente.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btnSubmit = formNovoCliente.querySelector('button[type="submit"]');
+                const originalText = btnSubmit.innerHTML;
+                btnSubmit.innerHTML = 'Gravando no Banco...';
+                
+                const nome = document.getElementById('cliNome').value;
+                const email = document.getElementById('cliEmail').value;
+                const plano = document.getElementById('cliPlano').value;
+                
+                try {
+                    await addDoc(clientesRef, {
+                        nome: nome,
+                        email: email,
+                        plano: plano,
+                        status: 'Ativo',
+                        createdAt: serverTimestamp()
+                    });
+                    
+                    formNovoCliente.reset();
+                    modalNovoCliente.style.display = 'none';
+                    // O alert foi suprimido para UX mais fluida, a tabela já atualiza em realtime!
+                } catch (error) {
+                    console.error("Erro ao salvar: ", error);
+                    alert("Houve um erro: " + error.message);
+                } finally {
+                    btnSubmit.innerHTML = originalText;
+                }
+            });
+        }
+
+        // Leitura em Tempo Real (Real-time listener)
+        onSnapshot(clientesRef, (snapshot) => {
+            listaClientesDOM.innerHTML = '';
+            
+            if (snapshot.empty) {
+                listaClientesDOM.innerHTML = '<tr><td colspan="5" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum cliente cadastrado no banco ainda.</td></tr>';
+                return;
+            }
+
+            snapshot.forEach((docSnap) => {
+                const cliente = docSnap.data();
+                const tr = document.createElement('tr');
+                tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                tr.innerHTML = `
+                    <td style="padding: 16px 24px; color: #fff;">${cliente.nome}</td>
+                    <td style="padding: 16px 24px; color: var(--text-muted);">${cliente.email}</td>
+                    <td style="padding: 16px 24px; color: var(--text-muted);">${cliente.plano}</td>
+                    <td style="padding: 16px 24px;"><span style="color: var(--success); font-size: 0.85rem; background: rgba(16,185,129,0.1); padding: 4px 10px; border-radius: 20px;">${cliente.status || 'Ativo'}</span></td>
+                    <td style="padding: 16px 24px; text-align: center;">
+                        <button class="btn btn-outline btn-delete" data-id="${docSnap.id}" style="padding: 6px; border: none; color: #ef4444;" title="Excluir"><i data-lucide="trash-2" width="16"></i></button>
+                    </td>
+                `;
+                listaClientesDOM.appendChild(tr);
+            });
+            
+            lucide.createIcons(); // Força render dos lixeirinhos
+
+            // Adiciona evento de excluir nos lixeirinhos
+            document.querySelectorAll('.btn-delete').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    if(confirm('Tem certeza que deseja apagar esse cliente para sempre?')) {
+                        const id = e.currentTarget.getAttribute('data-id');
+                        await deleteDoc(doc(db, 'clientes', id));
+                    }
+                });
+            });
+        });
+
     </script>
 </body>
 </html>
