@@ -28,12 +28,14 @@
             <p class="text-muted" style="margin-top: 10px;">Área exclusiva do cliente</p>
         </div>
 
-        <form action="dashboard-cliente.html" style="display: flex; flex-direction: column; gap: 20px;">
+        <form id="loginForm" style="display: flex; flex-direction: column; gap: 20px;">
+            <div id="errorBox" style="display: none; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; padding: 12px; border-radius: 8px; font-size: 0.85rem; text-align: center;"></div>
+
             <div>
                 <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">E-mail</label>
                 <div style="position: relative;">
                     <i data-lucide="mail" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);" width="18"></i>
-                    <input type="email" placeholder="seu@email.com" required style="width: 100%; padding: 14px 16px 14px 45px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
+                    <input type="email" id="email" placeholder="seu@email.com" required style="width: 100%; padding: 14px 16px 14px 45px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
                 </div>
             </div>
 
@@ -44,11 +46,11 @@
                 </label>
                 <div style="position: relative;">
                     <i data-lucide="lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);" width="18"></i>
-                    <input type="password" placeholder="••••••••" required style="width: 100%; padding: 14px 16px 14px 45px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
+                    <input type="password" id="password" placeholder="••••••••" required style="width: 100%; padding: 14px 16px 14px 45px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 16px; margin-top: 10px; background: var(--gradient-primary);">
+            <button type="submit" id="btnSubmit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 16px; margin-top: 10px; background: var(--gradient-primary);">
                 Acessar Painel <i data-lucide="arrow-right" width="18"></i>
             </button>
         </form>
@@ -61,5 +63,53 @@
     <script>
         lucide.createIcons();
     </script>
+    <script type="module">
+        import { auth } from './js/firebase-config.js';
+        import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+
+        const loginForm = document.getElementById('loginForm');
+        const btnSubmit = document.getElementById('btnSubmit');
+        const errorBox = document.getElementById('errorBox');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            errorBox.style.display = 'none';
+            btnSubmit.innerHTML = 'Conectando... <i data-lucide="loader" class="spin" style="animation: spin 1s linear infinite;"></i>';
+            lucide.createIcons();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                // Tenta logar no Firebase Authentication
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                // Redireciona com base no tipo de usuário (futuramente validado via Firestore)
+                if(email.includes('admin@')) {
+                    window.location.href = 'admin.html';
+                } else {
+                    window.location.href = 'dashboard-cliente.html';
+                }
+
+            } catch (error) {
+                console.error("Erro no login:", error);
+                errorBox.style.display = 'block';
+                
+                // Lidando com mensagens de erro específicas
+                if(error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                    errorBox.innerText = 'Email ou senha inválidos. Tente novamente.';
+                } else {
+                    errorBox.innerText = 'Erro ao conectar. Tente novamente mais tarde.';
+                }
+                
+                btnSubmit.innerHTML = 'Acessar Painel <i data-lucide="arrow-right"></i>';
+                lucide.createIcons();
+            }
+        });
+    </script>
+    <style>
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+    </style>
 </body>
 </html>
