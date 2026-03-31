@@ -173,6 +173,15 @@
         lucide.createIcons();
 
         document.addEventListener('DOMContentLoaded', () => {
+            // LÓGICA MODO DASHBOARD (IFRAME)
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('mode') === 'dashboard') {
+                const nav = document.getElementById('navbar');
+                if (nav) nav.style.display = 'none';
+                document.body.style.paddingTop = '0';
+                document.querySelector('section').style.paddingTop = '60px'; // Ajuste fino sem nav
+            }
+
             const baseTypes = document.querySelectorAll('input[name="base_type"]');
             const extras = document.querySelectorAll('.extra-check');
             const totalPriceEl = document.getElementById('total_price');
