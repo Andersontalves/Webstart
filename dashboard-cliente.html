@@ -143,22 +143,22 @@
             
             <ul class="sidebar-menu">
                 <li>
-                    <a href="#" class="sidebar-link active">
+                    <a data-tab="tabVisaoGeral" class="sidebar-link active cursor-pointer">
                         <i data-lucide="layout-dashboard" width="18"></i> Visão Geral
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="sidebar-link">
+                    <a data-tab="tabServicos" class="sidebar-link cursor-pointer">
                         <i data-lucide="server" width="18"></i> Meus Serviços
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="sidebar-link">
+                    <a data-tab="tabFaturas" class="sidebar-link cursor-pointer">
                         <i data-lucide="credit-card" width="18"></i> Faturas
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="sidebar-link">
+                    <a data-tab="tabSuporte" class="sidebar-link cursor-pointer">
                         <i data-lucide="headphones" width="18"></i> Suporte Técnico
                     </a>
                 </li>
@@ -193,7 +193,7 @@
                 </div>
             </header>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 40px;">
+            <div id="tabVisaoGeral" class="tab-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 40px;">
                 
                 <!-- Status do Projeto Atual -->
                 <div class="glass-card" style="border-color: rgba(37,99,235,0.3);" id="projContainer">
@@ -237,7 +237,6 @@
 
                     <div style="display: flex; gap: 10px;">
                         <button class="btn btn-primary" id="btnPagarPix" style="flex: 1; padding: 10px; justify-content: center; font-size: 0.9rem;">Pagar com Pix</button>
-                        <button class="btn btn-outline" style="flex: 1; padding: 10px; justify-content: center; font-size: 0.9rem;">Ver PDF</button>
                     </div>
                 </div>
 
@@ -262,8 +261,11 @@
 
             </div>
 
-            <!-- Lista de Serviços Contratados -->
-            <h3 style="margin-bottom: 20px; font-size: 1.3rem;">Serviços Ativos</h3>
+            <!-- TAB: Lista de Serviços Contratados -->
+            <div id="tabServicos" class="tab-content" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="font-size: 1.3rem;">Serviços Ativos</h3>
+                </div>
             <div class="glass-card" style="padding: 0; overflow-x: auto;">
                 <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 600px;">
                     <thead style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);">
@@ -290,6 +292,56 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+            </div>
+
+            <!-- TAB: Faturas -->
+            <div id="tabFaturas" class="tab-content" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="font-size: 1.3rem;">Histórico de Faturas</h3>
+                </div>
+                <div class="glass-card" style="padding: 0; overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 600px;">
+                        <thead style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <tr>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Descrição</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Vencimento</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Status</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Valor</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaFaturasDOM">
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <td colspan="5" style="padding: 16px 24px; color: var(--text-muted); text-align: center;">Buscando faturas...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB: Chamados -->
+            <div id="tabSuporte" class="tab-content" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="font-size: 1.3rem;">Meus Chamados</h3>
+                    <button class="btn btn-primary" id="btnAbrirChamadoTab" style="padding: 8px 16px; font-size: 0.9rem;"><i data-lucide="plus" width="16"></i> Novo</button>
+                </div>
+                <div class="glass-card" style="padding: 0; overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 600px;">
+                        <thead style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <tr>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Data</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Assunto</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaChamadosDOM">
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <td colspan="3" style="padding: 16px 24px; color: var(--text-muted); text-align: center;">Carregando histórico...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Modal UI: Pagar com Pix -->
@@ -347,8 +399,40 @@
         const btnToggleSidebar = document.getElementById('btnToggleSidebar');
         const btnCloseSidebar = document.getElementById('btnCloseSidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
-        const links = document.querySelectorAll('.sidebar-link');
+        // ===== LÓGICA DAS TABS (NAVEGAÇÃO LAteral) =====
+        const links = document.querySelectorAll('.sidebar-link[data-tab]');
+        const tabs = document.querySelectorAll('.tab-content');
 
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                // Remove active de todos os links
+                links.forEach(l => l.classList.remove('active'));
+                // Adiciona active no clicado
+                link.classList.add('active');
+                
+                // Esconde todas as tabs
+                tabs.forEach(tab => {
+                    tab.style.display = 'none';
+                    tab.classList.remove('active');
+                });
+                
+                // Mostra a tab correspondente
+                const targetTab = document.getElementById(link.getAttribute('data-tab'));
+                if (targetTab) {
+                    if (targetTab.id === 'tabVisaoGeral') {
+                        targetTab.style.display = 'grid'; // because Visão Geral is a CSS grid
+                    } else {
+                        targetTab.style.display = 'block';
+                    }
+                    targetTab.classList.add('active');
+                }
+
+                // Fecha sidebar em telas menores
+                if(window.innerWidth <= 900) toggleSidebarMobile();
+            });
+        });
+
+        // Toggle Sidebar Functions
         function toggleSidebarMobile() {
             if(sidebar) sidebar.classList.toggle('active');
             if(sidebarOverlay) sidebarOverlay.classList.toggle('active');
@@ -357,14 +441,6 @@
         if(btnToggleSidebar) btnToggleSidebar.addEventListener('click', toggleSidebarMobile);
         if(btnCloseSidebar) btnCloseSidebar.addEventListener('click', toggleSidebarMobile);
         if(sidebarOverlay) sidebarOverlay.addEventListener('click', toggleSidebarMobile);
-
-        if (links) {
-            links.forEach(link => {
-                link.addEventListener('click', () => {
-                    if(window.innerWidth <= 900) toggleSidebarMobile();
-                });
-            });
-        }
     </script>
     <script type="module">
         import { auth, db, onAuthStateChanged, signOut, collection, query, where, onSnapshot, getDocs, addDoc } from './js/firebase-config.js';
@@ -383,6 +459,12 @@
         const projAtual_prazo = document.getElementById('projAtual_prazo');
 
         const tabelaServicosDOM = document.getElementById('tabelaServicosDOM');
+        const tabelaFaturasDOM = document.getElementById('tabelaFaturasDOM');
+        const tabelaChamadosDOM = document.getElementById('tabelaChamadosDOM');
+        const faturaContainer = document.getElementById('faturaContainer');
+        const fatura_vencimento = document.getElementById('fatura_vencimento');
+        const fatura_nome = document.getElementById('fatura_nome');
+        const fatura_valor = document.getElementById('fatura_valor');
 
         // Logout
         document.getElementById('btnLogout').addEventListener('click', (e) => {
@@ -479,7 +561,89 @@
                 } else {
                     document.getElementById('projContainer').style.display = 'none'; // Some se acabou os projetos pendentes.
                 }
+            });
 
+            // 3. Ouvinte: Faturas do Cliente
+            const qFaturas = query(collection(db, 'faturas'), where('cliente', '==', nomeDoClienteFiltro));
+            onSnapshot(qFaturas, (snap) => {
+                if (tabelaFaturasDOM) tabelaFaturasDOM.innerHTML = '';
+                let faturaPendenteEncontrada = null;
+
+                if (snap.empty) {
+                    if (tabelaFaturasDOM) tabelaFaturasDOM.innerHTML = '<tr><td colspan="5" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhuma fatura encontrada.</td></tr>';
+                    if (faturaContainer) faturaContainer.style.display = 'none';
+                    return;
+                }
+
+                snap.forEach(docSnap => {
+                    const fat = docSnap.data();
+                    
+                    // Alimenta a tabela de Faturas
+                    let statusColor = fat.status === 'Pago' ? 'var(--success)' : (fat.status === 'Pendente' ? '#f59e0b' : '#ef4444');
+                    let statusBg = fat.status === 'Pago' ? 'rgba(16,185,129,0.1)' : 'rgba(245,158,11,0.1)';
+
+                    const tr = document.createElement('tr');
+                    tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                    tr.innerHTML = `
+                        <td style="padding: 16px 24px; color: #fff;">${fat.servico}</td>
+                        <td style="padding: 16px 24px; color: var(--text-muted);">${fat.vencimento}</td>
+                        <td style="padding: 16px 24px;"><span style="color: ${statusColor}; font-size: 0.85rem; background: ${statusBg}; padding: 4px 10px; border-radius: 20px;">${fat.status}</span></td>
+                        <td style="padding: 16px 24px; color: #fff; font-weight: 600;">R$ ${fat.valor}</td>
+                        <td style="padding: 16px 24px;">
+                            ${fat.status === 'Pendente' ? `<button class="btn btn-primary btn-pagar-pix-list" style="padding: 5px 12px; font-size: 0.8rem;">Pagar Pix</button>` : `<span style="color: var(--text-muted); font-size: 0.8rem;">-</span>`}
+                        </td>
+                    `;
+                    if (tabelaFaturasDOM) tabelaFaturasDOM.appendChild(tr);
+
+                    // Pega a primeira pendente para o widget inicial
+                    if (fat.status === 'Pendente' && !faturaPendenteEncontrada) {
+                        faturaPendenteEncontrada = fat;
+                    }
+                });
+
+                // Atualiza Widget de Fatura Pendente na Visão Geral
+                if (faturaPendenteEncontrada && faturaContainer) {
+                    faturaContainer.style.display = 'block';
+                    if (fatura_vencimento) fatura_vencimento.textContent = `Vencimento: ${faturaPendenteEncontrada.vencimento}`;
+                    if (fatura_nome) fatura_nome.textContent = faturaPendenteEncontrada.servico;
+                    if (fatura_valor) fatura_valor.textContent = `R$ ${faturaPendenteEncontrada.valor}`;
+                } else if (faturaContainer) {
+                    faturaContainer.style.display = 'none';
+                }
+
+                // Listener para botões de pagar na lista
+                document.querySelectorAll('.btn-pagar-pix-list').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const modalPix = document.getElementById('modalPix');
+                        if (modalPix) modalPix.style.display = 'flex';
+                    });
+                });
+            });
+
+            // 4. Ouvinte: Chamados do Cliente
+            const qChamados = query(collection(db, 'chamados'), where('cliente', '==', nomeDoClienteFiltro));
+            onSnapshot(qChamados, (snap) => {
+                if (tabelaChamadosDOM) tabelaChamadosDOM.innerHTML = '';
+
+                if (snap.empty) {
+                    if (tabelaChamadosDOM) tabelaChamadosDOM.innerHTML = '<tr><td colspan="3" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum chamado aberto.</td></tr>';
+                    return;
+                }
+
+                snap.forEach(docSnap => {
+                    const ch = docSnap.data();
+                    let statusColor = ch.status === 'Resolvido' ? 'var(--success)' : (ch.status === 'Em Análise' ? '#3b82f6' : '#f59e0b');
+                    let statusBg = ch.status === 'Resolvido' ? 'rgba(16,185,129,0.1)' : 'rgba(59,130,246,0.1)';
+
+                    const tr = document.createElement('tr');
+                    tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                    tr.innerHTML = `
+                        <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${ch.dataAbertura}</td>
+                        <td style="padding: 16px 24px; color: #fff; font-weight: 500;">${ch.assunto}</td>
+                        <td style="padding: 16px 24px;"><span style="color: ${statusColor}; font-size: 0.85rem; background: ${statusBg}; padding: 4px 10px; border-radius: 20px;">${ch.status}</span></td>
+                    `;
+                    if (tabelaChamadosDOM) tabelaChamadosDOM.appendChild(tr);
+                });
             });
         });
 
@@ -504,6 +668,14 @@
                 modalChamado.style.display = 'flex';
             });
         }
+        
+        const btnAbrirChamadoTab = document.getElementById('btnAbrirChamadoTab');
+        if(btnAbrirChamadoTab) {
+            btnAbrirChamadoTab.addEventListener('click', () => {
+                modalChamado.style.display = 'flex';
+            });
+        }
+        
         document.getElementById('btnCloseChamado').addEventListener('click', () => modalChamado.style.display = 'none');
 
         // Lógica de Envio de Chamado ao Firestore
