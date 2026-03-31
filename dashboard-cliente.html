@@ -271,33 +271,25 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                     <h3 style="font-size: 1.3rem;">Serviços Ativos</h3>
                 </div>
-            <div class="glass-card" style="padding: 0; overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 600px;">
-                    <thead style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);">
-                        <tr>
-                            <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Serviço</th>
-                            <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Domínio</th>
-                            <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Status</th>
-                            <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Renovação</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabelaServicosDOM">
-                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <td colspan="4" style="padding: 16px 24px; color: var(--text-muted); text-align: center;">Carregando histórico de serviços...</td>
-                            <td style="padding: 16px 24px; color: #fff; font-weight: 500;">Hospedagem Cloud Pro</td>
-                            <td style="padding: 16px 24px; color: var(--text-muted);">empresaxpto.com.br</td>
-                            <td style="padding: 16px 24px;"><span style="color: var(--success); font-size: 0.85rem; background: rgba(16,185,129,0.1); padding: 4px 10px; border-radius: 20px;">Ativo</span></td>
-                            <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">12/08/2026</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 16px 24px; color: #fff; font-weight: 500;">Manutenção Mensal VIP</td>
-                            <td style="padding: 16px 24px; color: var(--text-muted);">-</td>
-                            <td style="padding: 16px 24px;"><span style="color: var(--success); font-size: 0.85rem; background: rgba(16,185,129,0.1); padding: 4px 10px; border-radius: 20px;">Ativo</span></td>
-                            <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">Renovação Mensal</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                <div class="glass-card" style="padding: 0;">
+                    <div class="table-responsive">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 600px;">
+                            <thead style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <tr>
+                                    <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Serviço</th>
+                                    <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Domínio</th>
+                                    <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Status</th>
+                                    <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Renovação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaServicosDOM">
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <td colspan="4" style="padding: 16px 24px; color: var(--text-muted); text-align: center;">Carregando histórico de serviços...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             <!-- TAB: Faturas -->
@@ -305,23 +297,25 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                     <h3 style="font-size: 1.3rem;">Histórico de Faturas</h3>
                 </div>
-                <div class="glass-card" style="padding: 0; overflow-x: auto;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 600px;">
-                        <thead style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <tr>
-                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Descrição</th>
-                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Vencimento</th>
-                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Status</th>
-                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Valor</th>
-                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Ação</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelaFaturasDOM">
-                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                                <td colspan="5" style="padding: 16px 24px; color: var(--text-muted); text-align: center;">Buscando faturas...</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="glass-card" style="padding: 0;">
+                    <div class="table-responsive">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 600px;">
+                            <thead style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <tr>
+                                    <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Descrição</th>
+                                    <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Vencimento</th>
+                                    <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Status</th>
+                                    <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Valor</th>
+                                    <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaFaturasDOM">
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <td colspan="5" style="padding: 16px 24px; color: var(--text-muted); text-align: center;">Buscando faturas...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -331,21 +325,23 @@
                     <h3 style="font-size: 1.3rem;">Meus Chamados</h3>
                     <button class="btn btn-primary" id="btnAbrirChamadoTab" style="padding: 8px 16px; font-size: 0.9rem;"><i data-lucide="plus" width="16"></i> Novo</button>
                 </div>
-                <div class="glass-card" style="padding: 0; overflow-x: auto;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 600px;">
-                        <thead style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <tr>
-                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Data</th>
-                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Assunto</th>
-                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelaChamadosDOM">
-                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                                <td colspan="3" style="padding: 16px 24px; color: var(--text-muted); text-align: center;">Carregando histórico...</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="glass-card" style="padding: 0;">
+                    <div class="table-responsive">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 600px;">
+                            <thead style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <tr>
+                                    <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Data</th>
+                                    <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Assunto</th>
+                                    <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaChamadosDOM">
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <td colspan="3" style="padding: 16px 24px; color: var(--text-muted); text-align: center;">Carregando histórico...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 

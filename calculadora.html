@@ -37,7 +37,7 @@
                 </p>
             </div>
 
-            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px; margin-top: 50px; align-items: start;">
+            <div id="simuladorGrid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px; margin-top: 50px; align-items: start;">
                 
                 <!-- Formulário Base Custo -->
                 <div class="glass-card" style="padding: 40px;">
@@ -152,13 +152,23 @@
             </div>
             
             <style>
-                @media (max-width: 900px) {
-                    section .container > div {
-                        grid-template-columns: 1fr;
+                @media (max-width: 1024px) {
+                    #simuladorGrid {
+                        grid-template-columns: 1fr !important;
                     }
                     #extras_container {
                         grid-template-columns: 1fr;
                     }
+                    /* Desativa sticky no mobile para o resumo não sobrepor o formulário */
+                    .glass-card[style*="position: sticky"] {
+                        position: static !important;
+                        margin-top: 30px;
+                    }
+                }
+                @media (max-width: 480px) {
+                    h1 { font-size: 2.2rem !important; }
+                    .glass-card { padding: 20px !important; }
+                    .sim-option { padding: 15px !important; }
                 }
             </style>
         </div>
