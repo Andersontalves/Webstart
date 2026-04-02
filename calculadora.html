@@ -264,9 +264,9 @@
                 lucide.createIcons();
 
                 // Captura dados do formulário
-                let selecionadoBase = document.querySelector('input[name="base_type"]:checked').dataset.label;
-                let selecionadosExtras = [];
-                extras.forEach(e => { if(e.checked) selecionadosExtras.push(e.dataset.label); });
+                var projetoBase = document.querySelector('input[name="base_type"]:checked').dataset.label;
+                var itensExtras = [];
+                extras.forEach(e => { if(e.checked) itensExtras.push(e.dataset.label); });
 
                 // Salvar no Firestore (Coleção Leads)
                 try {
@@ -274,8 +274,8 @@
                         nome: clientName,
                         email: clientEmail,
                         whatsapp: clientWhatsapp,
-                        tipoProjeto: selecionadoBase,
-                        extras: selecionadosExtras,
+                        tipoProjeto: projetoBase,
+                        extras: itensExtras,
                         valorTotal: totalPriceEl.innerText,
                         createdAt: serverTimestamp()
                     });
