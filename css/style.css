@@ -193,6 +193,13 @@ img {
   align-items: center;
 }
 
+/* Mobile: Navbar needs padding-left to not hide behind hamburger */
+@media (max-width: 768px) {
+  .navbar .container {
+    padding-left: 60px;
+  }
+}
+
 .nav-brand {
   font-family: 'Outfit', sans-serif;
   font-size: 1.5rem;
@@ -227,6 +234,11 @@ img {
   color: var(--text-main);
   font-size: 1.8rem;
   cursor: pointer;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 9999;
+  padding: 10px;
 }
 
 @media (max-width: 768px) {
@@ -240,6 +252,7 @@ img {
     flex-direction: column;
     padding: 20px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1000;
   }
   
   .nav-menu.active {
