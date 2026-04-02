@@ -553,11 +553,20 @@
                 // Se não encontrou pelo nome, filtra pelo email do cliente no documento
                 const userEmail = currentUser ? currentUser.email.toLowerCase() : '';
                 const userNome = nomeDoClienteFiltro && nomeDoClienteFiltro !== "DESCONHECIDO" ? nomeDoClienteFiltro : '';
+                const userNomeLower = userNome.toLowerCase();
                 
                 const projetosFiltrados = snap.docs.filter(doc => {
                     const proj = doc.data();
-                    // Aceita se o nome do cliente OU o email do cliente batter
-                    return proj.cliente === userNome || (proj.emailCliente && proj.emailCliente.toLowerCase() === userEmail);
+                    // Aceita se:
+                    // 1. O nome do cliente bater exatamente
+                    // 2. O nome do cliente conter o nome do usuário (partial match)
+                    // 3. O email do cliente bater
+                    const projCliente = proj.cliente ? proj.cliente.toLowerCase() : '';
+                    const projEmail = proj.emailCliente ? proj.emailCliente.toLowerCase() : '';
+                    
+                    return proj.cliente === userNome || 
+                           projCliente.includes(userNomeLower) ||
+                           projEmail === userEmail;
                 });
                 
                 if (projetosFiltrados.length === 0) {
