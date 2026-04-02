@@ -83,7 +83,19 @@
                     </div>
                     <div class="header-buttons">
                         <button class="btn btn-outline" style="padding: 10px 16px;"><i data-lucide="download" width="18"></i> Relatório</button>
-                        <button class="btn btn-primary" id="btnNovoProjetoTop" style="background: var(--gradient-secondary); padding: 10px 16px;"><i data-lucide="plus" width="18"></i> Novo Projeto</button>
+    <script>
+        // Debug function to test button
+        function openNovoProjeto() {
+            const modal = document.getElementById('modalNovoProjeto');
+            if(modal) {
+                modal.style.display = 'flex';
+                console.log('Modal opened!');
+            } else {
+                console.log('Modal not found!');
+            }
+        }
+    </script>
+    <button class="btn btn-primary" id="btnNovoProjetoTop" onclick="openNovoProjeto()" style="background: var(--gradient-secondary); padding: 10px 16px;"><i data-lucide="plus" width="18"></i> Novo Projeto</button>
                     </div>
                 </header>
 
