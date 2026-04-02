@@ -200,7 +200,7 @@
                         <p class="text-muted" style="margin: 4px 0 0 0;">Acompanhe o workflow dos novos sites e lojas.</p>
                     </div>
                     <div class="header-buttons">
-                        <button class="btn btn-primary" style="background: var(--gradient-primary); padding: 10px 16px;"><i data-lucide="folder-plus" width="18"></i> Criar Projeto</button>
+                        <button class="btn btn-primary" id="btnCriarProjeto" style="background: var(--gradient-primary); padding: 10px 16px;"><i data-lucide="folder-plus" width="18"></i> Criar Projeto</button>
                     </div>
                 </header>
                 <div class="glass-card" style="overflow-x: auto;">
@@ -608,7 +608,6 @@
         if (btnNovoProjetoTop && modalNovoProjeto) {
             console.log('Botão Novo Projeto encontrado, configurando evento...');
             btnNovoProjetoTop.addEventListener('click', () => {
-                alert('Abrindo modal de novo projeto!');
                 console.log('Clicou no botão Novo Projeto, abrindo modal...');
                 modalNovoProjeto.style.display = 'flex';
                 lucide.createIcons();
@@ -619,6 +618,16 @@
             modalNovoProjeto.addEventListener('click', (e) => {
                 if (e.target === modalNovoProjeto) modalNovoProjeto.style.display = 'none';
             });
+            
+            // Também abre o mesmo modal para o botão "Criar Projeto" na aba Projetos
+            const btnCriarProjeto = document.getElementById('btnCriarProjeto');
+            if(btnCriarProjeto) {
+                btnCriarProjeto.addEventListener('click', () => {
+                    console.log('Clicou no botão Criar Projeto na aba projetos...');
+                    modalNovoProjeto.style.display = 'flex';
+                    lucide.createIcons();
+                });
+            }
         } else {
             console.log('ERRO: Botão ou Modal não encontrado', { btnNovoProjetoTop, modalNovoProjeto });
         }
