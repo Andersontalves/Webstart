@@ -241,7 +241,7 @@
             </div>
 
             <!-- MODAL: Detalhes do Chamado -->
-            <div id="modalChamadoDetalhes" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center;">
+            <div id="modalChamadoDetalhes" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center;">
                 <div style="background: #1e293b; border-radius: 12px; padding: 30px; max-width: 500px; width: 90%; border: 1px solid rgba(255,255,255,0.1);">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                         <h3 style="margin: 0; font-size: 1.3rem;">Detalhes do Chamado</h3>
@@ -315,7 +315,7 @@
     </div>
 
     <!-- MODAL NOVO CLIENTE -->
-    <div id="modalNovoCliente" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+    <div id="modalNovoCliente" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
         <div class="glass-card" style="width: 100%; max-width: 500px; padding: 40px; position: relative; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
             <button id="closeModalCliente" style="position: absolute; right: 20px; top: 20px; background: none; border: none; color: var(--text-muted); cursor: pointer; transition: 0.2s; font-size: 1.5rem;">&times;</button>
             <h3 style="margin: 0 0 25px 0; font-size: 1.5rem; text-align: center;">Cadastrar Novo Cliente</h3>
@@ -361,7 +361,7 @@
     </div>
 
     <!-- MODAL NOVO PROJETO -->
-    <div id="modalNovoProjeto" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+    <div id="modalNovoProjeto" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
         <div class="glass-card" style="width: 100%; max-width: 500px; padding: 40px; position: relative; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
             <button id="closeModalProjeto" style="position: absolute; right: 20px; top: 20px; background: none; border: none; color: var(--text-muted); cursor: pointer; transition: 0.2s; font-size: 1.5rem;">&times;</button>
             <h3 style="margin: 0 0 25px 0; font-size: 1.5rem; text-align: center;">Criar Novo Projeto</h3>
@@ -387,7 +387,7 @@
     </div>
 
     <!-- MODAL NOVO POST -->
-    <div id="modalNovoPost" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+    <div id="modalNovoPost" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
         <div class="glass-card" style="width: 100%; max-width: 700px; padding: 40px; position: relative; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); max-height: 90vh; overflow-y: auto;">
             <button id="closeModalPost" style="position: absolute; right: 20px; top: 20px; background: none; border: none; color: var(--text-muted); cursor: pointer;"><i data-lucide="x"></i></button>
             <h3 style="margin: 0 0 25px 0; font-size: 1.5rem; text-align: center;">Publicar Novo Artigo</h3>
@@ -1038,6 +1038,8 @@
                 e.stopPropagation();
                 var modal = document.getElementById('modalNovoProjeto');
                 if(modal) {
+                    // Garante que o modal fique visível acima de tudo
+                    modal.style.zIndex = '10001';
                     modal.style.display = 'flex';
                 }
             };
