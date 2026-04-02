@@ -317,14 +317,30 @@
     <!-- MODAL NOVO CLIENTE -->
     <div id="modalNovoCliente" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
         <div class="glass-card" style="width: 100%; max-width: 500px; padding: 40px; position: relative; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
-            <button id="closeModalCliente" style="position: absolute; right: 20px; top: 20px; background: none; border: none; color: var(--text-muted); cursor: pointer; transition: 0.2s;"><i data-lucide="x"></i></button>
+            <button id="closeModalCliente" style="position: absolute; right: 20px; top: 20px; background: none; border: none; color: var(--text-muted); cursor: pointer; transition: 0.2s; font-size: 1.5rem;">&times;</button>
             <h3 style="margin: 0 0 25px 0; font-size: 1.5rem; text-align: center;">Cadastrar Novo Cliente</h3>
             
-            <form id="formNovoCliente" style="display: flex; flex-direction: column; gap: 15px;">
-                <div class="input-group">
-                    <label>Nome do Cliente / Empresa</label>
-                    <input type="text" id="cliNome" class="input" required placeholder="Ex: Clínica Med">
+            <form id="formNovoCliente" style="display: flex; flex-direction: column; gap: 18px;">
+                <div>
+                    <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 8px; color: #e2e8f0;">Nome do Cliente / Empresa</label>
+                    <input type="text" id="cliNome" required placeholder="Ex: Clínica Med" style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.3); color: #fff; font-size: 1rem; outline: none;">
                 </div>
+                <div>
+                    <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 8px; color: #e2e8f0;">E-mail (Login do Dashboard)</label>
+                    <input type="email" id="cliEmail" required placeholder="Ex: admin@clinica.com" style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.3); color: #fff; font-size: 1rem; outline: none;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 8px; color: #e2e8f0;">Plano Contratado</label>
+                    <select id="cliPlano" required style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.3); color: #fff; font-size: 1rem; outline: none;">
+                        <option value="Hospedagem Standard">Hospedagem Standard</option>
+                        <option value="Manutenção VIP">Manutenção VIP</option>
+                        <option value="Projetos (Site Novo)">Sem plano Recorrente</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px; justify-content: center; background: var(--gradient-primary); font-size: 1.05rem; padding: 14px; border-radius: 8px;">Salvar no Banco (Firestore) <i data-lucide="hard-drive" width="18"></i></button>
+            </form>
+        </div>
+    </div>
                 <div class="input-group">
                     <label>E-mail (Login do Dashboard)</label>
                     <input type="email" id="cliEmail" class="input" required placeholder="Ex: admin@clinica.com">
@@ -347,27 +363,25 @@
     <!-- MODAL NOVO PROJETO -->
     <div id="modalNovoProjeto" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
         <div class="glass-card" style="width: 100%; max-width: 500px; padding: 40px; position: relative; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
-            <button id="closeModalProjeto" style="position: absolute; right: 20px; top: 20px; background: none; border: none; color: var(--text-muted); cursor: pointer; transition: 0.2s;"><i data-lucide="x"></i></button>
+            <button id="closeModalProjeto" style="position: absolute; right: 20px; top: 20px; background: none; border: none; color: var(--text-muted); cursor: pointer; transition: 0.2s; font-size: 1.5rem;">&times;</button>
             <h3 style="margin: 0 0 25px 0; font-size: 1.5rem; text-align: center;">Criar Novo Projeto</h3>
             
-            <form id="formNovoProjeto" style="display: flex; flex-direction: column; gap: 15px;">
-                <div class="input-group">
-                    <label>Selecionar Cliente</label>
-                    <select id="projCliente" class="input" required style="background: var(--bg-body); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+            <form id="formNovoProjeto" style="display: flex; flex-direction: column; gap: 18px;">
+                <div>
+                    <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 8px; color: #e2e8f0;">Selecionar Cliente</label>
+                    <select id="projCliente" required style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.3); color: #fff; font-size: 1rem; outline: none;">
                         <option value="">Carregando clientes...</option>
                     </select>
                 </div>
-                <div class="input-group">
-                    <label>Serviço Contratado</label>
-                    <input type="text" id="projServico" class="input" required placeholder="Ex: Loja Virtual, Landing Page...">
+                <div>
+                    <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 8px; color: #e2e8f0;">Serviço Contratado</label>
+                    <input type="text" id="projServico" required placeholder="Ex: Loja Virtual, Landing Page..." style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.3); color: #fff; font-size: 1rem; outline: none;">
                 </div>
-                <div class="input-group" style="display: flex; gap: 15px;">
-                    <div style="flex: 1;">
-                        <label>Prazo de Entrega</label>
-                        <input type="date" id="projPrazo" class="input" required style="color-scheme: dark;">
-                    </div>
+                <div>
+                    <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 8px; color: #e2e8f0;">Prazo de Entrega</label>
+                    <input type="date" id="projPrazo" required style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.3); color: #fff; font-size: 1rem; outline: none; color-scheme: dark;">
                 </div>
-                <button type="submit" class="btn btn-primary" style="margin-top: 15px; justify-content: center; background: var(--gradient-secondary); font-size: 1.05rem; padding: 14px;">Iniciar Projeto <i data-lucide="play-circle" width="18"></i></button>
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px; justify-content: center; background: linear-gradient(135deg, #8b5cf6, #ec4899); font-size: 1.05rem; padding: 14px; border-radius: 8px;">Iniciar Projeto <i data-lucide="play-circle" width="18"></i></button>
             </form>
         </div>
     </div>
