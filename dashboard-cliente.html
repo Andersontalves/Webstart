@@ -541,11 +541,26 @@
             }
 
             // 2. Ouvinte: Projetos e Serviços do Cliente
-            const qProj = query(collection(db, 'projetos'), where('cliente', '==', nomeDoClienteFiltro));
+            // Primeiro tenta pelo nome, se não encontrar, busca todos e filtra
+            let qProj;
+            if (nomeDoClienteFiltro && nomeDoClienteFiltro !== "DESCONHECIDO") {
+                qProj = query(collection(db, 'projetos'), where('cliente', '==', nomeDoClienteFiltro));
+            } else {
+                qProj = query(collection(db, 'projetos'));
+            }
+            
             onSnapshot(qProj, (snap) => {
-                tabelaServicosDOM.innerHTML = '';
+                // Se não encontrou pelo nome, filtra pelo email do cliente no documento
+                const userEmail = currentUser ? currentUser.email.toLowerCase() : '';
+                const userNome = nomeDoClienteFiltro && nomeDoClienteFiltro !== "DESCONHECIDO" ? nomeDoClienteFiltro : '';
                 
-                if (snap.empty) {
+                const projetosFiltrados = snap.docs.filter(doc => {
+                    const proj = doc.data();
+                    // Aceita se o nome do cliente OU o email do cliente batter
+                    return proj.cliente === userNome || (proj.emailCliente && proj.emailCliente.toLowerCase() === userEmail);
+                });
+                
+                if (projetosFiltrados.length === 0) {
                     projAtual_nome.textContent = "Nenhum projeto em vista";
                     projAtual_fase.textContent = "Que tal solicitar um orçamento?";
                     projAtual_status.textContent = "Livre";
@@ -555,7 +570,7 @@
 
                 let primeiroProjetoPendente = null;
 
-                snap.forEach(docSnap => {
+                projetosFiltrados.forEach(docSnap => {
                     const pj = docSnap.data();
                     
                     // Alimenta a tabela de "Meus Serviços" (Histórico Geral)

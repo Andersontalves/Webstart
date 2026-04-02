@@ -577,6 +577,7 @@
                         const opt = document.createElement('option');
                         opt.value = cliente.nome;
                         opt.textContent = cliente.nome;
+                        opt.dataset.email = cliente.email; // Armazena o email para recuperar depois
                         projClienteSelect.appendChild(opt);
                     }
 
@@ -673,6 +674,10 @@
                 const servico = document.getElementById('projServico').value;
                 const prazoOriginal = document.getElementById('projPrazo').value;
                 
+                // Pega o email do cliente selecionado
+                const clienteSelect = document.getElementById('projCliente');
+                const clienteEmail = clienteSelect.options[clienteSelect.selectedIndex]?.dataset?.email || '';
+                
                 // Formata YYYY-MM-DD pra formato local
                 const dateParts = prazoOriginal.split('-');
                 const prazo = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
@@ -680,6 +685,7 @@
                 try {
                     await addDoc(projetosRef, {
                         cliente: cliente,
+                        emailCliente: clienteEmail,
                         servico: servico,
                         progresso: 10, // Novo projeto sempre nasce com 10%
                         prazo: prazo,
