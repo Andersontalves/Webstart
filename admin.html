@@ -422,6 +422,7 @@
     </div>
 
     <script type="module">
+        console.log('=== INICIANDO ADMIN JS ===');
         import { db } from './js/firebase-config.js';
         import { collection, addDoc, onSnapshot, serverTimestamp, deleteDoc, doc, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
@@ -431,6 +432,7 @@
 
         /* Lógica de Navegação da Sidebar (SPA) */
         const links = document.querySelectorAll('.sidebar-link');
+        console.log('Links encontrados:', links.length);
         const views = document.querySelectorAll('.content-view');
         
         // Restaura última abavisitada
