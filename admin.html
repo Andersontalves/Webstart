@@ -850,8 +850,9 @@
                         <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${ch.email || 'N/A'}</td>
                         <td style="padding: 16px 24px; color: #fff;">${ch.assunto || 'N/A'}</td>
                         <td style="padding: 16px 24px;"><span style="color: ${statusColor}; font-size: 0.85rem; background: ${statusBg}; padding: 4px 10px; border-radius: 20px;">${ch.status || 'Aberto'}</span></td>
-                        <td style="padding: 16px 24px;">
+                        <td style="padding: 16px 24px; display: flex; gap: 8px;">
                             <button class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;" data-id="${docId}" data-ch='${JSON.stringify(ch).replace(/'/g, "\\'")}'>Ver/Editar</button>
+                            <button class="btn-delete-chamado" data-id="${docId}" style="padding: 6px 12px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #ef4444; border-radius: 6px; cursor: pointer;" title="Excluir"><i data-lucide="trash-2" width="14"></i></button>
                         </td>
                     `;
                     tabelaChamadosAdmin.appendChild(tr);
@@ -929,6 +930,20 @@
                     }
                 });
             });
+
+            // Delegação de evento para excluir chamado
+            const btnDeleteChamado = e.target.closest('.btn-delete-chamado');
+            if (btnDeleteChamado) {
+                const idChamado = btnDeleteChamado.getAttribute('data-id');
+                if (confirm('Tem certeza que deseja excluir este chamado?')) {
+                    try {
+                        await deleteDoc(doc(db, 'chamados', idChamado));
+                        alert('Chamado excluído!');
+                    } catch (error) {
+                        alert('Erro ao excluir: ' + error.message);
+                    }
+                }
+            }
         }
 
         // Event Delegation para Botoes de Arquivar/Excluir Projeto
