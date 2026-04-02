@@ -6,7 +6,7 @@
     <title>Simulador de Preço - WebStart</title>
     <meta name="description" content="Simule o orçamento do seu novo site ou loja virtual e gere o PDF na hora.">
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
     <!-- jsPDF para gerar PDF localmente via JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
@@ -179,10 +179,7 @@
 
     <!-- SCRIPTS -->
     <script src="js/main.js"></script>
-    <script type="module">
-        import { db } from './js/firebase-config.js';
-        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
-
+    <script>
         lucide.createIcons();
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -192,7 +189,7 @@
                 const nav = document.getElementById('navbar');
                 if (nav) nav.style.display = 'none';
                 document.body.style.paddingTop = '0';
-                document.querySelector('section').style.paddingTop = '60px'; // Ajuste fino sem nav
+                document.querySelector('section').style.paddingTop = '60px';
             }
 
             const baseTypes = document.querySelectorAll('input[name="base_type"]');
@@ -249,12 +246,14 @@
                 btnPdf.innerHTML = 'Processando... <i data-lucide="loader" class="spin"></i>';
                 lucide.createIcons();
 
-                // 1. Salvar no Firestore (Coleção Leads)
+                // 1. Salvar no Firestore (Coleção Leads) - opcional
                 let selecionadoBase = document.querySelector('input[name="base_type"]:checked').dataset.label;
                 let selecionadosExtras = [];
                 extras.forEach(e => { if(e.checked) selecionadosExtras.push(e.dataset.label); });
 
                 try {
+                    const { db } = await import('./js/firebase-config.js');
+                    const { collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js');
                     await addDoc(collection(db, 'leads'), {
                         nome: clientName,
                         email: clientEmail,
@@ -265,7 +264,7 @@
                         createdAt: serverTimestamp()
                     });
                 } catch (error) {
-                    console.error("Erro ao salvar lead:", error);
+                    console.log("Firebase não disponível - gerando PDF apenas:", error.message);
                 }
 
                 // 2. Gerar PDF usando jsPDF
