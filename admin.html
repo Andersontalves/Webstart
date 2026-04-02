@@ -622,11 +622,15 @@
             // Também abre o mesmo modal para o botão "Criar Projeto" na aba Projetos
             const btnCriarProjeto = document.getElementById('btnCriarProjeto');
             if(btnCriarProjeto) {
+                console.log('Botão Criar Projeto encontrado na aba projetos!');
                 btnCriarProjeto.addEventListener('click', () => {
+                    alert('Abrindo modal de novo projeto (da aba projetos)!');
                     console.log('Clicou no botão Criar Projeto na aba projetos...');
                     modalNovoProjeto.style.display = 'flex';
                     lucide.createIcons();
                 });
+            } else {
+                console.log('Botão Criar Projeto NÃO encontrado');
             }
         } else {
             console.log('ERRO: Botão ou Modal não encontrado', { btnNovoProjetoTop, modalNovoProjeto });
@@ -757,7 +761,21 @@
         const chamadosRef = collection(db, 'chamados');
         onSnapshot(chamadosRef, (snapshot) => {
             if(document.getElementById('dash-chamados')) {
-                document.getElementById('dash-chamados').textContent = snapshot.size;
+                // Conta por status
+                let abertos = 0;
+                let andamento = 0;
+                let fechados = 0;
+                
+                snapshot.forEach(doc => {
+                    const status = doc.data().status;
+                    if (status === 'Aberto') abertos++;
+                    else if (status === 'Em Análise') andamento++;
+                    else if (status === 'Resolvido') fechados++;
+                });
+                
+                // Atualiza o display com contagem detalhada
+                document.getElementById('dash-chamados').innerHTML = 
+                    `<span style="color: #f59e0b;">${abertos} Abertos</span> | <span style="color: #3b82f6;">${andamento} Em Análise</span> | <span style="color: #22c55e;">${fechados} Resolvidos</span>`;
             }
             
             // Popula a tabela de chamados no admin
