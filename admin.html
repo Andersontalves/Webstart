@@ -239,6 +239,17 @@
                     </table>
                 </div>
             </div>
+
+            <!-- MODAL: Detalhes do Chamado -->
+            <div id="modalChamadoDetalhes" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center;">
+                <div style="background: #1e293b; border-radius: 12px; padding: 30px; max-width: 500px; width: 90%; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="margin: 0; font-size: 1.3rem;">Detalhes do Chamado</h3>
+                        <button id="btnFecharModalChamado" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.5rem;">&times;</button>
+                    </div>
+                    <div id="conteudoModalChamado"></div>
+                </div>
+            </div>
             <div id="view-config" class="content-view" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
                 <h2 style="font-size: 1.8rem; margin-bottom: 20px;">Configurações</h2>
                 <div class="glass-card"><p class="text-muted">Chaves de API, Perfil e Dados Bancários...</p></div>
@@ -398,7 +409,7 @@
 
     <script type="module">
         import { db } from './js/firebase-config.js';
-        import { collection, addDoc, onSnapshot, serverTimestamp, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { collection, addDoc, onSnapshot, serverTimestamp, deleteDoc, doc, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
         // Compatibiliza injeção modular com lucide global
         window.lucide = lucide;
@@ -728,6 +739,7 @@
                 
                 snapshot.forEach(doc => {
                     const ch = doc.data();
+                    const docId = doc.id;
                     let statusColor = ch.status === 'Resolvido' ? '#22c55e' : (ch.status === 'Em Análise' ? '#3b82f6' : '#f59e0b');
                     let statusBg = ch.status === 'Resolvido' ? 'rgba(34,197,94,0.1)' : (ch.status === 'Em Análise' ? 'rgba(59,130,246,0.1)' : 'rgba(245,158,11,0.1)');
                     
@@ -740,13 +752,85 @@
                         <td style="padding: 16px 24px; color: #fff;">${ch.assunto || 'N/A'}</td>
                         <td style="padding: 16px 24px;"><span style="color: ${statusColor}; font-size: 0.85rem; background: ${statusBg}; padding: 4px 10px; border-radius: 20px;">${ch.status || 'Aberto'}</span></td>
                         <td style="padding: 16px 24px;">
-                            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;" onclick="alert('Mensagem: ${(ch.mensagem || '').replace(/'/g, "\\'")}')">Ver Mensagem</button>
+                            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;" data-id="${docId}" data-ch='${JSON.stringify(ch).replace(/'/g, "\\'")}'>Ver/Editar</button>
                         </td>
                     `;
                     tabelaChamadosAdmin.appendChild(tr);
                 });
             }
         });
+
+        // Modal de detalhes do chamado
+        const modalChamado = document.getElementById('modalChamadoDetalhes');
+        const btnFecharModal = document.getElementById('btnFecharModalChamado');
+        
+        if (btnFecharModal) {
+            btnFecharModal.addEventListener('click', () => {
+                modalChamado.style.display = 'none';
+            });
+        }
+        
+        if (modalChamado) {
+            modalChamado.addEventListener('click', (e) => {
+                if (e.target === modalChamado) {
+                    modalChamado.style.display = 'none';
+                }
+            });
+        }
+
+        // Delegação de evento para botões Ver/Editar
+        const tabelaChamadosAdmin = document.getElementById('tabelaChamadosAdmin');
+        if (tabelaChamadosAdmin) {
+            tabelaChamadosAdmin.addEventListener('click', async (e) => {
+                const btn = e.target.closest('button[data-id]');
+                if (!btn) return;
+                
+                const docId = btn.getAttribute('data-id');
+                const ch = JSON.parse(btn.getAttribute('data-ch').replace(/\\'/g, "'"));
+                
+                const conteudo = document.getElementById('conteudoModalChamado');
+                conteudo.innerHTML = `
+                    <div style="margin-bottom: 20px;">
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 4px;">Cliente</p>
+                        <p style="font-weight: 600; font-size: 1.1rem;">${ch.cliente || 'N/A'}</p>
+                        <p style="color: var(--text-muted); font-size: 0.85rem;">${ch.email || 'N/A'}</p>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 4px;">Assunto</p>
+                        <p style="font-weight: 600;">${ch.assunto || 'N/A'}</p>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px;">Mensagem</p>
+                        <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 8px; font-size: 0.95rem; line-height: 1.5;">${ch.mensagem || 'N/A'}</div>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px;">Alterar Status</p>
+                        <select id="novoStatusChamado" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.3); color: #fff; border: 1px solid rgba(255,255,255,0.2); font-size: 1rem;">
+                            <option value="Aberto" ${ch.status === 'Aberto' ? 'selected' : ''}>Aberto</option>
+                            <option value="Em Análise" ${ch.status === 'Em Análise' ? 'selected' : ''}>Em Análise</option>
+                            <option value="Resolvido" ${ch.status === 'Resolvido' ? 'selected' : ''}>Resolvido</option>
+                        </select>
+                    </div>
+                    <button id="btnAtualizarStatus" data-id="${docId}" class="btn btn-primary" style="width: 100%; justify-content: center;">Atualizar Status</button>
+                `;
+                
+                modalChamado.style.display = 'flex';
+                
+                // Evento para atualizar status
+                document.getElementById('btnAtualizarStatus').addEventListener('click', async () => {
+                    const novoStatus = document.getElementById('novoStatusChamado').value;
+                    try {
+                        await updateDoc(doc(db, 'chamados', docId), {
+                            status: novoStatus
+                        });
+                        alert('Status atualizado!');
+                        modalChamado.style.display = 'none';
+                    } catch (error) {
+                        alert('Erro ao atualizar: ' + error.message);
+                    }
+                });
+            });
+        }
 
         // Event Delegation para Botoes de Arquivar/Excluir Projeto
         if (listaProjetosDOM) {
