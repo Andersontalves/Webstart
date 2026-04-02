@@ -1031,23 +1031,16 @@
         if(btnCloseSidebar) btnCloseSidebar.addEventListener('click', toggleSidebarMobile);
         if(sidebarOverlay) sidebarOverlay.addEventListener('click', toggleSidebarMobile);
 
-        // Debug: adiciona evento ao botão Novo Projeto
-        const btnNovoProjetoTop = document.getElementById('btnNovoProjetoTop');
+        // Adiciona evento ao botão Novo Projeto
         if(btnNovoProjetoTop) {
             btnNovoProjetoTop.onclick = function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                alert('Botão funcionando!');
-
                 var modal = document.getElementById('modalNovoProjeto');
                 if(modal) {
                     modal.style.display = 'flex';
-                    alert('Modal aberto!');
-                } else {
-                    alert('Modal não encontrado!');
                 }
             };
-            console.log('Evento adicionado ao botão Novo Projeto');
         }
 
         // Ao clicar em link da sidebar, fecha-a no mobile
