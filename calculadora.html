@@ -251,16 +251,12 @@
                 btnPdf.innerHTML = 'Processando... <i data-lucide="loader" class="spin"></i>';
                 lucide.createIcons();
 
-                // 1. Salvar no Firestore (Coleção Leads) - opcional
+                // Captura dados do formulário
                 let selecionadoBase = document.querySelector('input[name="base_type"]:checked').dataset.label;
                 let selecionadosExtras = [];
                 extras.forEach(e => { if(e.checked) selecionadosExtras.push(e.dataset.label); });
 
-                // 1. Salvar no Firestore (Coleção Leads)
-                let selecionadoBase = document.querySelector('input[name="base_type"]:checked').dataset.label;
-                let selecionadosExtras = [];
-                extras.forEach(e => { if(e.checked) selecionadosExtras.push(e.dataset.label); });
-
+                // Salvar no Firestore (Coleção Leads)
                 try {
                     await addDoc(collection(db, 'leads'), {
                         nome: clientName,
