@@ -419,11 +419,32 @@
         const links = document.querySelectorAll('.sidebar-link');
         const views = document.querySelectorAll('.content-view');
         
+        // Restaura última abavisitada
+        const ultimaAba = localStorage.getItem('admin_ultima_aba');
+        if (ultimaAba) {
+            links.forEach(l => {
+                if (l.getAttribute('data-target') === ultimaAba) {
+                    l.classList.add('active');
+                } else {
+                    l.classList.remove('active');
+                }
+            });
+            views.forEach(v => v.style.display = 'none');
+            const targetView = document.getElementById(ultimaAba);
+            if (targetView) {
+                targetView.style.display = 'block';
+                targetView.style.opacity = '1';
+            }
+        }
+        
         links.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const targetId = link.getAttribute('data-target');
                 if(!targetId) return;
+
+                // Salva a aba atual no localStorage
+                localStorage.setItem('admin_ultima_aba', targetId);
 
                 // Destaca botão ativo
                 links.forEach(l => l.classList.remove('active'));
