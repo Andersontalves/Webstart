@@ -213,6 +213,7 @@
                 let baseSelecionada = document.querySelector('input[name="base_type"]:checked');
                 if(baseSelecionada) {
                     total += parseFloat(baseSelecionada.value);
+                    console.log('Base selecionada:', baseSelecionada.value, baseSelecionada.dataset.label);
                     resumoLista.innerHTML += `<li style="display:flex; justify-content:space-between; color: #fff;"><span>${baseSelecionada.dataset.label}</span> <span>R$ ${baseSelecionada.value}</span></li>`;
                 }
 
@@ -220,6 +221,7 @@
                 extras.forEach(box => {
                     if(box.checked) {
                         total += parseFloat(box.value);
+                        console.log('Extra:', box.value, box.dataset.label);
                         resumoLista.innerHTML += `<li style="display:flex; justify-content:space-between; color: #fff;"><span>+ ${box.dataset.label}</span> <span>R$ ${box.value}</span></li>`;
                     }
                 });
@@ -231,9 +233,19 @@
                 console.log('Total:', total);
             }
 
+            // Listener para change
             baseTypes.forEach(el => el.addEventListener('change', atualizarResumo));
             extras.forEach(el => el.addEventListener('change', atualizarResumo));
-            atualizarResumo();
+            
+            // Listener para clique (para garantir que funciona no mobile)
+            document.querySelectorAll('.sim-option').forEach(label => {
+                label.addEventListener('click', () => {
+                    setTimeout(atualizarResumo, 50);
+                });
+            });
+            
+            // Executa ao carregar
+            window.addEventListener('load', atualizarResumo);
 
             // Gerar PDF e Salvar Lead
             btnPdf.addEventListener('click', async () => {
