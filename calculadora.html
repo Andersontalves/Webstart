@@ -179,7 +179,10 @@
 
     <!-- SCRIPTS -->
     <script src="js/main.js"></script>
-    <script>
+    <script type="module">
+        import { db } from './js/firebase-config.js';
+        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
         lucide.createIcons();
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -253,8 +256,25 @@
                 let selecionadosExtras = [];
                 extras.forEach(e => { if(e.checked) selecionadosExtras.push(e.dataset.label); });
 
-                // Firebase desabilitado - apenas gera PDF
-                console.log("Projeto:", selecionadoBase, "Extras:", selecionadosExtras);
+                // 1. Salvar no Firestore (Coleção Leads)
+                let selecionadoBase = document.querySelector('input[name="base_type"]:checked').dataset.label;
+                let selecionadosExtras = [];
+                extras.forEach(e => { if(e.checked) selecionadosExtras.push(e.dataset.label); });
+
+                try {
+                    await addDoc(collection(db, 'leads'), {
+                        nome: clientName,
+                        email: clientEmail,
+                        whatsapp: clientWhatsapp,
+                        tipoProjeto: selecionadoBase,
+                        extras: selecionadosExtras,
+                        valorTotal: totalPriceEl.innerText,
+                        createdAt: serverTimestamp()
+                    });
+                    console.log("Lead salvo com sucesso!");
+                } catch (error) {
+                    console.log("Erro ao salvar lead:", error.message);
+                }
 
                 // 2. Gerar PDF usando jsPDF
                 const { jsPDF } = window.jspdf;
