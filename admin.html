@@ -69,6 +69,13 @@
                 <li><a href="#" class="sidebar-link" data-target="view-leads"><i data-lucide="calculator" width="18"></i> Leads e Orçamentos</a></li>
                 <li><a href="#" class="sidebar-link" data-target="view-config"><i data-lucide="settings" width="18"></i> Configurações</a></li>
             </ul>
+            
+            <!-- Botão Sair -->
+            <div style="padding: 20px; border-top: 1px solid rgba(255,255,255,0.05);">
+                <button id="btnLogoutAdmin" style="width: 100%; padding: 12px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #ef4444; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 500;">
+                    <i data-lucide="log-out" width="18"></i> Sair
+                </button>
+            </div>
         </aside>
 
         <!-- MAIN CONTENT -->
@@ -405,12 +412,26 @@
 
     <script type="module">
         console.log('=== INICIANDO ADMIN JS ===');
-        import { db } from './js/firebase-config.js';
+        import { db, auth, signOut } from './js/firebase-config.js';
         import { collection, addDoc, onSnapshot, serverTimestamp, deleteDoc, doc, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
         // Compatibiliza injeção modular com lucide global
         window.lucide = lucide;
         lucide.createIcons();
+
+        // Botão Sair do Admin
+        const btnLogoutAdmin = document.getElementById('btnLogoutAdmin');
+        if(btnLogoutAdmin) {
+            btnLogoutAdmin.addEventListener('click', () => {
+                if(confirm('Deseja sair do painel administrativo?')) {
+                    signOut(auth).then(() => {
+                        window.location.href = 'login.html';
+                    }).catch((error) => {
+                        alert('Erro ao sair: ' + error.message);
+                    });
+                }
+            });
+        }
 
         /* Lógica de Navegação da Sidebar (SPA) */
         const links = document.querySelectorAll('.sidebar-link');
