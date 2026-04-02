@@ -103,15 +103,15 @@
                 </div>
 
                 <div class="metric-card">
-                    <span style="color: var(--text-muted); font-size: 0.9rem;">Clientes Ativos</span>
-                    <div class="metric-value" style="color: #fff;" id="dash-clientes">0</div>
-                    <div style="color: var(--text-muted); font-size: 0.85rem;" id="dash-clientes-sub">Atendimento contínuo</div>
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">Projetos Ativos</span>
+                    <div class="metric-value" style="color: #fff;" id="dash-projetos">0</div>
+                    <div style="color: var(--text-muted); font-size: 0.85rem;" id="dash-projetos-sub">Em andamento</div>
                 </div>
 
                 <div class="metric-card">
                     <span style="color: var(--text-muted); font-size: 0.9rem;">Chamados Abertos</span>
                     <div class="metric-value" style="color: var(--warning);" id="dash-chamados">0</div>
-                    <div style="color: #ef4444; font-size: 0.85rem; display: flex; align-items: center; gap: 4px;">Nenhum atrasado</div>
+                    <div style="color: var(--text-muted); font-size: 0.8rem;">Abertos: <span style="color: #f59e0b;" id="chamados-abertos">0</span> | Análise: <span style="color: #3b82f6;" id="chamados-analise">0</span> | Resolvidos: <span style="color: #22c55e;" id="chamados-resolvidos">0</span></div>
                 </div>
             </div>
 
@@ -683,13 +683,25 @@
             listaProjetosDOM.innerHTML = '';
             
             let andamentoCount = 0;
+            let atrasadosCount = 0;
 
             if (snapshot.empty) {
-                listaProjetosDOM.innerHTML = '<tr><td colspan="4" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Ufa, caixas limpas! Nenhum projeto em andamento.</td></tr>';
+                listaProjetosDOM.innerHTML = '<tr><td colspan="4" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Ufa, caixas limpas! Nenhum projeto.</td></tr>';
             } else {
+                // Pega data de hoje para comparar prazos
+                const hoje = new Date();
+                
                 snapshot.forEach((docSnap) => {
                     const proj = docSnap.data();
                     andamentoCount++;
+                    
+                    // Verifica se o projeto está atrasado (prazo menor que hoje)
+                    if(proj.prazo) {
+                        const dataPrazo = new Date(proj.prazo.split('/').reverse().join('-'));
+                        if(dataPrazo < hoje && proj.status !== 'Concluído') {
+                            atrasadosCount++;
+                        }
+                    }
                     
                     // Cor inteligente baseada no progresso
                     let barColor = 'var(--primary)';
@@ -716,7 +728,14 @@
             }
             
             // Dashboard
-            if(document.getElementById('dash-projetos')) document.getElementById('dash-projetos').textContent = andamentoCount;
+            if(document.getElementById('dash-projetos')) {
+                document.getElementById('dash-projetos').textContent = andamentoCount;
+                // Se houver projetos atrasados, mostra na subtitle
+                const dashProjSub = document.getElementById('dash-projetos-sub');
+                if(dashProjSub && atrasadosCount > 0) {
+                    dashProjSub.innerHTML = `<span style="color: #ef4444;">${atrasadosCount} atrasado${atrasadosCount > 1 ? 's' : ''}</span>`;
+                }
+            }
 
             lucide.createIcons();
         });
@@ -773,9 +792,11 @@
                     else if (status === 'Resolvido') fechados++;
                 });
                 
-                // Atualiza o display com contagem detalhada
-                document.getElementById('dash-chamados').innerHTML = 
-                    `<span style="color: #f59e0b;">${abertos} Abertos</span> | <span style="color: #3b82f6;">${andamento} Em Análise</span> | <span style="color: #22c55e;">${fechados} Resolvidos</span>`;
+                // Atualiza o total e os detalhes
+                document.getElementById('dash-chamados').textContent = abertos + andamento;
+                document.getElementById('chamados-abertos').textContent = abertos;
+                document.getElementById('chamados-analise').textContent = andamento;
+                document.getElementById('chamados-resolvidos').textContent = fechados;
             }
             
             // Popula a tabela de chamados no admin
