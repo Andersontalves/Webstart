@@ -396,12 +396,14 @@
                     
                     <form id="formChamado" style="display: flex; flex-direction: column; gap: 16px;">
                         <div>
-                            <label for="chamadoAssunto" class="form-label">Assunto / Serviço Afetado</label>
-                            <input type="text" id="chamadoAssunto" class="form-input" placeholder="Ex: Alteração de imagem na Home" required>
+                            <label for="chamadoAssunto" style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 8px; color: #e2e8f0;">Assunto / Serviço Afetado</label>
+                            <input type="text" id="chamadoAssunto" placeholder="Ex: Alteração de imagem na Home" required 
+                                   style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.3); color: #fff; font-size: 1rem; outline: none; transition: border-color 0.2s;">
                         </div>
                         <div>
-                            <label for="chamadoMensagem" class="form-label">Descrição da Solicitação</label>
-                            <textarea id="chamadoMensagem" class="form-input" rows="4" placeholder="Descreva os detalhes..." required></textarea>
+                            <label for="chamadoMensagem" style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 8px; color: #e2e8f0;">Descrição da Solicitação</label>
+                            <textarea id="chamadoMensagem" rows="5" placeholder="Descreva os detalhes..." required 
+                                      style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.3); color: #fff; font-size: 1rem; outline: none; resize: vertical; min-height: 120px; font-family: inherit; transition: border-color 0.2s;"></textarea>
                         </div>
                         <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
                             <button type="submit" class="btn btn-primary" id="btnSalvarChamado" aria-label="Enviar solicitação de suporte">Enviar Solicitação</button>
