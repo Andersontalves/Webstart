@@ -2,9 +2,30 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="format-detection" content="telephone=yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
     <title>WebStart - Criação de Sites e Lojas Virtuais Profissionais</title>
     <meta name="description" content="WebStart: Criamos seu site profissional com preço acessível. Entregamos seu site pronto para funcionar com domínio, hospedagem configurados.">
+    <meta name="keywords" content="criação de sites, loja virtual, landing page, desenvolvimento web, SEO, agência digital, criação de site Sorocaba">
+    <meta name="author" content="WebStart Agency">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Portuguese">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Preconnect para recursos externos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://images.unsplash.com">
+    
+    <!-- DNS Prefetch para recursos que serão usados depois -->
+    <link rel="dns-prefetch" href="https://wa.me">
+    
+    <!-- Preload de recursos críticos -->
+    <link rel="preload" href="css/style.css" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" as="font" type="font/woff2" crossorigin>
     
     <!-- Open Graph / Meta SEO Final -->
     <meta property="og:title" content="WebStart - Agência Web">
@@ -13,15 +34,107 @@
     <meta property="og:url" content="https://webstart.agency">
     <meta property="og:image" content="https://webstart.agency/images/og-image.jpg">
 
+    <!-- Schema Markup JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "WebStart - Criação de Sites e Lojas Virtuais",
+        "url": "https://webstart.agency",
+        "description": "Agência web especializada em criação de sites profissionais, lojas virtuais e landing pages de alta conversão.",
+        "publisher": {
+            "@type": "Organization",
+            "name": "WebStart",
+            "url": "https://webstart.agency"
+        },
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://webstart.agency/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "WebStart",
+        "url": "https://webstart.agency",
+        "logo": "https://webstart.agency/images/logo.png",
+        "description": "Agência web especializada em criação de sites profissionais, lojas virtuais e landing pages.",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+55-15-99669-6096",
+            "contactType": "customer service",
+            "availableTime": {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                "opens": "09:00",
+                "closes": "18:00"
+            }
+        },
+        "sameAs": [
+            "https://wa.me/5515996696096"
+        ],
+        "areaServed": {
+            "@type": "Country",
+            "name": "Brasil"
+        },
+        "serviceType": ["Web Development", "E-commerce", "SEO", "Digital Marketing"]
+    }
+    </script>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563EB">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="WebStart">
+    
+    <!-- Favicon e Ícones -->
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="images/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="images/apple-touch-icon-120x120.png">
+    
+    <!-- Canonical URL (SEO) -->
+    <link rel="canonical" href="https://webstart.agency/">
+
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
-    <!-- Ícones Lucide -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Security Headers via Meta -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="X-XSS-Protection" content="1; mode=block">
+    
+    <!-- Ícones Lucide (defer para não bloquear render) -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
 </head>
 <body>
 
+    <!-- Script do Service Worker (PWA) -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/js/sw.js')
+                    .then((registration) => {
+                        console.log('Service Worker registrado:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker falhou:', error);
+                    });
+            });
+        }
+    </script>
+
+    <!-- Skip Link para Acessibilidade -->
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+
     <!-- ================= NAVBAR ================= -->
-    <nav class="navbar" id="navbar">
+    <nav class="navbar" id="navbar" role="navigation" aria-label="Menu principal">
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
             <a href="#" class="nav-brand">
                 <i data-lucide="rocket" style="color: var(--primary);"></i> WebStart
@@ -47,14 +160,14 @@
             </ul>
 
             <!-- Botão Mobile -->
-            <button class="hamburger" id="hamburgerBtn">
+            <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menu de navegação" aria-expanded="false">
                 <i data-lucide="menu"></i>
             </button>
         </div>
     </nav>
 
     <!-- ================= HERO SECTION ================= -->
-    <section id="inicio" style="padding: 160px 0 100px 0; min-height: 100vh; display: flex; align-items: center; position: relative;">
+    <section id="inicio" style="padding: 160px 0 100px 0; min-height: 100vh; display: flex; align-items: center; position: relative;" role="main" id="main-content">
         <!-- Background decorative elements -->
         <div style="position: absolute; top: -10%; left: -10%; width: 50%; height: 50%; background: var(--primary); filter: blur(150px); opacity: 0.15; z-index: -1;"></div>
         <div style="position: absolute; bottom: 0; right: -10%; width: 40%; height: 40%; background: var(--secondary); filter: blur(150px); opacity: 0.15; z-index: -1;"></div>
@@ -75,7 +188,7 @@
                     <a href="#contato" class="btn btn-primary">
                         Solicitar orçamento <i data-lucide="arrow-right" width="20" height="20"></i>
                     </a>
-                    <a href="https://wa.me/5515996696096" target="_blank" class="btn btn-outline" style="border-color: #25D366; color: #fff;">
+                    <a href="https://wa.me/5515996696096" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="border-color: #25D366; color: #fff;">
                         <i data-lucide="message-circle" width="20" height="20" style="color: #25D366;"></i> Falar no WhatsApp
                     </a>
                 </div>
@@ -197,73 +310,73 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px;">
                 <!-- 1 -->
                 <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
-                    <div style="height: 220px; background: url('images/mockups/portfolio_restaurante_pt.png') center/cover; position: relative;">
+                    <div style="height: 220px; background: url('images/mockups/portfolio_restaurante_pt.png') center/cover; position: relative;" loading="lazy">
                     </div>
                     <div style="padding: 24px;">
                         <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Institucional & Cardápio</span>
                         <h3 style="margin: 8px 0; font-size: 1.3rem;">Site Restaurante Premium</h3>
                         <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Layout limpo com fotos de alta qualidade, cardápio digital integrado e reserva de mesas pelo WhatsApp.</p>
-                        <a href="demos/restaurante.html" target="_blank" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                        <a href="demos/restaurante.html" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
                     </div>
                 </div>
 
                 <!-- 2 -->
                 <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
-                    <div style="height: 220px; background: url('images/mockups/portfolio_fitness_pt.png') center/cover; position: relative;">
+                    <div style="height: 220px; background: url('images/mockups/portfolio_fitness_pt.png') center/cover; position: relative;" loading="lazy">
                     </div>
                     <div style="padding: 24px;">
                         <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Sistema e Membros</span>
                         <h3 style="margin: 8px 0; font-size: 1.3rem;">Plataforma Personal Trainer</h3>
                         <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Área restrita de login para alunos, venda de consultoria integrada (pagamento) e painel em vídeo.</p>
-                        <a href="demos/fitness.html" target="_blank" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                        <a href="demos/fitness.html" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
                     </div>
                 </div>
 
                 <!-- 3 -->
                 <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
-                    <div style="height: 220px; background: url('images/mockups/portfolio_ecommerce_pt.png') center/cover; position: relative;">
+                    <div style="height: 220px; background: url('images/mockups/portfolio_ecommerce_pt.png') center/cover; position: relative;" loading="lazy">
                     </div>
                     <div style="padding: 24px;">
                         <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">E-commerce</span>
                         <h3 style="margin: 8px 0; font-size: 1.3rem;">Loja Virtual de Roupas</h3>
                         <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Layout focado em fotos, zoom em produtos, carrinho lateral intuitivo e checkout transparente otimizado.</p>
-                        <a href="demos/ecommerce.html" target="_blank" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                        <a href="demos/ecommerce.html" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
                     </div>
                 </div>
 
                 <!-- 4 -->
                 <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
-                    <div style="height: 220px; background: url('images/mockups/portfolio_advocacia_pt.png') center/cover; position: relative;">
+                    <div style="height: 220px; background: url('images/mockups/portfolio_advocacia_pt.png') center/cover; position: relative;" loading="lazy">
                     </div>
                     <div style="padding: 24px;">
                         <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Serviços Jurídicos</span>
                         <h3 style="margin: 8px 0; font-size: 1.3rem;">Site Escritório de Advocacia</h3>
                         <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Focado em confiança de alto padrão, cores sólidas, apresentação dos sócios e formulário de cotação dinâmico.</p>
-                        <a href="demos/advocacia.html" target="_blank" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                        <a href="demos/advocacia.html" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
                     </div>
                 </div>
 
                 <!-- 5 -->
                 <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
-                    <div style="height: 220px; background: url('images/mockups/portfolio_clinica_pt.png') center/cover; position: relative;">
+                    <div style="height: 220px; background: url('images/mockups/portfolio_clinica_pt.png') center/cover; position: relative;" loading="lazy">
                     </div>
                     <div style="padding: 24px;">
                         <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Saúde</span>
                         <h3 style="margin: 8px 0; font-size: 1.3rem;">Site Clínica Médica / Odonto</h3>
                         <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Apresentação do corpo clínico, especialidades, e recurso de pré-agendamento online de consultas integrado.</p>
-                        <a href="demos/clinica.html" target="_blank" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                        <a href="demos/clinica.html" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
                     </div>
                 </div>
 
                 <!-- 6 -->
                 <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
-                    <div style="height: 220px; background: url('images/mockups/portfolio_landing_pt.png') center/cover; position: relative;">
+                    <div style="height: 220px; background: url('images/mockups/portfolio_landing_pt.png') center/cover; position: relative;" loading="lazy">
                     </div>
                     <div style="padding: 24px;">
                         <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Educação e Produtos</span>
                         <h3 style="margin: 8px 0; font-size: 1.3rem;">Landing Page VIP</h3>
                         <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px;">Landing Page de alta conversão, foco em copy e gatilhos de desconto para lançamento de InfoProduto.</p>
-                        <a href="demos/infoproduto.html" target="_blank" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
+                        <a href="demos/infoproduto.html" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.1);">Ver Demonstração</a>
                     </div>
                 </div>
             </div>
@@ -499,7 +612,8 @@
 
                         <div>
                             <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">WhatsApp com DDD</label>
-                            <input type="text" id="whats_input" required placeholder="(00) 00000-0000" style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
+                            <input type="tel" id="whats_input" required placeholder="(00) 00000-0000" maxlength="15" pattern="\([0-9]{2}\) [0-9]{5}-[0-9]{4}" style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
+                            <small style="color: var(--text-muted); font-size: 0.8rem;">Formato: (DDD) 00000-0000</small>
                         </div>
 
                         <div>
@@ -521,7 +635,7 @@
                             <label for="dominio_input" style="font-size: 0.95rem; color: var(--text-muted);">Já possuo um domínio registrado</label>
                         </div>
 
-                        <button type="submit" class="btn btn-primary" style="margin-top: 16px; width: 100%; padding: 16px; font-size: 1.05rem;">
+                        <button type="submit" class="btn btn-primary" style="margin-top: 16px; width: 100%; padding: 16px; font-size: 1.05rem;" aria-label="Enviar formulário de contato">
                             Enviar Solicitação <i data-lucide="send" width="18" height="18"></i>
                         </button>
                         

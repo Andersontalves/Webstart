@@ -2,10 +2,23 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Painel do Cliente - WebStart</title>
+    <meta name="description" content="Acesse seu painel de cliente WebStart. Gerencie seus projetos, Chamados de suporte e muito mais.">
+    
+    <!-- Preconnect para recursos externos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://webstart.agency/dashboard-cliente.html">
+    
+    <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
     <style>
         .dashboard-layout {
             display: flex;
@@ -127,7 +140,10 @@
 </head>
 <body>
 
-    <button class="mobile-toggle" id="btnToggleSidebar"><i data-lucide="menu"></i></button>
+    <!-- Skip Link para Acessibilidade -->
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+
+    <button class="mobile-toggle" id="btnToggleSidebar" aria-label="Abrir menu de navegação"><i data-lucide="menu"></i></button>
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <div class="dashboard-layout">
@@ -177,7 +193,7 @@
         </aside>
 
         <!-- MAIN CONTENT -->
-        <main class="main-content">
+        <main class="main-content" id="main-content" role="main" aria-label="Conteúdo principal do painel">
             
             <header class="user-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;">
                 <div style="display: flex; align-items: center; gap: 16px;">
@@ -359,7 +375,7 @@
                     
                     <div style="background: #fff; padding: 20px; border-radius: 12px; display: inline-block; margin-bottom: 20px;">
                         <!-- QR Code Falso -->
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126420014br.gov.bcb.pix0120exemplo@webstart.com5204000053039865802BR5915WebStart Design6009Sao Paulo62070503***63041234" alt="QR Code Pix" style="width: 200px; height: 200px;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126420014br.gov.bcb.pix0120exemplo@webstart.com5204000053039865802BR5915WebStart Design6009Sao Paulo62070503***63041234" alt="QR Code Pix para pagamento" style="width: 200px; height: 200px;" loading="lazy">
                     </div>
                     
                     <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Ou copie o código "Pix Copia e Cola" abaixo:</p>
@@ -380,15 +396,15 @@
                     
                     <form id="formChamado" style="display: flex; flex-direction: column; gap: 16px;">
                         <div>
-                            <label class="form-label">Assunto / Serviço Afetado</label>
+                            <label for="chamadoAssunto" class="form-label">Assunto / Serviço Afetado</label>
                             <input type="text" id="chamadoAssunto" class="form-input" placeholder="Ex: Alteração de imagem na Home" required>
                         </div>
                         <div>
-                            <label class="form-label">Descrição da Solicitação</label>
+                            <label for="chamadoMensagem" class="form-label">Descrição da Solicitação</label>
                             <textarea id="chamadoMensagem" class="form-input" rows="4" placeholder="Descreva os detalhes..." required></textarea>
                         </div>
                         <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
-                            <button type="submit" class="btn btn-primary" id="btnSalvarChamado">Enviar Solicitação</button>
+                            <button type="submit" class="btn btn-primary" id="btnSalvarChamado" aria-label="Enviar solicitação de suporte">Enviar Solicitação</button>
                         </div>
                     </form>
                 </div>

@@ -1,0 +1,37 @@
+# ============================================
+# Git Ignore - WebStart
+# ============================================
+
+# Ambiente e Credenciais
+.env
+.env.local
+.env.*.local
+
+# Dependências
+node_modules/
+package-lock.json
+
+# Build e Distribuição
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Credenciais Firebase (NUNCA commitar)
+firebase-config.js  (mantenha apenas como template)
+
+# Imagens Otimizadas (geradas automaticamente)
+*.webp
+*.avif

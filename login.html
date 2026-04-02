@@ -20,7 +20,10 @@
 </head>
 <body>
 
-    <div class="glass-card" style="width: 100%; max-width: 450px; padding: 40px;">
+    <!-- Skip Link para Acessibilidade -->
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+
+    <div class="glass-card" style="width: 100%; max-width: 450px; padding: 40px;" id="main-content">
         <div style="text-align: center; margin-bottom: 30px;">
             <a href="index.html" class="nav-brand" style="justify-content: center; font-size: 2rem;">
                 <i data-lucide="rocket" style="color: var(--primary); width: 32px; height: 32px;"></i> WebStart
@@ -32,10 +35,13 @@
             <div id="errorBox" style="display: none; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; padding: 12px; border-radius: 8px; font-size: 0.85rem; text-align: center;"></div>
 
             <div>
-                <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">E-mail</label>
+                <label for="email" style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">E-mail</label>
                 <div style="position: relative;">
                     <i data-lucide="mail" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);" width="18"></i>
-                    <input type="email" id="email" placeholder="seu@email.com" required style="width: 100%; padding: 14px 16px 14px 45px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
+                    <input type="email" id="email" placeholder="seu@email.com" required 
+                           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                           title="Digite um e-mail válido exemplo@dominio.com"
+                           style="width: 100%; padding: 14px 16px 14px 45px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none;">
                 </div>
             </div>
 

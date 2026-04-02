@@ -1,0 +1,38 @@
+# robots.txt - WebStart
+# https://webstart.agency
+
+User-agent: *
+Allow: /
+
+# Páginas principais
+Allow: /index.html
+Allow: /servicos.html
+Allow: /portfolio.html
+Allow: /contato.html
+Allow: /blog.html
+Allow: /templates.html
+
+# Autenticação
+Allow: /login.html
+Allow: /cadastro.html
+
+# Ferramentas
+Allow: /calculadora.html
+Allow: /afiliados.html
+
+# Demos
+Allow: /demos/
+
+# Bloquear páginas administrativas e dashboards
+Disallow: /admin.html
+Disallow: /dashboard-cliente.html
+
+# Bloquear páginas de erro/debug
+Disallow: /*.json$
+Disallow: /*.js$
+
+# Sitemap
+Sitemap: https://webstart.agency/sitemap.xml
+
+# Crawl-delay (opcional, para evitar sobrecarga)
+Crawl-delay: 1

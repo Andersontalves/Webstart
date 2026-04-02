@@ -16,6 +16,62 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // 1.1. Máscara de Telefone (DDD + 8 ou 9 dígitos)
+    const phoneInputs = document.querySelectorAll('input[type="tel"], input[placeholder*="(00)"]');
+    
+    phoneInputs.forEach(input => {
+        input.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.length > 0) {
+                // Adiciona parênteses no DDD
+                if (value.length <= 2) {
+                    value = `(${value}`;
+                } else if (value.length <= 3) {
+                    value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+                } else if (value.length <= 7) {
+                    value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}`;
+                } else {
+                    // 9 dígitos (com hífen)
+                    value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7, 11)}`;
+                }
+            }
+            
+            e.target.value = value;
+        });
+        
+        // Validação ao sair do campo
+        input.addEventListener('blur', () => {
+            const value = input.value.replace(/\D/g, '');
+            if (value.length < 10 || value.length > 11) {
+                input.setCustomValidity('Digite um telefone válido com DDD');
+                input.reportValidity();
+            } else {
+                input.setCustomValidity('');
+            }
+        });
+    });
+
+    // 1.2. Validação de E-mail
+    const emailInputs = document.querySelectorAll('input[type="email"]');
+    
+    emailInputs.forEach(input => {
+        input.addEventListener('blur', () => {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(input.value)) {
+                input.setCustomValidity('Digite um e-mail válido (exemplo@dominio.com)');
+                input.reportValidity();
+            } else {
+                input.setCustomValidity('');
+            }
+        });
+        
+        // Remove mensagem de erro enquanto digita
+        input.addEventListener('input', () => {
+            input.setCustomValidity('');
+        });
+    });
+
     // 2. Menu Mobile (Hamburger)
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navMenu = document.getElementById('navMenu');
