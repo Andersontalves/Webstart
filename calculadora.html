@@ -253,21 +253,8 @@
                 let selecionadosExtras = [];
                 extras.forEach(e => { if(e.checked) selecionadosExtras.push(e.dataset.label); });
 
-                try {
-                    const { db } = await import('./js/firebase-config.js');
-                    const { collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js');
-                    await addDoc(collection(db, 'leads'), {
-                        nome: clientName,
-                        email: clientEmail,
-                        whatsapp: clientWhatsapp,
-                        tipoProjeto: selecionadoBase,
-                        extras: selecionadosExtras,
-                        valorTotal: totalPriceEl.innerText,
-                        createdAt: serverTimestamp()
-                    });
-                } catch (error) {
-                    console.log("Firebase não disponível - gerando PDF apenas:", error.message);
-                }
+                // Firebase desabilitado - apenas gera PDF
+                console.log("Projeto:", selecionadoBase, "Extras:", selecionadosExtras);
 
                 // 2. Gerar PDF usando jsPDF
                 const { jsPDF } = window.jspdf;
