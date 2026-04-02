@@ -644,8 +644,16 @@
                 });
             });
 
-            // 4. Ouvinte: Chamados do Cliente
-            const qChamados = query(collection(db, 'chamados'), where('cliente', '==', nomeDoClienteFiltro));
+            // 4. Ouvinte: Chamados do Cliente (busca por nome ou email)
+            let qChamados;
+            if (nomeDoClienteFiltro && nomeDoClienteFiltro !== "DESCONHECIDO") {
+                // Filtra por nome do cliente
+                qChamados = query(collection(db, 'chamados'), where('cliente', '==', nomeDoClienteFiltro));
+            } else {
+                // Fallback: busca por email do usuário logado
+                qChamados = query(collection(db, 'chamados'), where('email', '==', user.email));
+            }
+            
             onSnapshot(qChamados, (snap) => {
                 if (tabelaChamadosDOM) tabelaChamadosDOM.innerHTML = '';
 
@@ -715,11 +723,25 @@
             const mensagem = document.getElementById('chamadoMensagem').value;
             
             // O nome do cliente é extraído do Dashboard renderizado, caso tenha carregado.
-            let clienteResponsavel = clienteTop_nome.textContent;
+            let clienteResponsavel = "";
+
+            // Tenta obter o nome do cliente do elemento
+            if (clienteTop_nome && clienteTop_nome.textContent && clienteTop_nome.textContent !== "Buscando..." && clienteTop_nome.textContent !== "Sua Conta") {
+                clienteResponsavel = clienteTop_nome.textContent;
+            } else if (nomeDoClienteFiltro && nomeDoClienteFiltro !== "DESCONHECIDO") {
+                // Fallback: usa o nomeDoClienteFiltro que veio do Firestore
+                clienteResponsavel = nomeDoClienteFiltro;
+            } else {
+                // Último fallback: usa o email do usuário
+                clienteResponsavel = user.email;
+            }
+
+            console.log("Enviando chamado para cliente:", clienteResponsavel);
 
             try {
                 await addDoc(collection(db, 'chamados'), {
                     cliente: clienteResponsavel,
+                    email: user.email,
                     assunto: assunto,
                     mensagem: mensagem,
                     status: 'Aberto',
