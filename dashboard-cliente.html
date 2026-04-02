@@ -469,8 +469,9 @@
     <script type="module">
         import { auth, db, onAuthStateChanged, signOut, collection, query, where, onSnapshot, getDocs, addDoc } from './js/firebase-config.js';
 
-        // Variável global para armazenar o nome do cliente
+        // Variável global para armazenar o nome do cliente e usuário
         let nomeDoClienteFiltro = "";
+        let currentUser = null;
 
         // Elementos DOM
         const clienteGeral_nome = document.getElementById('clienteGeral_nome');
@@ -507,6 +508,9 @@
                 window.location.href = 'login.html';
                 return;
             }
+
+            // Armazena o usuário atual
+            currentUser = user;
 
             // Impede admin de entrar no painel de cliente e bagunçar a lógica
             if(user.email.toLowerCase() === 'admin@webstart.com') {
@@ -652,7 +656,7 @@
                 qChamados = query(collection(db, 'chamados'), where('cliente', '==', nomeDoClienteFiltro));
             } else {
                 // Fallback: busca por email do usuário logado
-                qChamados = query(collection(db, 'chamados'), where('email', '==', user.email));
+                qChamados = query(collection(db, 'chamados'), where('email', '==', currentUser.email));
             }
             
             onSnapshot(qChamados, (snap) => {
@@ -734,7 +738,7 @@
                 clienteResponsavel = nomeDoClienteFiltro;
             } else {
                 // Último fallback: usa o email do usuário
-                clienteResponsavel = user.email;
+                clienteResponsavel = currentUser ? currentUser.email : "email nao identificado";
             }
 
             console.log("Enviando chamado para cliente:", clienteResponsavel);
@@ -742,7 +746,7 @@
             try {
                 await addDoc(collection(db, 'chamados'), {
                     cliente: clienteResponsavel,
-                    email: user.email,
+                    email: currentUser ? currentUser.email : "",
                     assunto: assunto,
                     mensagem: mensagem,
                     status: 'Aberto',
