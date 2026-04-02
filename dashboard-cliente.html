@@ -469,6 +469,9 @@
     <script type="module">
         import { auth, db, onAuthStateChanged, signOut, collection, query, where, onSnapshot, getDocs, addDoc } from './js/firebase-config.js';
 
+        // Variável global para armazenar o nome do cliente
+        let nomeDoClienteFiltro = "";
+
         // Elementos DOM
         const clienteGeral_nome = document.getElementById('clienteGeral_nome');
         const clienteTop_nome = document.getElementById('clienteTop_nome');
@@ -514,8 +517,6 @@
             // 1. Puxar Dados do Cliente baseado no Email da Auth
             const qCliente = query(collection(db, 'clientes'), where('email', '==', user.email));
             const querySnapshot = await getDocs(qCliente);
-
-            let nomeDoClienteFiltro = "";
 
             if (!querySnapshot.empty) {
                 const clienteData = querySnapshot.docs[0].data();
