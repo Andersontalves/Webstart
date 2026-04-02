@@ -608,6 +608,7 @@
         if (btnNovoProjetoTop && modalNovoProjeto) {
             console.log('Botão Novo Projeto encontrado, configurando evento...');
             btnNovoProjetoTop.addEventListener('click', () => {
+                alert('Abrindo modal de novo projeto!');
                 console.log('Clicou no botão Novo Projeto, abrindo modal...');
                 modalNovoProjeto.style.display = 'flex';
                 lucide.createIcons();
@@ -1012,20 +1013,6 @@
         if(btnToggleSidebar) btnToggleSidebar.addEventListener('click', toggleSidebarMobile);
         if(btnCloseSidebar) btnCloseSidebar.addEventListener('click', toggleSidebarMobile);
         if(sidebarOverlay) sidebarOverlay.addEventListener('click', toggleSidebarMobile);
-
-        // Adiciona evento ao botão Novo Projeto
-        if(btnNovoProjetoTop) {
-            btnNovoProjetoTop.onclick = function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                var modal = document.getElementById('modalNovoProjeto');
-                if(modal) {
-                    // Garante que o modal fique visível acima de tudo
-                    modal.style.zIndex = '10001';
-                    modal.style.display = 'flex';
-                }
-            };
-        }
 
         // Ao clicar em link da sidebar, fecha-a no mobile
         if (links) {
