@@ -202,6 +202,7 @@
             const clientWhatsappInput = document.getElementById('client_whatsapp');
 
             function atualizarResumo() {
+                console.log('Atualizando resumo...');
                 let total = 0;
                 resumoLista.innerHTML = '';
                 
@@ -209,21 +210,22 @@
                 let baseSelecionada = document.querySelector('input[name="base_type"]:checked');
                 if(baseSelecionada) {
                     total += parseFloat(baseSelecionada.value);
-                    resumoLista.innerHTML += `<li style="display:flex; justify-content:space-between;"><span>${baseSelecionada.dataset.label}</span> <span>R$ ${baseSelecionada.value}</span></li>`;
+                    resumoLista.innerHTML += `<li style="display:flex; justify-content:space-between; color: #fff;"><span>${baseSelecionada.dataset.label}</span> <span>R$ ${baseSelecionada.value}</span></li>`;
                 }
 
                 // Extras
                 extras.forEach(box => {
                     if(box.checked) {
                         total += parseFloat(box.value);
-                        resumoLista.innerHTML += `<li style="display:flex; justify-content:space-between; color: var(--text-main);"><span>+ ${box.dataset.label}</span> <span>R$ ${box.value}</span></li>`;
+                        resumoLista.innerHTML += `<li style="display:flex; justify-content:space-between; color: #fff;"><span>+ ${box.dataset.label}</span> <span>R$ ${box.value}</span></li>`;
                     }
                 });
 
                 // Inclusos padrão
-                resumoLista.innerHTML += `<li style="display:flex; justify-content:space-between; color: var(--success); margin-top: 10px; font-size: 0.85rem;"><span>✔ Domínio + Hospedagem 1 Ano</span> <span>Incluso</span></li>`;
+                resumoLista.innerHTML += `<li style="display:flex; justify-content:space-between; color: #22c55e; margin-top: 10px; font-size: 0.85rem;"><span>✔ Domínio + Hospedagem 1 Ano</span> <span>Incluso</span></li>`;
 
                 totalPriceEl.innerText = `R$ ${total.toLocaleString('pt-BR')}`;
+                console.log('Total:', total);
             }
 
             baseTypes.forEach(el => el.addEventListener('change', atualizarResumo));
