@@ -646,7 +646,7 @@
 
             // 4. Ouvinte: Chamados do Cliente (busca por nome ou email)
             let qChamados;
-            if (nomeDoClienteFiltro && nomeDoClienteFiltro !== "DESCONHECIDO") {
+            if (typeof nomeDoClienteFiltro !== 'undefined' && nomeDoClienteFiltro && nomeDoClienteFiltro !== "DESCONHECIDO") {
                 // Filtra por nome do cliente
                 qChamados = query(collection(db, 'chamados'), where('cliente', '==', nomeDoClienteFiltro));
             } else {
@@ -728,7 +728,7 @@
             // Tenta obter o nome do cliente do elemento
             if (clienteTop_nome && clienteTop_nome.textContent && clienteTop_nome.textContent !== "Buscando..." && clienteTop_nome.textContent !== "Sua Conta") {
                 clienteResponsavel = clienteTop_nome.textContent;
-            } else if (nomeDoClienteFiltro && nomeDoClienteFiltro !== "DESCONHECIDO") {
+            } else if (typeof nomeDoClienteFiltro !== 'undefined' && nomeDoClienteFiltro && nomeDoClienteFiltro !== "DESCONHECIDO") {
                 // Fallback: usa o nomeDoClienteFiltro que veio do Firestore
                 clienteResponsavel = nomeDoClienteFiltro;
             } else {
