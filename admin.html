@@ -83,7 +83,7 @@
                     </div>
                     <div class="header-buttons">
                         <button class="btn btn-outline" style="padding: 10px 16px;"><i data-lucide="download" width="18"></i> Relatório</button>
-                        <button type="button" class="btn btn-primary" id="btnNovoProjetoTop" style="background: linear-gradient(135deg, #8b5cf6, #ec4899); padding: 10px 16px; cursor: pointer;" title="Clique para criar novo projeto"><i data-lucide="plus" width="18"></i> Novo Projeto</button>
+                        <button type="button" class="btn btn-primary" id="btnNovoProjetoTop" style="background: linear-gradient(135deg, #8b5cf6, #ec4899); padding: 10px 16px; cursor: pointer; position: relative; z-index: 99999 !important; pointer-events: auto !important;" title="Clique para criar novo projeto"><i data-lucide="plus" width="18"></i> Novo Projeto</button>
                     </div>
                 </header>
 
@@ -1034,14 +1034,17 @@
         // Debug: adiciona evento ao botão Novo Projeto
         const btnNovoProjetoTop = document.getElementById('btnNovoProjetoTop');
         if(btnNovoProjetoTop) {
-            btnNovoProjetoTop.onclick = function() {
-                console.log('Botão clicado!');
+            btnNovoProjetoTop.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                alert('Botão funcionando!');
+
                 var modal = document.getElementById('modalNovoProjeto');
                 if(modal) {
                     modal.style.display = 'flex';
-                    console.log('Modal aberto!');
+                    alert('Modal aberto!');
                 } else {
-                    console.log('Modal não encontrado!');
+                    alert('Modal não encontrado!');
                 }
             };
             console.log('Evento adicionado ao botão Novo Projeto');
