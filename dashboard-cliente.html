@@ -736,9 +736,12 @@
             } else if (typeof nomeDoClienteFiltro !== 'undefined' && nomeDoClienteFiltro && nomeDoClienteFiltro !== "DESCONHECIDO") {
                 // Fallback: usa o nomeDoClienteFiltro que veio do Firestore
                 clienteResponsavel = nomeDoClienteFiltro;
+            } else if (currentUser && currentUser.email) {
+                // Último fallback: usa o email do currentUser
+                clienteResponsavel = currentUser.email;
             } else {
-                // Último fallback: usa o email do usuário
-                clienteResponsavel = currentUser ? currentUser.email : "email nao identificado";
+                // Fallback final
+                clienteResponsavel = "email nao identificado";
             }
 
             console.log("Enviando chamado para cliente:", clienteResponsavel);
