@@ -219,7 +219,25 @@
             </div>
             <div id="view-chamados" class="content-view" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
                 <h2 style="font-size: 1.8rem; margin-bottom: 20px;">Tickets de Suporte</h2>
-                <div class="glass-card"><p class="text-muted">Chat de suporte unificado e mensagens de clientes...</p></div>
+                <div class="glass-card" style="padding: 0; overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 700px;">
+                        <thead style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <tr>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Data</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Cliente</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">E-mail</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Assunto</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Status</th>
+                                <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaChamadosAdmin">
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <td colspan="6" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Carregando chamados...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div id="view-config" class="content-view" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
                 <h2 style="font-size: 1.8rem; margin-bottom: 20px;">Configurações</h2>
@@ -696,6 +714,37 @@
         onSnapshot(chamadosRef, (snapshot) => {
             if(document.getElementById('dash-chamados')) {
                 document.getElementById('dash-chamados').textContent = snapshot.size;
+            }
+            
+            // Popula a tabela de chamados no admin
+            const tabelaChamadosAdmin = document.getElementById('tabelaChamadosAdmin');
+            if (tabelaChamadosAdmin) {
+                tabelaChamadosAdmin.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    tabelaChamadosAdmin.innerHTML = '<tr><td colspan="6" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum chamado encontrado.</td></tr>';
+                    return;
+                }
+                
+                snapshot.forEach(doc => {
+                    const ch = doc.data();
+                    let statusColor = ch.status === 'Resolvido' ? '#22c55e' : (ch.status === 'Em Análise' ? '#3b82f6' : '#f59e0b');
+                    let statusBg = ch.status === 'Resolvido' ? 'rgba(34,197,94,0.1)' : (ch.status === 'Em Análise' ? 'rgba(59,130,246,0.1)' : 'rgba(245,158,11,0.1)');
+                    
+                    const tr = document.createElement('tr');
+                    tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                    tr.innerHTML = `
+                        <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${ch.dataAbertura || 'N/A'}</td>
+                        <td style="padding: 16px 24px; color: #fff; font-weight: 500;">${ch.cliente || 'N/A'}</td>
+                        <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${ch.email || 'N/A'}</td>
+                        <td style="padding: 16px 24px; color: #fff;">${ch.assunto || 'N/A'}</td>
+                        <td style="padding: 16px 24px;"><span style="color: ${statusColor}; font-size: 0.85rem; background: ${statusBg}; padding: 4px 10px; border-radius: 20px;">${ch.status || 'Aberto'}</span></td>
+                        <td style="padding: 16px 24px;">
+                            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;" onclick="alert('Mensagem: ${(ch.mensagem || '').replace(/'/g, "\\'")}')">Ver Mensagem</button>
+                        </td>
+                    `;
+                    tabelaChamadosAdmin.appendChild(tr);
+                });
             }
         });
 
