@@ -489,7 +489,7 @@
         if(sidebarOverlay) sidebarOverlay.addEventListener('click', toggleSidebarMobile);
     </script>
     <script type="module">
-        import { auth, db, onAuthStateChanged, signOut, collection, query, where, onSnapshot, getDocs, addDoc } from './js/firebase-config.js';
+        import { auth, db, onAuthStateChanged, signOut, collection, query, where, onSnapshot, getDocs, addDoc, doc, serverTimestamp, updateDoc } from './js/firebase-config.js';
 
         // Variável global para armazenar o nome do cliente e usuário
         let nomeDoClienteFiltro = "";
@@ -500,6 +500,47 @@
         const clienteTop_nome = document.getElementById('clienteTop_nome');
         const clienteTop_plano = document.getElementById('clienteTop_plano');
         const clienteTop_sigla = document.getElementById('clienteTop_sigla');
+
+        // Segurança e Carregamento (Realtime)
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                // Timeout para evitar redirect falso durante carregamento inicial (Firebase Auth delay)
+                setTimeout(() => {
+                    if(!auth.currentUser) window.location.href = 'login.html';
+                }, 3000);
+                return;
+            }
+
+            // Armazena o usuário atual
+            currentUser = user;
+
+            // Impede admin de entrar no painel de cliente e bagunçar a lógica
+            if(user.email.toLowerCase() === 'admin@webstart.com') {
+                window.location.href = 'admin.html';
+                return;
+            }
+
+            // 1. Puxar Dados do Cliente baseado no Email da Auth
+            const qCliente = query(collection(db, 'clientes'), where('email', '==', user.email));
+            onSnapshot(qCliente, (snapshot) => {
+                if (!snapshot.empty) {
+                    const clienteData = snapshot.docs[0].data();
+                    nomeDoClienteFiltro = clienteData.nome;
+
+                    let primeiroNome = clienteData.nome.split(' ')[0];
+                    let sigla = primeiroNome.substring(0, 2).toUpperCase();
+                    
+                    clienteGeral_nome.innerHTML = `Olá, ${primeiroNome}! 👋`;
+                    clienteTop_nome.textContent = clienteData.nome;
+                    clienteTop_plano.textContent = clienteData.plano;
+                    clienteTop_sigla.textContent = sigla;
+                } else {
+                    clienteGeral_nome.innerHTML = `Bem-vindo! 👋`;
+                    clienteTop_nome.textContent = "Sua Conta";
+                    clienteTop_plano.textContent = user.email;
+                    nomeDoClienteFiltro = "DESCONHECIDO";
+                }
+            });
         
         const projAtual_nome = document.getElementById('projAtual_nome');
         const projAtual_status = document.getElementById('projAtual_status');
@@ -524,43 +565,7 @@
             });
         });
 
-        // Autenticação Realtime
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                window.location.href = 'login.html';
-                return;
-            }
 
-            // Armazena o usuário atual
-            currentUser = user;
-
-            // Impede admin de entrar no painel de cliente e bagunçar a lógica
-            if(user.email.toLowerCase() === 'admin@webstart.com') {
-                window.location.href = 'admin.html';
-                return;
-            }
-
-            // 1. Puxar Dados do Cliente baseado no Email da Auth
-            const qCliente = query(collection(db, 'clientes'), where('email', '==', user.email));
-            const querySnapshot = await getDocs(qCliente);
-
-            if (!querySnapshot.empty) {
-                const clienteData = querySnapshot.docs[0].data();
-                nomeDoClienteFiltro = clienteData.nome;
-
-                let primeiroNome = clienteData.nome.split(' ')[0];
-                let sigla = primeiroNome.substring(0, 2).toUpperCase();
-                
-                clienteGeral_nome.innerHTML = `Olá, ${primeiroNome}! 👋`;
-                clienteTop_nome.textContent = clienteData.nome;
-                clienteTop_plano.textContent = clienteData.plano;
-                clienteTop_sigla.textContent = sigla;
-            } else {
-                clienteGeral_nome.innerHTML = `Bem-vindo! 👋`;
-                clienteTop_nome.textContent = "Sua Conta";
-                clienteTop_plano.textContent = "Definindo Plano";
-                nomeDoClienteFiltro = "DESCONHECIDO"; // Segurança
-            }
 
             // 2. Ouvinte: Projetos e Serviços do Cliente
             // Primeiro tenta pelo nome, se não encontrar, busca todos e filtra

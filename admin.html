@@ -606,7 +606,7 @@
 
     <script type="module">
         console.log('=== INICIANDO ADMIN JS ===');
-        import { db, auth, signOut } from './js/firebase-config.js';
+        import { db, auth, signOut, onAuthStateChanged } from './js/firebase-config.js';
         import { collection, addDoc, onSnapshot, serverTimestamp, deleteDoc, doc, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
         // Compatibiliza injeção modular com lucide global
@@ -627,28 +627,56 @@
             });
         }
 
+        /* Lógica de Autenticação e Segurança */
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log("Admin logado:", user.email);
+            } else {
+                // Se não houver usuário logado após um curto período, redireciona
+                setTimeout(() => {
+                    if(!auth.currentUser) {
+                        window.location.href = 'login.html';
+                    }
+                }, 3000);
+            }
+        });
+
         /* Lógica de Navegação da Sidebar (SPA) */
         const links = document.querySelectorAll('.sidebar-link');
-        console.log('Links encontrados:', links.length);
         const views = document.querySelectorAll('.content-view');
         
-        // Restaura última abavisitada
-        const ultimaAba = localStorage.getItem('admin_ultima_aba');
-        if (ultimaAba) {
+        function switchView(targetId) {
+            if(!targetId) return;
+            localStorage.setItem('admin_ultima_aba', targetId);
             links.forEach(l => {
-                if (l.getAttribute('data-target') === ultimaAba) {
-                    l.classList.add('active');
-                } else {
-                    l.classList.remove('active');
-                }
+                if(l.getAttribute('data-target') === targetId) l.classList.add('active');
+                else l.classList.remove('active');
             });
-            views.forEach(v => v.style.display = 'none');
-            const targetView = document.getElementById(ultimaAba);
-            if (targetView) {
+            views.forEach(v => {
+                v.style.display = 'none';
+                v.style.opacity = '0';
+            });
+            const targetView = document.getElementById(targetId);
+            if(targetView) {
                 targetView.style.display = 'block';
-                targetView.style.opacity = '1';
+                setTimeout(() => { targetView.style.opacity = '1'; }, 50);
             }
         }
+
+        const ultimaAba = localStorage.getItem('admin_ultima_aba') || 'view-dashboard';
+        switchView(ultimaAba);
+        
+        links.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchView(link.getAttribute('data-target'));
+                const sidebar = document.getElementById('sidebar');
+                if(window.innerWidth <= 900 && sidebar) {
+                    sidebar.classList.remove('active');
+                    document.getElementById('sidebarOverlay')?.classList.remove('active');
+                }
+            });
+        });
         
         links.forEach(link => {
             link.addEventListener('click', (e) => {
