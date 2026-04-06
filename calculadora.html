@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulador de Preço - WebStart</title>
     <meta name="description" content="Simule o orçamento do seu novo site ou loja virtual e gere o PDF na hora.">
+    
+    <!-- Preconnect para Google Fonts e otimização -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com">
+    
+    <!-- Open Graph (SEO Social) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Simulador de Preço - WebStart">
+    <meta property="og:description" content="Simule o orçamento do seu novo site ou loja virtual e gere o PDF na hora.">
+    <meta property="og:url" content="https://webstart.agency/calculadora.html">
+    <meta property="og:image" content="https://webstart.agency/images/og-image.png">
+
     <link rel="stylesheet" href="css/style.css">
     <script src="https://unpkg.com/lucide@latest" defer></script>
     <!-- jsPDF para gerar PDF localmente via JS -->
@@ -24,6 +37,9 @@
                 <li><a href="portfolio.html" class="nav-link">Portfólio</a></li>
                 <li><a href="contato.html" class="nav-link">Contato</a></li>
             </ul>
+            <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="navMenu">
+                <i data-lucide="menu"></i>
+            </button>
         </div>
     </nav>
 
@@ -71,7 +87,7 @@
                             <span style="font-weight: 700;">R$ 1.800</span>
                         </label>
 
-                        <label class="sim-option" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; cursor: pointer; background: rgba(0,0,0,0.2); transition: var(--transition-fast);">
+                        <label class="sim-option" style="display: none !important; justify-content: space-between; align-items: center; padding: 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; cursor: pointer; background: rgba(0,0,0,0.2); transition: var(--transition-fast);">
                             <div style="display: flex; align-items: center; gap: 15px;">
                                 <input type="radio" name="base_type" value="3500" data-label="Loja Virtual Completa" style="width: 20px; height: 20px; accent-color: var(--primary);">
                                 <div>

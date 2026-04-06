@@ -280,7 +280,7 @@
                     <a href="#contato" style="font-weight: 600; display: inline-flex; align-items: center; gap: 5px;">Orçamento <i data-lucide="arrow-right" width="16" height="16"></i></a>
                 </div>
 
-                <div class="glass-card text-center" style="position: relative; padding: 40px 20px; background: rgba(37, 99, 235, 0.05); border-color: rgba(37, 99, 235, 0.2);">
+                <div class="glass-card text-center" style="position: relative; padding: 40px 20px; background: rgba(37, 99, 235, 0.05); border-color: rgba(37, 99, 235, 0.2); display: none;">
                     <div style="position: absolute; top: -12px; right: 20px; background: var(--primary); color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">Mais Vendido</div>
                     <i data-lucide="shopping-cart" width="48" height="48" style="color: var(--primary); margin-bottom: 20px;"></i>
                     <h3>Loja Virtual</h3>
@@ -332,8 +332,8 @@
                     </div>
                 </div>
 
-                <!-- 3 -->
-                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);">
+                <!-- 3 (E-commerce Oculto Temporariamente) -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05); display: none;">
                     <div style="height: 220px; background: url('images/mockups/portfolio_ecommerce_pt.png') center/cover; position: relative;" loading="lazy">
                     </div>
                     <div style="padding: 24px;">
@@ -492,8 +492,8 @@
                     <a href="#contato" class="btn btn-primary" style="width: 100%; justify-content: center;">Quero Este</a>
                 </div>
 
-                <!-- Plano 3 -->
-                <div class="glass-card" style="padding: 40px 30px;">
+                <!-- Plano 3 (Loja Virtual - Oculto) -->
+                <div class="glass-card" style="padding: 40px 30px; display: none;">
                     <h3 style="font-size: 1.5rem; margin-bottom: 8px;">Loja Virtual</h3>
                     <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 24px; min-height: 40px;">Plataforma completa de vendas com checkout transparente.</p>
                     <div style="margin-bottom: 30px;">
@@ -620,7 +620,7 @@
                             <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">Tipo de Site</label>
                             <select id="tipo_input" style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none; appearance: none;">
                                 <option value="Site Institucional">Site Institucional / Landing Page</option>
-                                <option value="Loja Virtual">Loja Virtual (E-commerce)</option>
+                                <option value="Loja Virtual" style="display: none;">Loja Virtual (E-commerce)</option>
                                 <option value="Sistema Personalizado">Sistema/Dashboard Personalizado</option>
                             </select>
                         </div>
@@ -671,7 +671,7 @@
                         <i data-lucide="rocket" style="color: var(--primary);"></i> WebStart
                     </a>
                     <p class="text-muted" style="max-width: 300px; font-size: 0.95rem;">
-                        Arquitetura, design e performance premium. Sites modernos e lojas virtuais focadas em alta conversão.
+                        Arquitetura, design e performance premium. Sites modernos e landing pages focadas em alta conversão.
                     </p>
                 </div>
 
@@ -690,7 +690,7 @@
                     <ul style="display: flex; flex-direction: column; gap: 12px;">
                         <li><a href="#" class="text-muted">Landing Pages Otimizadas</a></li>
                         <li><a href="#" class="text-muted">Criação de Sites Institucionais</a></li>
-                        <li><a href="#" class="text-muted">Desenvolvimento de E-commerces</a></li>
+                        <li style="display: none;"><a href="#" class="text-muted">Desenvolvimento de E-commerces</a></li>
                         <li><a href="#" class="text-muted">Áreas de Membros Inclusas</a></li>
                     </ul>
                 </div>

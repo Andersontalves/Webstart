@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loja de Templates Profissionais - WebStart</title>
     <meta name="description" content="Compre templates prontos para sites, lojas virtuais e landing pages. Otimizados para conversão e performance.">
+    
+    <!-- Preconnect para Google Fonts e otimização -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com">
+    
+    <!-- Open Graph (SEO Social) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Loja de Templates Profissionais - WebStart">
+    <meta property="og:description" content="Compre templates prontos para sites, lojas virtuais e landing pages.">
+    <meta property="og:url" content="https://webstart.agency/templates.html">
+    <meta property="og:image" content="https://webstart.agency/images/og-image.png">
+
     <link rel="stylesheet" href="css/style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -39,7 +52,7 @@
             
             <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 40px;">
                 <button class="btn btn-primary" style="padding: 6px 16px; font-size: 0.9rem;">Todos</button>
-                <button class="btn btn-outline" style="padding: 6px 16px; font-size: 0.9rem;">E-commerce</button>
+                <button class="btn btn-outline" style="padding: 6px 16px; font-size: 0.9rem; display: none;">E-commerce</button>
                 <button class="btn btn-outline" style="padding: 6px 16px; font-size: 0.9rem;">Agências & B2B</button>
                 <button class="btn btn-outline" style="padding: 6px 16px; font-size: 0.9rem;">Infoprodutos</button>
                 <button class="btn btn-outline" style="padding: 6px 16px; font-size: 0.9rem;">Startups</button>
@@ -53,8 +66,8 @@
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px;">
 
-                <!-- Template 1 -->
-                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column;">
+                <!-- Template 1 (Oculto Temporariamente) -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05); display: none; flex-direction: column;">
                     <div style="height: 220px; background: #2f3e54; position: relative;">
                         <!-- Placeholder imagem -->
                         <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
@@ -144,9 +157,9 @@
     </section>
 
     <!-- MODAL DEMO (Acesso Restrito) -->
-    <div id="modalDemo" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+    <div id="modalDemo" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(5px); overscroll-behavior: contain;">
         <div class="modal-box" style="background: var(--bg-surface); padding: 40px; border-radius: 12px; max-width: 400px; width: 90%; text-align: center; border: 1px solid rgba(255,255,255,0.1); position: relative;">
-            <button id="closeDemo" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #fff; cursor: pointer;"><i data-lucide="x"></i></button>
+            <button id="closeDemo" aria-label="Fechar modal" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #fff; cursor: pointer;"><i data-lucide="x"></i></button>
             <div style="width: 60px; height: 60px; background: rgba(124,58,237,0.1); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
                 <i data-lucide="eye" width="30"></i>
             </div>
@@ -162,9 +175,9 @@
     </div>
 
     <!-- MODAL CHECKOUT -->
-    <div id="modalCheckout" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+    <div id="modalCheckout" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(5px); overscroll-behavior: contain;">
         <div class="modal-box" style="background: var(--bg-surface); padding: 40px; border-radius: 12px; max-width: 400px; width: 90%; text-align: center; border: 1px solid rgba(255,255,255,0.1); position: relative;">
-            <button id="closeCheckout" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #fff; cursor: pointer;"><i data-lucide="x"></i></button>
+            <button id="closeCheckout" aria-label="Fechar checkout modal" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #fff; cursor: pointer;"><i data-lucide="x"></i></button>
             <div style="width: 60px; height: 60px; background: rgba(16,185,129,0.1); color: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
                 <i data-lucide="shopping-bag" width="30"></i>
             </div>

@@ -133,7 +133,7 @@
             .main-content { margin-left: 0; width: 100%; padding: 20px; margin-top: 60px; overflow-x: hidden; }
             .mobile-toggle { display: flex; position: fixed; top: 15px; left: 15px; z-index: 999; border-radius: 8px; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.1); align-items: center; justify-content: center; width: 45px; height: 45px; }
             .close-sidebar { display: block; position: absolute; right: 15px; top: 25px; }
-            .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 998; backdrop-filter: blur(2px); opacity: 0; pointer-events: none; transition: 0.3s; }
+            .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 998; backdrop-filter: blur(2px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
             .sidebar-overlay.active { opacity: 1; pointer-events: all; }
         }
     </style>
@@ -154,7 +154,7 @@
                 <a href="index.html" class="nav-brand" style="margin: 0; font-size: 1.4rem;">
                     <i data-lucide="rocket" style="color: var(--primary);"></i> WebStart
                 </a>
-                <button class="close-sidebar" id="btnCloseSidebar"><i data-lucide="x"></i></button>
+                <button class="close-sidebar" id="btnCloseSidebar" aria-label="Fechar menu"><i data-lucide="x"></i></button>
             </div>
             
             <ul class="sidebar-menu">
@@ -169,13 +169,15 @@
                     </a>
                 </li>
                 <li>
-                    <a data-tab="tabFaturas" class="sidebar-link cursor-pointer">
-                        <i data-lucide="credit-card" width="18"></i> Faturas
+                    <a data-tab="tabFaturas" class="sidebar-link cursor-pointer" style="justify-content: space-between;">
+                        <span style="display: flex; align-items: center; gap: 12px;"><i data-lucide="credit-card" width="18"></i> Faturas</span>
+                        <span id="badgeFaturas" style="background: #ef4444; color: #fff; padding: 2px 6px; border-radius: 10px; font-size: 0.7rem; font-weight: 700; display: none;">0</span>
                     </a>
                 </li>
                 <li>
-                    <a data-tab="tabSuporte" class="sidebar-link cursor-pointer">
-                        <i data-lucide="headphones" width="18"></i> Suporte Técnico
+                    <a data-tab="tabSuporte" class="sidebar-link cursor-pointer" style="justify-content: space-between;">
+                        <span style="display: flex; align-items: center; gap: 12px;"><i data-lucide="headphones" width="18"></i> Suporte Técnico</span>
+                        <span id="badgeChamados" style="background: #3b82f6; color: #fff; padding: 2px 6px; border-radius: 10px; font-size: 0.7rem; font-weight: 700; display: none;">0</span>
                     </a>
                 </li>
                 <li>
@@ -198,15 +200,15 @@
             <header class="user-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;">
                 <div style="display: flex; align-items: center; gap: 16px;">
                     <div>
-                        <h2 style="font-size: 1.8rem; margin: 0;" id="clienteGeral_nome">Carregando... 👋</h2>
+                        <h2 style="font-size: 1.8rem; margin: 0;" id="clienteGeral_nome">Carregando… 👋</h2>
                         <p class="text-muted" style="margin: 4px 0 0 0;">Bem-vindo ao seu painel de controle.</p>
                     </div>
                 </div>
 
                 <div class="user-profile">
                     <div style="text-align: right; display: none; @media(min-width: 600px){display: block;}">
-                        <strong style="display: block; font-size: 0.95rem;" id="clienteTop_nome">Buscando...</strong>
-                        <span style="color: var(--text-muted); font-size: 0.85rem;" id="clienteTop_plano">Aguarde...</span>
+                        <strong style="display: block; font-size: 0.95rem;" id="clienteTop_nome">Buscando…</strong>
+                        <span style="color: var(--text-muted); font-size: 0.85rem;" id="clienteTop_plano">Aguarde…</span>
                     </div>
                     <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.5); display: flex; align-items: center; justify-content: center;">
                         <span style="font-weight: 700; color: var(--primary);" id="clienteTop_sigla">--</span>
@@ -221,7 +223,7 @@
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
                         <div>
                             <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600; text-transform: uppercase;">Projeto em Andamento</span>
-                            <h3 style="margin: 8px 0 0 0; font-size: 1.2rem;" id="projAtual_nome">Buscando Projetos...</h3>
+                            <h3 style="margin: 8px 0 0 0; font-size: 1.2rem;" id="projAtual_nome">Buscando Projetos…</h3>
                         </div>
                         <span id="projAtual_status" style="background: rgba(37,99,235,0.2); color: #60a5fa; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">Sincronizando</span>
                     </div>
@@ -300,7 +302,7 @@
                             </thead>
                             <tbody id="tabelaServicosDOM">
                                 <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                                    <td colspan="4" style="padding: 16px 24px; color: var(--text-muted); text-align: center;">Carregando histórico de serviços...</td>
+                                    <td colspan="4" style="padding: 16px 24px; color: var(--text-muted); text-align: center;">Carregando histórico de serviços…</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -327,7 +329,7 @@
                             </thead>
                             <tbody id="tabelaFaturasDOM">
                                 <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                                    <td colspan="5" style="padding: 16px 24px; color: var(--text-muted); text-align: center;">Buscando faturas...</td>
+                                    <td colspan="5" style="padding: 16px 24px; color: var(--text-muted); text-align: center;">Buscando faturas…</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -349,11 +351,12 @@
                                     <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Data</th>
                                     <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Assunto</th>
                                     <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Status</th>
+                                    <th style="padding: 16px 24px; font-weight: 500; color: var(--text-muted); font-size: 0.9rem;">Resposta</th>
                                 </tr>
                             </thead>
                             <tbody id="tabelaChamadosDOM">
                                 <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                                    <td colspan="3" style="padding: 16px 24px; color: var(--text-muted); text-align: center;">Carregando histórico...</td>
+                                    <td colspan="4" style="padding: 16px 24px; color: var(--text-muted); text-align: center;">Carregando histórico…</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -367,15 +370,15 @@
             </div>
 
             <!-- Modal UI: Pagar com Pix -->
-            <div id="modalPix" class="modal-overlay" style="display: none;">
+            <div id="modalPix" class="modal-overlay" style="display: none; overscroll-behavior: contain;">
                 <div class="modal-box" style="text-align: center;">
-                    <button class="btn-close" id="btnClosePix"><i data-lucide="x"></i></button>
+                    <button class="btn-close" id="btnClosePix" aria-label="Fechar modal de pagamento"><i data-lucide="x"></i></button>
                     <h3 style="margin-bottom: 10px; font-size: 1.5rem;">Pagamento via Pix</h3>
                     <p class="text-muted" style="margin-bottom: 20px; font-size: 0.95rem;">Escaneie o QR Code abaixo para pagar sua fatura de instante.</p>
                     
                     <div style="background: #fff; padding: 20px; border-radius: 12px; display: inline-block; margin-bottom: 20px;">
                         <!-- QR Code Falso -->
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126420014br.gov.bcb.pix0120exemplo@webstart.com5204000053039865802BR5915WebStart Design6009Sao Paulo62070503***63041234" alt="QR Code Pix para pagamento" style="width: 200px; height: 200px;" loading="lazy">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126420014br.gov.bcb.pix0120exemplo@webstart.com5204000053039865802BR5915WebStart Design6009Sao Paulo62070503***63041234" alt="QR Code Pix para pagamento" width="200" height="200" style="width: 200px; height: 200px;" loading="lazy">
                     </div>
                     
                     <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Ou copie o código "Pix Copia e Cola" abaixo:</p>
@@ -388,9 +391,9 @@
             </div>
 
             <!-- Modal UI: Abrir Chamado -->
-            <div id="modalChamado" class="modal-overlay" style="display: none;">
+            <div id="modalChamado" class="modal-overlay" style="display: none; overscroll-behavior: contain;">
                 <div class="modal-box">
-                    <button class="btn-close" id="btnCloseChamado"><i data-lucide="x"></i></button>
+                    <button class="btn-close" id="btnCloseChamado" aria-label="Fechar modal de chamado"><i data-lucide="x"></i></button>
                     <h3 style="margin-bottom: 5px;">Abrir Novo Chamado</h3>
                     <p class="text-muted" style="margin-bottom: 24px; font-size: 0.9rem;">Relate o que você precisa. Nossa equipe atenderá rapidamente.</p>
                     
@@ -621,19 +624,25 @@
             onSnapshot(qFaturas, (snap) => {
                 if (tabelaFaturasDOM) tabelaFaturasDOM.innerHTML = '';
                 let faturaPendenteEncontrada = null;
+                let faturasAbertasContador = 0;
 
                 if (snap.empty) {
                     if (tabelaFaturasDOM) tabelaFaturasDOM.innerHTML = '<tr><td colspan="5" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhuma fatura encontrada.</td></tr>';
                     if (faturaContainer) faturaContainer.style.display = 'none';
+                    if (document.getElementById('badgeFaturas')) document.getElementById('badgeFaturas').style.display = 'none';
                     return;
                 }
 
                 snap.forEach(docSnap => {
                     const fat = docSnap.data();
                     
+                    if (fat.status === 'Pendente' || fat.status === 'Atrasada') {
+                        faturasAbertasContador++;
+                    }
+
                     // Alimenta a tabela de Faturas
                     let statusColor = fat.status === 'Pago' ? 'var(--success)' : (fat.status === 'Pendente' ? '#f59e0b' : '#ef4444');
-                    let statusBg = fat.status === 'Pago' ? 'rgba(16,185,129,0.1)' : 'rgba(245,158,11,0.1)';
+                    let statusBg = fat.status === 'Pago' ? 'rgba(16,185,129,0.1)' : (fat.status === 'Pendente' ? 'rgba(245,158,11,0.1)' : 'rgba(239,68,68,0.1)');
 
                     const tr = document.createElement('tr');
                     tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
@@ -643,23 +652,38 @@
                         <td style="padding: 16px 24px;"><span style="color: ${statusColor}; font-size: 0.85rem; background: ${statusBg}; padding: 4px 10px; border-radius: 20px;">${fat.status}</span></td>
                         <td style="padding: 16px 24px; color: #fff; font-weight: 600;">R$ ${fat.valor}</td>
                         <td style="padding: 16px 24px;">
-                            ${fat.status === 'Pendente' ? `<button class="btn btn-primary btn-pagar-pix-list" style="padding: 5px 12px; font-size: 0.8rem;">Pagar Pix</button>` : `<span style="color: var(--text-muted); font-size: 0.8rem;">-</span>`}
+                            ${fat.status !== 'Pago' ? `<button class="btn btn-primary btn-pagar-pix-list" style="padding: 5px 12px; font-size: 0.8rem;">Pagar Pix</button>` : `<span style="color: var(--text-muted); font-size: 0.8rem;">-</span>`}
                         </td>
                     `;
                     if (tabelaFaturasDOM) tabelaFaturasDOM.appendChild(tr);
 
-                    // Pega a primeira pendente para o widget inicial
-                    if (fat.status === 'Pendente' && !faturaPendenteEncontrada) {
+                    // Pega a primeira pendente/atrasada para o widget inicial
+                    if ((fat.status === 'Pendente' || fat.status === 'Atrasada') && !faturaPendenteEncontrada) {
                         faturaPendenteEncontrada = fat;
                     }
                 });
+
+                // Atualiza Badge do Sidebar
+                const badgeFaturas = document.getElementById('badgeFaturas');
+                if (badgeFaturas) {
+                    if (faturasAbertasContador > 0) {
+                        badgeFaturas.textContent = faturasAbertasContador;
+                        badgeFaturas.style.display = 'inline-block';
+                    } else {
+                        badgeFaturas.style.display = 'none';
+                    }
+                }
 
                 // Atualiza Widget de Fatura Pendente na Visão Geral
                 if (faturaPendenteEncontrada && faturaContainer) {
                     faturaContainer.style.display = 'block';
                     if (fatura_vencimento) fatura_vencimento.textContent = `Vencimento: ${faturaPendenteEncontrada.vencimento}`;
                     if (fatura_nome) fatura_nome.textContent = faturaPendenteEncontrada.servico;
-                    if (fatura_valor) fatura_valor.textContent = `R$ ${faturaPendenteEncontrada.valor}`;
+                    if (fatura_valor) {
+                        fatura_valor.textContent = `R$ ${faturaPendenteEncontrada.valor}`;
+                        if (faturaPendenteEncontrada.status === 'Atrasada') fatura_valor.style.color = '#ef4444';
+                        else fatura_valor.style.color = 'var(--text-main)';
+                    }
                 } else if (faturaContainer) {
                     faturaContainer.style.display = 'none';
                 }
@@ -685,16 +709,24 @@
             
             onSnapshot(qChamados, (snap) => {
                 if (tabelaChamadosDOM) tabelaChamadosDOM.innerHTML = '';
+                let chamadosAbertosContador = 0;
 
                 if (snap.empty) {
-                    if (tabelaChamadosDOM) tabelaChamadosDOM.innerHTML = '<tr><td colspan="3" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum chamado aberto.</td></tr>';
+                    if (tabelaChamadosDOM) tabelaChamadosDOM.innerHTML = '<tr><td colspan="4" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum chamado aberto.</td></tr>';
+                    if (document.getElementById('badgeChamados')) document.getElementById('badgeChamados').style.display = 'none';
                     return;
                 }
 
                 snap.forEach(docSnap => {
                     const ch = docSnap.data();
+                    if (ch.status === 'Aberto' || ch.status === 'Em Análise') chamadosAbertosContador++;
+
                     let statusColor = ch.status === 'Resolvido' ? 'var(--success)' : (ch.status === 'Em Análise' ? '#3b82f6' : '#f59e0b');
-                    let statusBg = ch.status === 'Resolvido' ? 'rgba(16,185,129,0.1)' : 'rgba(59,130,246,0.1)';
+                    let statusBg = ch.status === 'Resolvido' ? 'rgba(16,185,129,0.1)' : (ch.status === 'Em Análise' ? 'rgba(59,130,246,0.1)' : 'rgba(245,158,11,0.1)');
+
+                    const respostaVisual = ch.status === 'Resolvido' || ch.status === 'Em Análise' 
+                        ? `<button class="btn btn-outline" onclick="alert('Histórico / Resposta do Administrador:\\n\\n${ch.respostaAdmin ? ch.respostaAdmin : 'Nossa equipe está avaliando seu chamado. Por favor aguarde atualizações finais.'}')" style="padding: 4px 10px; font-size: 0.8rem; border-color: ${statusColor}; color: ${statusColor};">Ver Resposta</button>`
+                        : '<span style="color: var(--text-muted); font-size: 0.8rem;">Aguardando equipe...</span>';
 
                     const tr = document.createElement('tr');
                     tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
@@ -702,9 +734,21 @@
                         <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${ch.dataAbertura}</td>
                         <td style="padding: 16px 24px; color: #fff; font-weight: 500;">${ch.assunto}</td>
                         <td style="padding: 16px 24px;"><span style="color: ${statusColor}; font-size: 0.85rem; background: ${statusBg}; padding: 4px 10px; border-radius: 20px;">${ch.status}</span></td>
+                        <td style="padding: 16px 24px;">${respostaVisual}</td>
                     `;
                     if (tabelaChamadosDOM) tabelaChamadosDOM.appendChild(tr);
                 });
+
+                // Atualiza Badge Sidebar
+                const badgeChamados = document.getElementById('badgeChamados');
+                if (badgeChamados) {
+                    if (chamadosAbertosContador > 0) {
+                        badgeChamados.textContent = chamadosAbertosContador;
+                        badgeChamados.style.display = 'inline-block';
+                    } else {
+                        badgeChamados.style.display = 'none';
+                    }
+                }
             });
         });
 

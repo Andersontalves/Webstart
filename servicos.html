@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Serviços Completos - WebStart</title>
     <meta name="description" content="Conheça todos os serviços de criação de sites, lojas virtuais e landing pages da WebStart.">
+    
+    <!-- Preconnect para Google Fonts e otimização -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com">
+    
+    <!-- Open Graph (SEO Social) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Serviços Compreensivos - WebStart">
+    <meta property="og:description" content="Conheça todos os serviços de criação de sites, lojas virtuais e landing pages da WebStart.">
+    <meta property="og:url" content="https://webstart.agency/servicos.html">
+    <meta property="og:image" content="https://webstart.agency/images/og-image.png">
+
     <link rel="stylesheet" href="css/style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -34,7 +47,7 @@
                 </li>
             </ul>
 
-            <button class="hamburger" id="hamburgerBtn">
+            <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="navMenu">
                 <i data-lucide="menu"></i>
             </button>
         </div>
@@ -72,13 +85,13 @@
                         </ul>
                         <a href="index.html#contato" class="btn btn-primary">Fazer Orçamento <i data-lucide="arrow-right" width="16"></i></a>
                     </div>
-                    <div style="flex: 1; min-width: 300px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); background: url('images/service_institucional.png') center/cover; height: 350px;">
+                    <div style="flex: 1; min-width: 300px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); background: url('images/service_institucional.png') center/cover; height: 350px;" loading="lazy">
                     </div>
                 </div>
 
-                <!-- Serviço 2 -->
-                <div class="glass-card" style="display: flex; gap: 30px; align-items: center; flex-wrap: wrap-reverse;">
-                    <div style="flex: 1; min-width: 300px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); background: url('images/service_ecommerce.png') center/cover; height: 350px;">
+                <!-- Serviço 2 (E-commerce Oculto) -->
+                <div class="glass-card" style="display: none; gap: 30px; align-items: center; flex-wrap: wrap-reverse;">
+                    <div style="flex: 1; min-width: 300px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); background: url('images/service_ecommerce.png') center/cover; height: 350px;" loading="lazy">
                     </div>
                     <div style="flex: 1; min-width: 300px;">
                         <div style="width: 60px; height: 60px; border-radius: 12px; background: rgba(124, 58, 237, 0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--secondary);">
@@ -114,7 +127,7 @@
                         </ul>
                         <a href="index.html#contato" class="btn btn-primary">Fazer Orçamento <i data-lucide="arrow-right" width="16"></i></a>
                     </div>
-                    <div style="flex: 1; min-width: 300px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); background: url('images/service_landing.png') center/cover; height: 350px;">
+                    <div style="flex: 1; min-width: 300px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); background: url('images/service_landing.png') center/cover; height: 350px;" loading="lazy">
                     </div>
                 </div>
 
@@ -142,7 +155,7 @@
                         <i data-lucide="rocket" style="color: var(--primary);"></i> WebStart
                     </a>
                     <p class="text-muted" style="max-width: 300px; font-size: 0.95rem;">
-                        Arquitetura, design e performance premium. Sites modernos e lojas virtuais focadas em alta conversão.
+                        Arquitetura, design e performance premium. Sites modernos e landing pages focadas em alta conversão.
                     </p>
                 </div>
                 <div>
@@ -159,7 +172,7 @@
                     <ul style="display: flex; flex-direction: column; gap: 12px;">
                         <li><a href="servicos.html" class="text-muted">Landing Pages Otimizadas</a></li>
                         <li><a href="servicos.html" class="text-muted">Criação de Sites Institucionais</a></li>
-                        <li><a href="servicos.html" class="text-muted">Desenvolvimento de E-commerces</a></li>
+                        <li style="display: none;"><a href="servicos.html" class="text-muted">Desenvolvimento de E-commerces</a></li>
                     </ul>
                 </div>
             </div>

@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Corporativo - WebStart</title>
     <meta name="description" content="Artigos, dicas de marketing digital, vendas online e estratégias para crescer seu negócio na internet.">
+    
+    <!-- Preconnect para Google Fonts e otimização -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com">
+    
+    <!-- Open Graph (SEO Social) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Blog Corporativo - WebStart">
+    <meta property="og:description" content="Artigos, dicas de marketing digital, vendas online e estratégias para crescer seu negócio na internet.">
+    <meta property="og:url" content="https://webstart.agency/blog.html">
+    <meta property="og:image" content="https://webstart.agency/images/og-image.png">
+
     <link rel="stylesheet" href="css/style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -26,7 +39,7 @@
                 <li><a href="blog.html" class="nav-link" style="color: var(--primary);">Blog</a></li>
                 <li><a href="contato.html" class="btn btn-primary" style="padding: 8px 20px; font-size: 0.9rem;">Orçamento</a></li>
             </ul>
-            <button class="hamburger" id="hamburgerBtn">
+            <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="navMenu">
                 <i data-lucide="menu"></i>
             </button>
         </div>
@@ -41,8 +54,22 @@
             </p>
             
             <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 40px;">
-                <input type="text" placeholder="Buscar artigos..." style="padding: 12px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; outline: none; width: 300px;">
+                <label for="inputBuscaBlog" class="sr-only">Pesquisar artigos</label>
+                <input type="search" id="inputBuscaBlog" name="q" autocomplete="off" placeholder="Pesquisar por assunto, título…" style="padding: 12px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; outline: none; width: 100%; max-width: 400px; font-size: 0.95rem;">
             </div>
+            
+            <div id="blogFilters" style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 25px;">
+                <button class="btn btn-outline active-filter" data-cat="ALL" style="border-radius: 20px; padding: 6px 16px; font-size: 0.85rem; border-color: rgba(255,255,255,0.2); color: #fff;">Todos</button>
+                <button class="btn btn-outline" data-cat="NEGÓCIOS" style="border-radius: 20px; padding: 6px 16px; font-size: 0.85rem; border-color: var(--primary); color: var(--primary);">Negócios</button>
+                <button class="btn btn-outline" data-cat="TECNOLOGIA" style="border-radius: 20px; padding: 6px 16px; font-size: 0.85rem; border-color: var(--warning); color: var(--warning);">Tecnologia</button>
+                <button class="btn btn-outline" data-cat="E-COMMERCE" style="border-radius: 20px; padding: 6px 16px; font-size: 0.85rem; border-color: var(--secondary); color: var(--secondary);">E-commerce</button>
+                <button class="btn btn-outline" data-cat="DICAS" style="border-radius: 20px; padding: 6px 16px; font-size: 0.85rem; border-color: var(--success); color: var(--success);">Dicas</button>
+            </div>
+            <style>
+                #blogFilters button.active-filter {
+                    background: rgba(255,255,255,0.1);
+                }
+            </style>
         </div>
     </section>
 
@@ -51,7 +78,7 @@
         <div class="container">
             <div id="blogGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px;">
                 <!-- Conteúdo dinâmico aqui -->
-                <p class="text-muted" style="text-align: center; grid-column: 1 / -1;">Carregando artigos...</p>
+                <p class="text-muted" style="text-align: center; grid-column: 1 / -1;">Carregando artigos…</p>
             </div>
         </div>
     </section>
@@ -69,21 +96,32 @@
         import { collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
         const blogGrid = document.getElementById('blogGrid');
+        const inputBusca = document.getElementById('inputBuscaBlog');
+        const botoesFiltro = document.querySelectorAll('#blogFilters button');
+        
         const blogRef = collection(db, 'posts');
         const q = query(blogRef, orderBy('createdAt', 'desc'));
 
-        onSnapshot(q, (snapshot) => {
+        let todosPosts = [];
+        let filtroCategoria = 'ALL';
+        let termoBusca = '';
+
+        // Função de renderização
+        function renderPosts() {
             blogGrid.innerHTML = '';
             
-            if(snapshot.empty) {
-                blogGrid.innerHTML = '<p class="text-muted" style="text-align: center; grid-column: 1 / -1;">Nenhum artigo publicado ainda. Volte em breve!</p>';
+            const filtrados = todosPosts.filter(p => {
+                const matchBusca = (p.titulo.toLowerCase().includes(termoBusca)) || (p.resumo.toLowerCase().includes(termoBusca));
+                const matchCat = filtroCategoria === 'ALL' || p.categoria === filtroCategoria;
+                return matchBusca && matchCat;
+            });
+
+            if(filtrados.length === 0) {
+                blogGrid.innerHTML = '<p class="text-muted" style="text-align: center; grid-column: 1 / -1; padding: 40px 0;">Nenhum artigo encontrado para sua busca.</p>';
                 return;
             }
 
-            snapshot.forEach(docSnap => {
-                const post = docSnap.data();
-                const id = docSnap.id;
-                
+            filtrados.forEach(post => {
                 // Mapeamento de cor e ícone por categoria
                 let catColor = 'var(--primary)';
                 let catIcon = 'file-text';
@@ -94,7 +132,7 @@
                 if(post.categoria === 'DICAS') { catColor = 'var(--success)'; catIcon = 'lightbulb'; }
 
                 const card = document.createElement('a');
-                card.href = `post.html?id=${id}`;
+                card.href = `post.html?id=${post.id}`;
                 card.className = 'glass-card';
                 card.style.padding = '0';
                 card.style.overflow = 'hidden';
@@ -109,7 +147,7 @@
                     </div>
                     <div style="padding: 24px;">
                         <h3 style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 12px;">${post.titulo}</h3>
-                        <p class="text-muted" style="font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5;">${post.resumo}</p>
+                        <p class="text-muted" style="font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">${post.resumo}</p>
                         <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted);">
                             <span><i data-lucide="calendar" width="14" style="display: inline; vertical-align: middle;"></i> ${post.data}</span>
                             <span>Ler artigo <i data-lucide="arrow-right" width="14" style="display: inline; vertical-align: middle;"></i></span>
@@ -119,6 +157,36 @@
                 blogGrid.appendChild(card);
             });
             lucide.createIcons();
+        }
+
+        // Listener do Banco de Dados
+        onSnapshot(q, (snapshot) => {
+            todosPosts = [];
+            snapshot.forEach(docSnap => {
+                todosPosts.push({ id: docSnap.id, ...docSnap.data() });
+            });
+            renderPosts();
+        });
+
+        // Listener da Busca
+        if(inputBusca) {
+            inputBusca.addEventListener('input', (e) => {
+                termoBusca = e.target.value.toLowerCase();
+                renderPosts();
+            });
+        }
+
+        // Listener dos Filtros
+        botoesFiltro.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // UI update
+                botoesFiltro.forEach(b => b.classList.remove('active-filter'));
+                btn.classList.add('active-filter');
+                
+                // Logic update
+                filtroCategoria = btn.getAttribute('data-cat');
+                renderPosts();
+            });
         });
     </script>
 </body>
