@@ -370,7 +370,7 @@
                             </div>
                             <div>
                                 <label style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 6px; color: #e2e8f0;">Site / Domínio Principal</label>
-                                <input type="url" id="cfgSite" name="website" autocomplete="url" value="webstart.com.br" style="width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12); background: rgba(0,0,0,0.3); color: #fff; font-size: 0.95rem; outline: none;">
+                                <input type="text" id="cfgSite" name="website" autocomplete="url" placeholder="Ex: www.agencia.com" style="width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12); background: rgba(0,0,0,0.3); color: #fff; font-size: 0.95rem; outline: none;">
                             </div>
                             <button type="submit" class="btn btn-primary" style="margin-top: 8px; justify-content: center; padding: 12px;">Salvar Configurações <i data-lucide="save" width="16"></i></button>
                         </form>
@@ -607,7 +607,7 @@
     <script type="module">
         console.log('=== INICIANDO ADMIN JS ===');
         import { db, auth, signOut, onAuthStateChanged } from './js/firebase-config.js';
-        import { collection, addDoc, onSnapshot, serverTimestamp, deleteDoc, doc, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { collection, addDoc, onSnapshot, serverTimestamp, deleteDoc, doc, query, orderBy, updateDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
         // Compatibiliza injeção modular com lucide global
         window.lucide = lucide;
@@ -631,1071 +631,1049 @@
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 console.log("Admin logado:", user.email);
+                initAdminPanel();
             } else {
-                // Se não houver usuário logado após um curto período, redireciona
                 setTimeout(() => {
-                    if(!auth.currentUser) {
-                        window.location.href = 'login.html';
-                    }
+                    if(!auth.currentUser) window.location.href = 'login.html';
                 }, 3000);
             }
         });
 
-        /* Lógica de Navegação da Sidebar (SPA) */
-        const links = document.querySelectorAll('.sidebar-link');
-        const views = document.querySelectorAll('.content-view');
-        
-        function switchView(targetId) {
-            if(!targetId) return;
-            localStorage.setItem('admin_ultima_aba', targetId);
-            links.forEach(l => {
-                if(l.getAttribute('data-target') === targetId) l.classList.add('active');
-                else l.classList.remove('active');
-            });
-            views.forEach(v => {
-                v.style.display = 'none';
-                v.style.opacity = '0';
-            });
-            const targetView = document.getElementById(targetId);
-            if(targetView) {
-                targetView.style.display = 'block';
-                setTimeout(() => { targetView.style.opacity = '1'; }, 50);
-            }
-        }
-
-        const ultimaAba = localStorage.getItem('admin_ultima_aba') || 'view-dashboard';
-        switchView(ultimaAba);
-        
-        links.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                switchView(link.getAttribute('data-target'));
-                const sidebar = document.getElementById('sidebar');
-                if(window.innerWidth <= 900 && sidebar) {
-                    sidebar.classList.remove('active');
-                    document.getElementById('sidebarOverlay')?.classList.remove('active');
-                }
-            });
-        });
-        
-        links.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetId = link.getAttribute('data-target');
+        async function initAdminPanel() {
+            try {
+                console.log("Inicializando componentes do painel...");
+                try { lucide.createIcons(); } catch(e) { console.error("Lucide failed:", e); }
+            
+            // 1. Navegação (SPA)
+            const links = document.querySelectorAll('.sidebar-link');
+            const views = document.querySelectorAll('.content-view');
+            
+            function switchView(targetId) {
                 if(!targetId) return;
-
-                // Salva a aba atual no localStorage
                 localStorage.setItem('admin_ultima_aba', targetId);
-
-                // Destaca botão ativo
-                links.forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-
-                // Esconde todas as abas
+                links.forEach(l => {
+                    if(l.getAttribute('data-target') === targetId) l.classList.add('active');
+                    else l.classList.remove('active');
+                });
                 views.forEach(v => {
+                    v.style.display = 'none';
                     v.style.opacity = '0';
-                    setTimeout(() => {
-                        v.style.display = 'none';
-                        v.classList.remove('active-view');
-                    }, 300); // 300ms transition time
                 });
-                
-                // Exibe a aba correta com fade in
-                setTimeout(() => {
-                    const targetView = document.getElementById(targetId);
-                    if(targetView) {
-                        targetView.style.display = 'block';
-                        // força reflow pra CSS pegar o opacidade
-                        void targetView.offsetWidth; 
-                        targetView.style.opacity = '1';
-                        targetView.classList.add('active-view');
+                const targetView = document.getElementById(targetId);
+                if(targetView) {
+                    targetView.style.display = 'block';
+                    setTimeout(() => { targetView.style.opacity = '1'; }, 50);
+                }
+            }
+
+            links.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    switchView(link.getAttribute('data-target'));
+                    const sidebar = document.getElementById('sidebar');
+                    if(window.innerWidth <= 900 && sidebar) {
+                        sidebar.classList.remove('active');
+                        document.getElementById('sidebarOverlay')?.classList.remove('active');
                     }
-                }, 310);
+                });
             });
-        });
-        
-        /* Lógica do Modal Novo Cliente */
-        const btnNovoCliente = document.getElementById('btnNovoCliente');
-        const modalNovoCliente = document.getElementById('modalNovoCliente');
-        const closeModalCliente = document.getElementById('closeModalCliente');
-        
-        if (btnNovoCliente && modalNovoCliente) {
-            btnNovoCliente.addEventListener('click', () => {
-                modalNovoCliente.style.display = 'flex';
-                lucide.createIcons(); // ensure close button icon renders
-            });
-            closeModalCliente.addEventListener('click', () => {
-                modalNovoCliente.style.display = 'none';
-            });
-            modalNovoCliente.addEventListener('click', (e) => {
-                if (e.target === modalNovoCliente) {
+
+            const ultimaAba = localStorage.getItem('admin_ultima_aba') || 'view-dashboard';
+            switchView(ultimaAba);
+
+            /* Lógica do Modal Novo Cliente */
+            const btnNovoCliente = document.getElementById('btnNovoCliente');
+            const modalNovoCliente = document.getElementById('modalNovoCliente');
+            const closeModalCliente = document.getElementById('closeModalCliente');
+            
+            if (btnNovoCliente && modalNovoCliente) {
+                btnNovoCliente.addEventListener('click', () => {
+                    modalNovoCliente.style.display = 'flex';
+                    lucide.createIcons(); // ensure close button icon renders
+                });
+                closeModalCliente.addEventListener('click', () => {
                     modalNovoCliente.style.display = 'none';
-                }
-            });
-        }
-
-        /* Lógica de Gravação e Leitura no Firestore */
-        const clientesRef = collection(db, 'clientes');
-        const formNovoCliente = document.getElementById('formNovoCliente');
-        const listaClientesDOM = document.getElementById('listaClientesDOM');
-
-        // Selects para Modais
-        const projClienteSelect = document.getElementById('projCliente');
-        const fatClienteSelect = document.getElementById('fatCliente');
-
-        // Salvar novo Cliente
-        if (formNovoCliente) {
-            formNovoCliente.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const btnSubmit = formNovoCliente.querySelector('button[type="submit"]');
-                const originalText = btnSubmit.innerHTML;
-                btnSubmit.innerHTML = 'Gravando no Banco...';
-                
-                const nome = document.getElementById('cliNome').value;
-                const email = document.getElementById('cliEmail').value;
-                const plano = document.getElementById('cliPlano').value;
-                
-                try {
-                    await addDoc(clientesRef, {
-                        nome: nome,
-                        email: email,
-                        plano: plano,
-                        status: 'Ativo',
-                        createdAt: serverTimestamp()
-                    });
-                    
-                    formNovoCliente.reset();
-                    modalNovoCliente.style.display = 'none';
-                    // O alert foi suprimido para UX mais fluida, a tabela já atualiza em realtime!
-                } catch (error) {
-                    console.error("Erro ao salvar: ", error);
-                    alert("Houve um erro: " + error.message);
-                } finally {
-                    btnSubmit.innerHTML = originalText;
-                }
-            });
-        }
-
-        // Leitura em Tempo Real (Real-time listener)
-        onSnapshot(clientesRef, (snapshot) => {
-            listaClientesDOM.innerHTML = '';
-            
-            // Dados para o Dashboard
-            let totalClientes = 0;
-            let totalReceita = 0;
-
-            if (snapshot.empty) {
-                listaClientesDOM.innerHTML = '<tr><td colspan="5" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum cliente cadastrado no banco ainda.</td></tr>';
-            } else {
-                const projClienteSelect = document.getElementById('projCliente');
-                if(projClienteSelect) projClienteSelect.innerHTML = '<option value="">Selecione o Cliente...</option>';
-
-                snapshot.forEach((docSnap) => {
-                    const cliente = docSnap.data();
-                    totalClientes++;
-                    
-                    // Lógica de Receita Baseada no Plano
-                    if(cliente.plano === 'Hospedagem Standard') totalReceita += 80;
-                    else if(cliente.plano === 'Manutenção VIP') totalReceita += 250;
-
-                    // Popula o select do modal de Projetos automaticamente!
-                    if(projClienteSelect) {
-                        const opt = document.createElement('option');
-                        opt.value = cliente.nome;
-                        opt.textContent = cliente.nome;
-                        opt.dataset.email = cliente.email; // Armazena o email para recuperar depois
-                        projClienteSelect.appendChild(opt);
-                    }
-                    if(fatClienteSelect) {
-                        const opt2 = document.createElement('option');
-                        opt2.value = cliente.nome;
-                        opt2.textContent = cliente.nome;
-                        fatClienteSelect.appendChild(opt2);
-                    }
-
-                    const tr = document.createElement('tr');
-                    tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
-                    tr.innerHTML = `
-                        <td style="padding: 16px 24px; color: #fff;">${cliente.nome}</td>
-                        <td style="padding: 16px 24px; color: var(--text-muted);">${cliente.email}</td>
-                        <td style="padding: 16px 24px; color: var(--text-muted);">${cliente.plano}</td>
-                        <td style="padding: 16px 24px;"><span style="color: var(--success); font-size: 0.85rem; background: rgba(16,185,129,0.1); padding: 4px 10px; border-radius: 20px;">${cliente.status || 'Ativo'}</span></td>
-                        <td style="padding: 16px 24px; text-align: center; display: flex; justify-content: center; gap: 8px;">
-                            <button class="btn btn-outline btn-edit-cliente" data-id="${docSnap.id}" data-nome="${cliente.nome}" data-email="${cliente.email}" data-plano="${cliente.plano}" style="padding: 6px; border: none; color: var(--primary);" title="Editar"><i data-lucide="edit" width="16"></i></button>
-                            <button class="btn btn-outline btn-delete" data-id="${docSnap.id}" style="padding: 6px; border: none; color: #ef4444;" title="Excluir"><i data-lucide="trash-2" width="16"></i></button>
-                        </td>
-                    `;
-                    listaClientesDOM.appendChild(tr);
                 });
-            }
-            
-            // Atualiza Dashboard
-            const formatMoeda = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
-            if(document.getElementById('dash-clientes')) document.getElementById('dash-clientes').textContent = totalClientes;
-            if(document.getElementById('dash-receita')) document.getElementById('dash-receita').textContent = formatMoeda.format(totalReceita);
-            if(document.getElementById('dash-receita-sub')) document.getElementById('dash-receita-sub').innerHTML = `<i data-lucide="trending-up" width="14"></i> Somatória MRR`;
-
-            lucide.createIcons();
-        });
-
-        // Adiciona evento de editar com delegação
-        listaClientesDOM.addEventListener('click', (e) => {
-            const btn = e.target.closest('.btn-edit-cliente');
-            if (btn) {
-                const id = btn.getAttribute('data-id');
-                const nome = btn.getAttribute('data-nome');
-                const email = btn.getAttribute('data-email');
-                const plano = btn.getAttribute('data-plano');
-
-                document.getElementById('editCliId').value = id;
-                document.getElementById('editCliNome').value = nome;
-                document.getElementById('editCliEmail').value = email;
-                document.getElementById('editCliPlano').value = plano;
-
-                document.getElementById('modalEditarCliente').style.display = 'flex';
-                lucide.createIcons();
-            }
-        });
-
-        // Fechar modal editar
-        const closeModalEditCliente = document.getElementById('closeModalEditCliente');
-        if(closeModalEditCliente) {
-            closeModalEditCliente.addEventListener('click', () => {
-                document.getElementById('modalEditarCliente').style.display = 'none';
-            });
-        }
-
-        // Salvar Edição de Cliente
-        const formEditarCliente = document.getElementById('formEditarCliente');
-        if (formEditarCliente) {
-            formEditarCliente.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const id = document.getElementById('editCliId').value;
-                const nome = document.getElementById('editCliNome').value;
-                const email = document.getElementById('editCliEmail').value;
-                const plano = document.getElementById('editCliPlano').value;
-                
-                const btn = formEditarCliente.querySelector('button[type="submit"]');
-                const orig = btn.innerHTML;
-                btn.innerHTML = 'Salvando...';
-
-                try {
-                    await updateDoc(doc(db, 'clientes', id), {
-                        nome, email, plano
-                    });
-                    document.getElementById('modalEditarCliente').style.display = 'none';
-                } catch (err) {
-                    alert('Erro ao salvar: ' + err.message);
-                } finally {
-                    btn.innerHTML = orig;
-                }
-            });
-        }
-
-        /* Lógica do Modal Novo Projeto */
-        const btnNovoProjetoTop = document.getElementById('btnNovoProjetoTop');
-        const modalNovoProjeto = document.getElementById('modalNovoProjeto');
-        const closeModalProjeto = document.getElementById('closeModalProjeto');
-        
-        if (btnNovoProjetoTop && modalNovoProjeto) {
-            console.log('Botão Novo Projeto encontrado, configurando evento...');
-            btnNovoProjetoTop.addEventListener('click', () => {
-                console.log('Clicou no botão Novo Projeto, abrindo modal...');
-                modalNovoProjeto.style.display = 'flex';
-                lucide.createIcons();
-            });
-            closeModalProjeto.addEventListener('click', () => {
-                modalNovoProjeto.style.display = 'none';
-            });
-            modalNovoProjeto.addEventListener('click', (e) => {
-                if (e.target === modalNovoProjeto) modalNovoProjeto.style.display = 'none';
-            });
-            
-            // Também abre o mesmo modal para o botão "Criar Projeto" na aba Projetos
-            const btnCriarProjeto = document.getElementById('btnCriarProjeto');
-            if(btnCriarProjeto) {
-                btnCriarProjeto.addEventListener('click', () => {
-                    modalNovoProjeto.style.display = 'flex';
-                    lucide.createIcons();
-                });
-            }
-        } else {
-            console.log('ERRO: Botão ou Modal não encontrado', { btnNovoProjetoTop, modalNovoProjeto });
-        }
-
-        /* Lógica de Gravação e Leitura de Projetos no Firestore */
-        const projetosRef = collection(db, 'projetos');
-        const formNovoProjeto = document.getElementById('formNovoProjeto');
-        const listaProjetosDOM = document.getElementById('listaProjetosDOM');
-        const listaProjetosTabDOM = document.getElementById('listaProjetosTabDOM');
-        
-        if (formNovoProjeto) {
-            formNovoProjeto.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const btnSubmit = formNovoProjeto.querySelector('button[type="submit"]');
-                const originalText = btnSubmit.innerHTML;
-                btnSubmit.innerHTML = 'Iniciando...';
-                
-                const cliente = document.getElementById('projCliente').value;
-                const servico = document.getElementById('projServico').value;
-                const prazoOriginal = document.getElementById('projPrazo').value;
-                
-                // Pega o email do cliente selecionado
-                const clienteSelect = document.getElementById('projCliente');
-                const clienteEmail = clienteSelect.options[clienteSelect.selectedIndex]?.dataset?.email || '';
-                
-                // Formata YYYY-MM-DD pra formato local
-                const dateParts = prazoOriginal.split('-');
-                const prazo = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
-                
-                try {
-                    await addDoc(projetosRef, {
-                        cliente: cliente,
-                        emailCliente: clienteEmail,
-                        servico: servico,
-                        progresso: 10, // Novo projeto sempre nasce com 10%
-                        prazo: prazo,
-                        status: 'Andamento',
-                        createdAt: serverTimestamp()
-                    });
-                    
-                    formNovoProjeto.reset();
-                    modalNovoProjeto.style.display = 'none';
-                } catch (error) {
-                    console.error("Erro ao salvar projeto: ", error);
-                    alert("Erro ao criar projeto: " + error.message);
-                } finally {
-                    btnSubmit.innerHTML = originalText;
-                }
-            });
-        }
-
-        // Leitura em Tempo Real (Real-time listener Projetos)
-        onSnapshot(projetosRef, (snapshot) => {
-            if(listaProjetosDOM) listaProjetosDOM.innerHTML = '';
-            if(listaProjetosTabDOM) listaProjetosTabDOM.innerHTML = '';
-            
-            let andamentoCount = 0;
-            let atrasadosCount = 0;
-
-            if (snapshot.empty) {
-                if(listaProjetosDOM) listaProjetosDOM.innerHTML = '<tr><td colspan="4" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Ufa, caixas limpas! Nenhum projeto.</td></tr>';
-                if(listaProjetosTabDOM) listaProjetosTabDOM.innerHTML = '<tr><td colspan="5" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum projeto encontrado.</td></tr>';
-            } else {
-                // Pega data de hoje para comparar prazos
-                const hoje = new Date();
-                
-                snapshot.forEach((docSnap) => {
-                    const proj = docSnap.data();
-                    andamentoCount++;
-                    
-                    // Verifica se o projeto está atrasado (prazo menor que hoje)
-                    if(proj.prazo) {
-                        const dataPrazo = new Date(proj.prazo.split('/').reverse().join('-'));
-                        if(dataPrazo < hoje && proj.status !== 'Concluído') {
-                            atrasadosCount++;
-                        }
-                    }
-                    
-                    // Cor inteligente baseada no progresso
-                    let barColor = 'var(--primary)';
-                    if(proj.progresso >= 100) barColor = 'var(--success)';
-                    if(proj.progresso < 30) barColor = 'var(--secondary)';
-                    
-                    // 1. Linha para o Dashboard (Visão Geral)
-                    if(listaProjetosDOM) {
-                        const trDash = document.createElement('tr');
-                        trDash.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
-                        trDash.innerHTML = `
-                            <td style="padding: 16px 24px; color: #fff; font-size: 0.9rem;">${proj.cliente}</td>
-                            <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${proj.servico}</td>
-                            <td style="padding: 16px 24px;">
-                                <div style="width: 100%; max-width: 150px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; position: relative;">
-                                    <div style="position: absolute; left: 0; top: 0; width: ${proj.progresso}%; height: 100%; background: ${barColor}; transition: 0.5s;"></div>
-                                </div>
-                            </td>
-                            <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
-                                ${proj.prazo}
-                            </td>
-                        `;
-                        listaProjetosDOM.appendChild(trDash);
-                    }
-
-                    // 2. Linha para a Tab Projetos (com Slider e Deleção)
-                    if(listaProjetosTabDOM) {
-                        const trTab = document.createElement('tr');
-                        trTab.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
-                        trTab.innerHTML = `
-                            <td style="padding: 14px 20px; color: #fff; font-size: 0.95rem;">${proj.cliente}</td>
-                            <td style="padding: 14px 20px; color: var(--text-muted); font-size: 0.9rem;">${proj.servico}</td>
-                            <td style="padding: 14px 20px; color: var(--text-muted); font-size: 0.9rem;">${proj.prazo}</td>
-                            <td style="padding: 14px 20px;">
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <input type="range" class="proj-slider" data-id="${docSnap.id}" min="0" max="100" value="${proj.progresso}" style="flex: 1; accent-color: ${barColor};">
-                                    <span style="font-size: 0.8rem; color: #fff; width: 35px; text-align: right;" id="perc-${docSnap.id}">${proj.progresso}%</span>
-                                </div>
-                            </td>
-                            <td style="padding: 14px 20px; text-align: center; display: flex; justify-content: center; gap: 8px;">
-                                <button class="btn btn-outline btn-save-prog" data-id="${docSnap.id}" style="padding: 6px 12px; border: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem;" title="Salvar Progresso">Salvar</button>
-                                <button class="btn btn-outline btn-delete-proj" data-id="${docSnap.id}" style="padding: 6px; border: none; color: #ef4444;" title="Arquivar / Excluir"><i data-lucide="archive" width="16"></i></button>
-                            </td>
-                        `;
-                        listaProjetosTabDOM.appendChild(trTab);
+                modalNovoCliente.addEventListener('click', (e) => {
+                    if (e.target === modalNovoCliente) {
+                        modalNovoCliente.style.display = 'none';
                     }
                 });
             }
-            
-            // Dashboard updates
-            if(document.getElementById('dash-projetos')) {
-                document.getElementById('dash-projetos').textContent = andamentoCount;
-                // Se houver projetos atrasados, mostra na subtitle
-                const dashProjSub = document.getElementById('dash-projetos-sub');
-                if(dashProjSub && atrasadosCount > 0) {
-                    dashProjSub.innerHTML = `<span style="color: #ef4444;">${atrasadosCount} atrasado${atrasadosCount > 1 ? 's' : ''}</span>`;
-                }
-            }
 
-            lucide.createIcons();
-            
-            // Adicionar Event Listeners dos Sliders Range localmente
-            if(listaProjetosTabDOM) {
-                document.querySelectorAll('.proj-slider').forEach(slider => {
-                    slider.addEventListener('input', (e) => {
-                        const id = e.target.getAttribute('data-id');
-                        document.getElementById(`perc-${id}`).textContent = e.target.value + '%';
-                    });
-                });
-            }
-        });
+            /* Lógica de Gravação e Leitura no Firestore */
+            const clientesRef = collection(db, 'clientes');
+            const formNovoCliente = document.getElementById('formNovoCliente');
+            const listaClientesDOM = document.getElementById('listaClientesDOM');
 
-        // Delegação de eventos para Botões de Progresso na Aba Projetos
-        if (listaProjetosTabDOM) {
-            listaProjetosTabDOM.addEventListener('click', async (e) => {
-                const btnSave = e.target.closest('.btn-save-prog');
-                if (btnSave) {
-                    const id = btnSave.getAttribute('data-id');
-                    const slider = document.querySelector(`.proj-slider[data-id="${id}"]`);
-                    if (slider) {
-                        try {
-                            btnSave.textContent = "...";
-                            await updateDoc(doc(db, 'projetos', id), { progresso: parseInt(slider.value) });
-                            btnSave.textContent = "Salvo!";
-                            setTimeout(() => btnSave.textContent = "Salvar", 2000);
-                        } catch (error) {
-                            alert("Erro ao salvar progresso: " + error.message);
-                            btnSave.textContent = "Erro";
-                        }
-                    }
-                }
-            });
-        }
+            // Selects para Modais
+            const projClienteSelect = document.getElementById('projCliente');
+            const fatClienteSelect = document.getElementById('fatCliente');
 
-        /* Lógica para "Faturas/Lembretes" e "Chamados" */
-        const faturasRef = collection(db, 'faturas');
-        const listaLembretesDOM = document.getElementById('listaLembretesDOM');
-        const tabelaFaturasAdminDOM = document.getElementById('tabelaFaturasAdminDOM');
-
-        // Modal de Faturas
-        const btnNovaFatura = document.getElementById('btnNovaFatura');
-        const modalNovaFatura = document.getElementById('modalNovaFatura');
-        const closeModalFatura = document.getElementById('closeModalFatura');
-        const formNovaFatura = document.getElementById('formNovaFatura');
-
-        if(btnNovaFatura) btnNovaFatura.addEventListener('click', () => { modalNovaFatura.style.display = 'flex'; });
-        if(closeModalFatura) closeModalFatura.addEventListener('click', () => { modalNovaFatura.style.display = 'none'; });
-        if(modalNovaFatura) modalNovaFatura.addEventListener('click', (e) => { if(e.target === modalNovaFatura) modalNovaFatura.style.display = 'none'; });
-
-        if(formNovaFatura) {
-            formNovaFatura.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const btn = formNovaFatura.querySelector('button[type="submit"]');
-                const orig = btn.innerHTML;
-                btn.innerHTML = "Gerando...";
-                
-                const cliente = document.getElementById('fatCliente').value;
-                const servico = document.getElementById('fatServico').value;
-                const vencOriginal = document.getElementById('fatVencimento').value;
-                const valor = parseFloat(document.getElementById('fatValor').value).toFixed(2);
-                
-                const dateParts = vencOriginal.split('-');
-                const vencimento = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
-
-                try {
-                    await addDoc(faturasRef, {
-                        cliente: cliente,
-                        servico: servico,
-                        vencimento: vencimento,
-                        valor: valor,
-                        status: 'Pendente',
-                        createdAt: serverTimestamp()
-                    });
-                    formNovaFatura.reset();
-                    modalNovaFatura.style.display = 'none';
-                } catch(error) {
-                    alert('Erro ao criar fatura: ' + error.message);
-                } finally {
-                    btn.innerHTML = orig;
-                }
-            });
-        }
-
-        onSnapshot(faturasRef, (snapshot) => {
-            if(listaLembretesDOM) listaLembretesDOM.innerHTML = '';
-            if(tabelaFaturasAdminDOM) tabelaFaturasAdminDOM.innerHTML = '';
-
-            let rRecebido = 0, rPendente = 0, rAtrasado = 0, totalFats = 0;
-
-            if (snapshot.empty) {
-                if(listaLembretesDOM) listaLembretesDOM.innerHTML = '<p class="text-muted" style="font-size: 0.9rem;">Nenhuma pendência financeira.</p>';
-                if(tabelaFaturasAdminDOM) tabelaFaturasAdminDOM.innerHTML = '<tr><td colspan="6" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhuma fatura encontrada.</td></tr>';
-            } else {
-                snapshot.forEach((docSnap) => {
-                    const fatura = docSnap.data();
-                    const idFat = docSnap.id;
-                    totalFats++;
+            // Salvar novo Cliente
+            if (formNovoCliente) {
+                formNovoCliente.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const btnSubmit = formNovoCliente.querySelector('button[type="submit"]');
+                    const originalText = btnSubmit.innerHTML;
+                    btnSubmit.innerHTML = 'Gravando no Banco...';
                     
-                    let vlr = parseFloat(fatura.valor);
-                    if (fatura.status === 'Pago') rRecebido += vlr;
-                    else if (fatura.status === 'Pendente') rPendente += vlr;
-                    else if (fatura.status === 'Atrasada') rAtrasado += vlr;
-
-                    let dotColor = 'var(--warning)';
-                    if (fatura.status === 'Atrasada') dotColor = '#ef4444';
+                    const nome = document.getElementById('cliNome').value;
+                    const email = document.getElementById('cliEmail').value;
+                    const plano = document.getElementById('cliPlano').value;
                     
-                    // Lembretes no Dashboard Principal
-                    if (listaLembretesDOM && fatura.status !== 'Pago') {
-                        const div = document.createElement('div');
-                        div.style.display = 'flex';
-                        div.style.alignItems = 'flex-start';
-                        div.style.gap = '12px';
+                    try {
+                        await addDoc(clientesRef, {
+                            nome: nome,
+                            email: email,
+                            plano: plano,
+                            status: 'Ativo',
+                            createdAt: serverTimestamp()
+                        });
                         
-                        div.innerHTML = `
-                            <div style="width: 8px; height: 8px; background: ${dotColor}; border-radius: 50%; margin-top: 6px;"></div>
-                            <div>
-                                <strong style="display: block; font-size: 0.9rem; color: #fff;">Fatura ${fatura.status} - R$ ${fatura.valor}</strong>
-                                <span style="font-size: 0.85rem; color: var(--text-muted);">${fatura.cliente} (Vence em ${fatura.vencimento})</span>
-                                ${fatura.status === 'Atrasada' ? `<a href="https://wa.me/?text=Olá, sua fatura da WebStart no valor de R$ ${fatura.valor} encontra-se em atraso." target="_blank" style="display: block; margin-top: 5px; font-size: 0.8rem; color: var(--primary);">Enviar Cobrança WhatsApp</a>` : ''}
-                            </div>
-                        `;
-                        listaLembretesDOM.appendChild(div);
+                        formNovoCliente.reset();
+                        modalNovoCliente.style.display = 'none';
+                        // O alert foi suprimido para UX mais fluida, a tabela já atualiza em realtime!
+                    } catch (error) {
+                        console.error("Erro ao salvar: ", error);
+                        alert("Houve um erro: " + error.message);
+                    } finally {
+                        btnSubmit.innerHTML = originalText;
                     }
+                });
+            }
 
-                    // Tabela Completa na Aba Faturamento
-                    if(tabelaFaturasAdminDOM) {
-                        let statusColor = fatura.status === 'Pago' ? '#10b981' : (fatura.status === 'Pendente' ? '#f59e0b' : '#ef4444');
-                        let statusBg = fatura.status === 'Pago' ? 'rgba(16,185,129,0.1)' : (fatura.status === 'Pendente' ? 'rgba(245,158,11,0.1)' : 'rgba(239,68,68,0.1)');
+            // Leitura em Tempo Real (Real-time listener)
+            onSnapshot(clientesRef, (snapshot) => {
+                listaClientesDOM.innerHTML = '';
+                
+                // Dados para o Dashboard
+                let totalClientes = 0;
+                let totalReceita = 0;
+
+                if (snapshot.empty) {
+                    listaClientesDOM.innerHTML = '<tr><td colspan="5" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum cliente cadastrado no banco ainda.</td></tr>';
+                } else {
+                    const projClienteSelect = document.getElementById('projCliente');
+                    if(projClienteSelect) projClienteSelect.innerHTML = '<option value="">Selecione o Cliente...</option>';
+
+                    snapshot.forEach((docSnap) => {
+                        const cliente = docSnap.data();
+                        totalClientes++;
                         
+                        // Lógica de Receita Baseada no Plano
+                        if(cliente.plano === 'Hospedagem Standard') totalReceita += 80;
+                        else if(cliente.plano === 'Manutenção VIP') totalReceita += 250;
+
+                        // Popula o select do modal de Projetos automaticamente!
+                        if(projClienteSelect) {
+                            const opt = document.createElement('option');
+                            opt.value = cliente.nome;
+                            opt.textContent = cliente.nome;
+                            opt.dataset.email = cliente.email; // Armazena o email para recuperar depois
+                            projClienteSelect.appendChild(opt);
+                        }
+                        if(fatClienteSelect) {
+                            const opt2 = document.createElement('option');
+                            opt2.value = cliente.nome;
+                            opt2.textContent = cliente.nome;
+                            fatClienteSelect.appendChild(opt2);
+                        }
+
                         const tr = document.createElement('tr');
                         tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
                         tr.innerHTML = `
-                            <td style="padding: 16px 24px; color: #fff; font-size: 0.95rem;">${fatura.cliente}</td>
-                            <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${fatura.servico}</td>
-                            <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${fatura.vencimento}</td>
-                            <td style="padding: 16px 24px; color: #fff; font-weight: 500;">R$ ${fatura.valor}</td>
-                            <td style="padding: 16px 24px;"><span style="color: ${statusColor}; font-size: 0.85rem; background: ${statusBg}; padding: 4px 10px; border-radius: 20px;">${fatura.status}</span></td>
+                            <td style="padding: 16px 24px; color: #fff;">${cliente.nome}</td>
+                            <td style="padding: 16px 24px; color: var(--text-muted);">${cliente.email}</td>
+                            <td style="padding: 16px 24px; color: var(--text-muted);">${cliente.plano}</td>
+                            <td style="padding: 16px 24px;"><span style="color: var(--success); font-size: 0.85rem; background: rgba(16,185,129,0.1); padding: 4px 10px; border-radius: 20px;">${cliente.status || 'Ativo'}</span></td>
                             <td style="padding: 16px 24px; text-align: center; display: flex; justify-content: center; gap: 8px;">
-                                ${fatura.status !== 'Pago' ? `<button class="btn btn-outline btn-mark-paid" data-id="${idFat}" style="padding: 6px 12px; border: 1px solid rgba(16,185,129,0.3); color: var(--success); font-size: 0.8rem;" title="Marcar como Pago">Pagar</button>` : ''}
-                                <button class="btn btn-outline btn-delete-fat" data-id="${idFat}" style="padding: 6px; border: none; color: #ef4444;" title="Excluir"><i data-lucide="trash-2" width="16"></i></button>
+                                <button class="btn btn-outline btn-edit-cliente" data-id="${docSnap.id}" data-nome="${cliente.nome}" data-email="${cliente.email}" data-plano="${cliente.plano}" style="padding: 6px; border: none; color: var(--primary);" title="Editar"><i data-lucide="edit" width="16"></i></button>
+                                <button class="btn btn-outline btn-delete" data-id="${docSnap.id}" style="padding: 6px; border: none; color: #ef4444;" title="Excluir"><i data-lucide="trash-2" width="16"></i></button>
                             </td>
                         `;
-                        tabelaFaturasAdminDOM.appendChild(tr);
+                        listaClientesDOM.appendChild(tr);
+                    });
+                }
+                
+                // Atualiza Dashboard
+                const formatMoeda = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+                if(document.getElementById('dash-clientes')) document.getElementById('dash-clientes').textContent = totalClientes;
+                if(document.getElementById('dash-receita')) document.getElementById('dash-receita').textContent = formatMoeda.format(totalReceita);
+                if(document.getElementById('dash-receita-sub')) document.getElementById('dash-receita-sub').innerHTML = `<i data-lucide="trending-up" width="14"></i> Somatória MRR`;
+
+                lucide.createIcons();
+            });
+
+            // Adiciona evento de editar com delegação
+            listaClientesDOM.addEventListener('click', (e) => {
+                const btn = e.target.closest('.btn-edit-cliente');
+                if (btn) {
+                    const id = btn.getAttribute('data-id');
+                    const nome = btn.getAttribute('data-nome');
+                    const email = btn.getAttribute('data-email');
+                    const plano = btn.getAttribute('data-plano');
+
+                    document.getElementById('editCliId').value = id;
+                    document.getElementById('editCliNome').value = nome;
+                    document.getElementById('editCliEmail').value = email;
+                    document.getElementById('editCliPlano').value = plano;
+
+                    document.getElementById('modalEditarCliente').style.display = 'flex';
+                    lucide.createIcons();
+                }
+            });
+
+            // Fechar modal editar
+            const closeModalEditCliente = document.getElementById('closeModalEditCliente');
+            if(closeModalEditCliente) {
+                closeModalEditCliente.addEventListener('click', () => {
+                    document.getElementById('modalEditarCliente').style.display = 'none';
+                });
+            }
+
+            // Salvar Edição de Cliente
+            const formEditarCliente = document.getElementById('formEditarCliente');
+            if (formEditarCliente) {
+                formEditarCliente.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const id = document.getElementById('editCliId').value;
+                    const nome = document.getElementById('editCliNome').value;
+                    const email = document.getElementById('editCliEmail').value;
+                    const plano = document.getElementById('editCliPlano').value;
+                    
+                    const btn = formEditarCliente.querySelector('button[type="submit"]');
+                    const orig = btn.innerHTML;
+                    btn.innerHTML = 'Salvando...';
+
+                    try {
+                        await updateDoc(doc(db, 'clientes', id), {
+                            nome, email, plano
+                        });
+                        document.getElementById('modalEditarCliente').style.display = 'none';
+                    } catch (err) {
+                        alert('Erro ao salvar: ' + err.message);
+                    } finally {
+                        btn.innerHTML = orig;
                     }
                 });
             }
 
-            // Cards de Resumo
-            const fmt = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
-            if(document.getElementById('fat-recebido')) document.getElementById('fat-recebido').textContent = fmt.format(rRecebido);
-            if(document.getElementById('fat-pendente')) document.getElementById('fat-pendente').textContent = fmt.format(rPendente);
-            if(document.getElementById('fat-atrasado')) document.getElementById('fat-atrasado').textContent = fmt.format(rAtrasado);
-            if(document.getElementById('fat-total')) document.getElementById('fat-total').textContent = totalFats;
+            /* Lógica do Modal Novo Projeto */
+            const btnNovoProjetoTop = document.getElementById('btnNovoProjetoTop');
+            const modalNovoProjeto = document.getElementById('modalNovoProjeto');
+            const closeModalProjeto = document.getElementById('closeModalProjeto');
+            
+            if (btnNovoProjetoTop && modalNovoProjeto) {
+                console.log('Botão Novo Projeto encontrado, configurando evento...');
+                btnNovoProjetoTop.addEventListener('click', () => {
+                    console.log('Clicou no botão Novo Projeto, abrindo modal...');
+                    modalNovoProjeto.style.display = 'flex';
+                    lucide.createIcons();
+                });
+                closeModalProjeto.addEventListener('click', () => {
+                    modalNovoProjeto.style.display = 'none';
+                });
+                modalNovoProjeto.addEventListener('click', (e) => {
+                    if (e.target === modalNovoProjeto) modalNovoProjeto.style.display = 'none';
+                });
+                
+                // Também abre o mesmo modal para o botão "Criar Projeto" na aba Projetos
+                const btnCriarProjeto = document.getElementById('btnCriarProjeto');
+                if(btnCriarProjeto) {
+                    btnCriarProjeto.addEventListener('click', () => {
+                        modalNovoProjeto.style.display = 'flex';
+                        lucide.createIcons();
+                    });
+                }
+            } else {
+                console.log('ERRO: Botão ou Modal não encontrado', { btnNovoProjetoTop, modalNovoProjeto });
+            }
 
-            lucide.createIcons();
-        });
-
-        if(tabelaFaturasAdminDOM) {
-            tabelaFaturasAdminDOM.addEventListener('click', async (e) => {
-                const btnPaid = e.target.closest('.btn-mark-paid');
-                if(btnPaid) {
-                    const id = btnPaid.getAttribute('data-id');
+            /* Lógica de Gravação e Leitura de Projetos no Firestore */
+            const projetosRef = collection(db, 'projetos');
+            const formNovoProjeto = document.getElementById('formNovoProjeto');
+            const listaProjetosDOM = document.getElementById('listaProjetosDOM');
+            const listaProjetosTabDOM = document.getElementById('listaProjetosTabDOM');
+            
+            if (formNovoProjeto) {
+                formNovoProjeto.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const btnSubmit = formNovoProjeto.querySelector('button[type="submit"]');
+                    const originalText = btnSubmit.innerHTML;
+                    btnSubmit.innerHTML = 'Iniciando...';
+                    
+                    const cliente = document.getElementById('projCliente').value;
+                    const servico = document.getElementById('projServico').value;
+                    const prazoOriginal = document.getElementById('projPrazo').value;
+                    
+                    // Pega o email do cliente selecionado
+                    const clienteSelect = document.getElementById('projCliente');
+                    const clienteEmail = clienteSelect.options[clienteSelect.selectedIndex]?.dataset?.email || '';
+                    
+                    // Formata YYYY-MM-DD pra formato local
+                    const dateParts = prazoOriginal.split('-');
+                    const prazo = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+                    
                     try {
-                        await updateDoc(doc(db, 'faturas', id), { status: 'Pago' });
-                    } catch(err) { alert('Erro: ' + err.message); }
+                        await addDoc(projetosRef, {
+                            cliente: cliente,
+                            emailCliente: clienteEmail,
+                            servico: servico,
+                            progresso: 10, // Novo projeto sempre nasce com 10%
+                            prazo: prazo,
+                            status: 'Andamento',
+                            createdAt: serverTimestamp()
+                        });
+                        
+                        formNovoProjeto.reset();
+                        modalNovoProjeto.style.display = 'none';
+                    } catch (error) {
+                        console.error("Erro ao salvar projeto: ", error);
+                        alert("Erro ao criar projeto: " + error.message);
+                    } finally {
+                        btnSubmit.innerHTML = originalText;
+                    }
+                });
+            }
+
+            // Leitura em Tempo Real (Real-time listener Projetos)
+            onSnapshot(projetosRef, (snapshot) => {
+                if(listaProjetosDOM) listaProjetosDOM.innerHTML = '';
+                if(listaProjetosTabDOM) listaProjetosTabDOM.innerHTML = '';
+                
+                let andamentoCount = 0;
+                let atrasadosCount = 0;
+
+                if (snapshot.empty) {
+                    if(listaProjetosDOM) listaProjetosDOM.innerHTML = '<tr><td colspan="4" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Ufa, caixas limpas! Nenhum projeto.</td></tr>';
+                    if(listaProjetosTabDOM) listaProjetosTabDOM.innerHTML = '<tr><td colspan="5" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum projeto encontrado.</td></tr>';
+                } else {
+                    // Pega data de hoje para comparar prazos
+                    const hoje = new Date();
+                    
+                    snapshot.forEach((docSnap) => {
+                        const proj = docSnap.data();
+                        andamentoCount++;
+                        
+                        // Verifica se o projeto está atrasado (prazo menor que hoje)
+                        if(proj.prazo) {
+                            const dataPrazo = new Date(proj.prazo.split('/').reverse().join('-'));
+                            if(dataPrazo < hoje && proj.status !== 'Concluído') {
+                                atrasadosCount++;
+                            }
+                        }
+                        
+                        // Cor inteligente baseada no progresso
+                        let barColor = 'var(--primary)';
+                        if(proj.progresso >= 100) barColor = 'var(--success)';
+                        if(proj.progresso < 30) barColor = 'var(--secondary)';
+                        
+                        // 1. Linha para o Dashboard (Visão Geral)
+                        if(listaProjetosDOM) {
+                            const trDash = document.createElement('tr');
+                            trDash.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                            trDash.innerHTML = `
+                                <td style="padding: 16px 24px; color: #fff; font-size: 0.9rem;">${proj.cliente}</td>
+                                <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${proj.servico}</td>
+                                <td style="padding: 16px 24px;">
+                                    <div style="width: 100%; max-width: 150px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; position: relative;">
+                                        <div style="position: absolute; left: 0; top: 0; width: ${proj.progresso}%; height: 100%; background: ${barColor}; transition: 0.5s;"></div>
+                                    </div>
+                                </td>
+                                <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
+                                    ${proj.prazo}
+                                </td>
+                            `;
+                            listaProjetosDOM.appendChild(trDash);
+                        }
+
+                        // 2. Linha para a Tab Projetos (com Slider e Deleção)
+                        if(listaProjetosTabDOM) {
+                            const trTab = document.createElement('tr');
+                            trTab.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                            trTab.innerHTML = `
+                                <td style="padding: 14px 20px; color: #fff; font-size: 0.95rem;">${proj.cliente}</td>
+                                <td style="padding: 14px 20px; color: var(--text-muted); font-size: 0.9rem;">${proj.servico}</td>
+                                <td style="padding: 14px 20px; color: var(--text-muted); font-size: 0.9rem;">${proj.prazo}</td>
+                                <td style="padding: 14px 20px;">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <input type="range" class="proj-slider" data-id="${docSnap.id}" min="0" max="100" value="${proj.progresso}" style="flex: 1; accent-color: ${barColor};">
+                                        <span style="font-size: 0.8rem; color: #fff; width: 35px; text-align: right;" id="perc-${docSnap.id}">${proj.progresso}%</span>
+                                    </div>
+                                </td>
+                                <td style="padding: 14px 20px; text-align: center; display: flex; justify-content: center; gap: 8px;">
+                                    <button class="btn btn-outline btn-save-prog" data-id="${docSnap.id}" style="padding: 6px 12px; border: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem;" title="Salvar Progresso">Salvar</button>
+                                    <button class="btn btn-outline btn-delete-proj" data-id="${docSnap.id}" style="padding: 6px; border: none; color: #ef4444;" title="Arquivar / Excluir"><i data-lucide="archive" width="16"></i></button>
+                                </td>
+                            `;
+                            listaProjetosTabDOM.appendChild(trTab);
+                        }
+                    });
+                }
+                
+                // Dashboard updates
+                if(document.getElementById('dash-projetos')) {
+                    document.getElementById('dash-projetos').textContent = andamentoCount;
+                    // Se houver projetos atrasados, mostra na subtitle
+                    const dashProjSub = document.getElementById('dash-projetos-sub');
+                    if(dashProjSub && atrasadosCount > 0) {
+                        dashProjSub.innerHTML = `<span style="color: #ef4444;">${atrasadosCount} atrasado${atrasadosCount > 1 ? 's' : ''}</span>`;
+                    }
                 }
 
-                const btnDel = e.target.closest('.btn-delete-fat');
-                if(btnDel) {
-                    const id = btnDel.getAttribute('data-id');
-                    if(confirm("Deseja mesmo excluir esta fatura?")) {
+                lucide.createIcons();
+                
+                // Adicionar Event Listeners dos Sliders Range localmente
+                if(listaProjetosTabDOM) {
+                    document.querySelectorAll('.proj-slider').forEach(slider => {
+                        slider.addEventListener('input', (e) => {
+                            const id = e.target.getAttribute('data-id');
+                            document.getElementById(`perc-${id}`).textContent = e.target.value + '%';
+                        });
+                    });
+                }
+            });
+
+            // Delegação de eventos para Botões de Progresso na Aba Projetos
+            if (listaProjetosTabDOM) {
+                listaProjetosTabDOM.addEventListener('click', async (e) => {
+                    const btnSave = e.target.closest('.btn-save-prog');
+                    if (btnSave) {
+                        const id = btnSave.getAttribute('data-id');
+                        const slider = document.querySelector(`.proj-slider[data-id="${id}"]`);
+                        if (slider) {
+                            try {
+                                btnSave.textContent = "...";
+                                await updateDoc(doc(db, 'projetos', id), { progresso: parseInt(slider.value) });
+                                btnSave.textContent = "Salvo!";
+                                setTimeout(() => btnSave.textContent = "Salvar", 2000);
+                            } catch (error) {
+                                alert("Erro ao salvar progresso: " + error.message);
+                                btnSave.textContent = "Erro";
+                            }
+                        }
+                    }
+                });
+            }
+
+            /* Lógica para "Faturas/Lembretes" e "Chamados" */
+            const faturasRef = collection(db, 'faturas');
+            const listaLembretesDOM = document.getElementById('listaLembretesDOM');
+            const tabelaFaturasAdminDOM = document.getElementById('tabelaFaturasAdminDOM');
+
+            // Modal de Faturas
+            const btnNovaFatura = document.getElementById('btnNovaFatura');
+            const modalNovaFatura = document.getElementById('modalNovaFatura');
+            const closeModalFatura = document.getElementById('closeModalFatura');
+            const formNovaFatura = document.getElementById('formNovaFatura');
+
+            if(btnNovaFatura) btnNovaFatura.addEventListener('click', () => { modalNovaFatura.style.display = 'flex'; });
+            if(closeModalFatura) closeModalFatura.addEventListener('click', () => { modalNovaFatura.style.display = 'none'; });
+            if(modalNovaFatura) modalNovaFatura.addEventListener('click', (e) => { if(e.target === modalNovaFatura) modalNovaFatura.style.display = 'none'; });
+
+            if(formNovaFatura) {
+                formNovaFatura.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const btn = formNovaFatura.querySelector('button[type="submit"]');
+                    const orig = btn.innerHTML;
+                    btn.innerHTML = "Gerando...";
+                    
+                    const cliente = document.getElementById('fatCliente').value;
+                    const servico = document.getElementById('fatServico').value;
+                    const vencOriginal = document.getElementById('fatVencimento').value;
+                    const valor = parseFloat(document.getElementById('fatValor').value).toFixed(2);
+                    
+                    const dateParts = vencOriginal.split('-');
+                    const vencimento = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+
+                    try {
+                        await addDoc(faturasRef, {
+                            cliente: cliente,
+                            servico: servico,
+                            vencimento: vencimento,
+                            valor: valor,
+                            status: 'Pendente',
+                            createdAt: serverTimestamp()
+                        });
+                        formNovaFatura.reset();
+                        modalNovaFatura.style.display = 'none';
+                    } catch(error) {
+                        alert('Erro ao criar fatura: ' + error.message);
+                    } finally {
+                        btn.innerHTML = orig;
+                    }
+                });
+            }
+
+            onSnapshot(faturasRef, (snapshot) => {
+                if(listaLembretesDOM) listaLembretesDOM.innerHTML = '';
+                if(tabelaFaturasAdminDOM) tabelaFaturasAdminDOM.innerHTML = '';
+
+                let rRecebido = 0, rPendente = 0, rAtrasado = 0, totalFats = 0;
+
+                if (snapshot.empty) {
+                    if(listaLembretesDOM) listaLembretesDOM.innerHTML = '<p class="text-muted" style="font-size: 0.9rem;">Nenhuma pendência financeira.</p>';
+                    if(tabelaFaturasAdminDOM) tabelaFaturasAdminDOM.innerHTML = '<tr><td colspan="6" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhuma fatura encontrada.</td></tr>';
+                } else {
+                    snapshot.forEach((docSnap) => {
+                        const fatura = docSnap.data();
+                        const idFat = docSnap.id;
+                        totalFats++;
+                        
+                        let vlr = parseFloat(fatura.valor);
+                        if (fatura.status === 'Pago') rRecebido += vlr;
+                        else if (fatura.status === 'Pendente') rPendente += vlr;
+                        else if (fatura.status === 'Atrasada') rAtrasado += vlr;
+
+                        let dotColor = 'var(--warning)';
+                        if (fatura.status === 'Atrasada') dotColor = '#ef4444';
+                        
+                        // Lembretes no Dashboard Principal
+                        if (listaLembretesDOM && fatura.status !== 'Pago') {
+                            const div = document.createElement('div');
+                            div.style.display = 'flex';
+                            div.style.alignItems = 'flex-start';
+                            div.style.gap = '12px';
+                            
+                            div.innerHTML = `
+                                <div style="width: 8px; height: 8px; background: ${dotColor}; border-radius: 50%; margin-top: 6px;"></div>
+                                <div>
+                                    <strong style="display: block; font-size: 0.9rem; color: #fff;">Fatura ${fatura.status} - R$ ${fatura.valor}</strong>
+                                    <span style="font-size: 0.85rem; color: var(--text-muted);">${fatura.cliente} (Vence em ${fatura.vencimento})</span>
+                                    ${fatura.status === 'Atrasada' ? `<a href="https://wa.me/?text=Olá, sua fatura da WebStart no valor de R$ ${fatura.valor} encontra-se em atraso." target="_blank" style="display: block; margin-top: 5px; font-size: 0.8rem; color: var(--primary);">Enviar Cobrança WhatsApp</a>` : ''}
+                                </div>
+                            `;
+                            listaLembretesDOM.appendChild(div);
+                        }
+
+                        // Tabela Completa na Aba Faturamento
+                        if(tabelaFaturasAdminDOM) {
+                            let statusColor = fatura.status === 'Pago' ? '#10b981' : (fatura.status === 'Pendente' ? '#f59e0b' : '#ef4444');
+                            let statusBg = fatura.status === 'Pago' ? 'rgba(16,185,129,0.1)' : (fatura.status === 'Pendente' ? 'rgba(245,158,11,0.1)' : 'rgba(239,68,68,0.1)');
+                            
+                            const tr = document.createElement('tr');
+                            tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                            tr.innerHTML = `
+                                <td style="padding: 16px 24px; color: #fff; font-size: 0.95rem;">${fatura.cliente}</td>
+                                <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${fatura.servico}</td>
+                                <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${fatura.vencimento}</td>
+                                <td style="padding: 16px 24px; color: #fff; font-weight: 500;">R$ ${fatura.valor}</td>
+                                <td style="padding: 16px 24px;"><span style="color: ${statusColor}; font-size: 0.85rem; background: ${statusBg}; padding: 4px 10px; border-radius: 20px;">${fatura.status}</span></td>
+                                <td style="padding: 16px 24px; text-align: center; display: flex; justify-content: center; gap: 8px;">
+                                    ${fatura.status !== 'Pago' ? `<button class="btn btn-outline btn-mark-paid" data-id="${idFat}" style="padding: 6px 12px; border: 1px solid rgba(16,185,129,0.3); color: var(--success); font-size: 0.8rem;" title="Marcar como Pago">Pagar</button>` : ''}
+                                    <button class="btn btn-outline btn-delete-fat" data-id="${idFat}" style="padding: 6px; border: none; color: #ef4444;" title="Excluir"><i data-lucide="trash-2" width="16"></i></button>
+                                </td>
+                            `;
+                            tabelaFaturasAdminDOM.appendChild(tr);
+                        }
+                    });
+                }
+
+                // Cards de Resumo
+                const fmt = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+                if(document.getElementById('fat-recebido')) document.getElementById('fat-recebido').textContent = fmt.format(rRecebido);
+                if(document.getElementById('fat-pendente')) document.getElementById('fat-pendente').textContent = fmt.format(rPendente);
+                if(document.getElementById('fat-atrasado')) document.getElementById('fat-atrasado').textContent = fmt.format(rAtrasado);
+                if(document.getElementById('fat-total')) document.getElementById('fat-total').textContent = totalFats;
+
+                lucide.createIcons();
+            });
+
+            if(tabelaFaturasAdminDOM) {
+                tabelaFaturasAdminDOM.addEventListener('click', async (e) => {
+                    const btnPaid = e.target.closest('.btn-mark-paid');
+                    if(btnPaid) {
+                        const id = btnPaid.getAttribute('data-id');
                         try {
-                            await deleteDoc(doc(db, 'faturas', id));
+                            await updateDoc(doc(db, 'faturas', id), { status: 'Pago' });
                         } catch(err) { alert('Erro: ' + err.message); }
+                    }
+
+                    const btnDel = e.target.closest('.btn-delete-fat');
+                    if(btnDel) {
+                        const id = btnDel.getAttribute('data-id');
+                        if(confirm("Deseja mesmo excluir esta fatura?")) {
+                            try {
+                                await deleteDoc(doc(db, 'faturas', id));
+                            } catch(err) { alert('Erro: ' + err.message); }
+                        }
+                    }
+                });
+            }
+
+            // Lógica de Chamados e Chat (Sincronização Admin <-> Cliente)
+            const chamadosRef = collection(db, 'chamados');
+            let unsubscribeChat = null; // Para limpar o listener do chat ao fechar modal
+
+            // Badge de notificações no Sidebar Admin (Chamados não lidos)
+            // Badge de notificações no Sidebar Admin (Chamados não lidos)
+            onSnapshot(chamadosRef, (snap) => {
+                const unreadCount = snap.docs.filter(d => d.data().unreadByAdmin === true).length;
+                const badge = document.getElementById('badgeChamadosAdmin');
+                if (badge) {
+                    if (unreadCount === 0) {
+                        badge.style.display = 'none';
+                    } else {
+                        badge.textContent = unreadCount;
+                        badge.style.display = 'inline-block';
                     }
                 }
             });
-        }
 
-        // Lógica de Chamados e Chat (Sincronização Admin <-> Cliente)
-        const chamadosRef = collection(db, 'chamados');
-        let unsubscribeChat = null; // Para limpar o listener do chat ao fechar modal
-
-        // Badge de notificações no Sidebar Admin (Chamados não lidos)
-        onSnapshot(query(chamadosRef, where('unreadByAdmin', '==', true)), (snap) => {
-            const badge = document.getElementById('badgeChamadosAdmin');
-            if (badge) {
-                if (snap.empty) {
-                    badge.style.display = 'none';
-                } else {
-                    badge.textContent = snap.size;
-                    badge.style.display = 'inline-block';
-                }
-            }
-        });
-
-        onSnapshot(chamadosRef, (snapshot) => {
-            if(document.getElementById('dash-chamados')) {
-                let abertos = 0, andamento = 0, fechados = 0;
-                snapshot.forEach(docSnap => {
-                    const status = docSnap.data().status;
-                    if (status === 'Aberto') abertos++;
-                    else if (status === 'Em Análise') andamento++;
-                    else if (status === 'Resolvido') fechados++;
-                });
-                document.getElementById('dash-chamados').textContent = abertos + andamento;
-                document.getElementById('chamados-abertos').textContent = abertos;
-                document.getElementById('chamados-analise').textContent = andamento;
-                document.getElementById('chamados-resolvidos').textContent = fechados;
-            }
-            
-            const tabelaChamadosAdmin = document.getElementById('tabelaChamadosAdmin');
-            if (tabelaChamadosAdmin) {
-                tabelaChamadosAdmin.innerHTML = '';
-                if (snapshot.empty) {
-                    tabelaChamadosAdmin.innerHTML = '<tr><td colspan="6" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum chamado encontrado.</td></tr>';
-                    return;
+            onSnapshot(chamadosRef, (snapshot) => {
+                if(document.getElementById('dash-chamados')) {
+                    let abertos = 0, andamento = 0, fechados = 0;
+                    snapshot.forEach(docSnap => {
+                        const status = docSnap.data().status;
+                        if (status === 'Aberto') abertos++;
+                        else if (status === 'Em Análise') andamento++;
+                        else if (status === 'Resolvido') fechados++;
+                    });
+                    document.getElementById('dash-chamados').textContent = abertos + andamento;
+                    document.getElementById('chamados-abertos').textContent = abertos;
+                    document.getElementById('chamados-analise').textContent = andamento;
+                    document.getElementById('chamados-resolvidos').textContent = fechados;
                 }
                 
-                snapshot.forEach(docSnap => {
-                    const ch = docSnap.data();
-                    const docId = docSnap.id;
-                    let statusColor = ch.status === 'Resolvido' ? '#22c55e' : (ch.status === 'Em Análise' ? '#3b82f6' : '#f59e0b');
-                    let statusBg = ch.status === 'Resolvido' ? 'rgba(34,197,94,0.1)' : (ch.status === 'Em Análise' ? 'rgba(59,130,246,0.1)' : 'rgba(245,158,11,0.1)');
+                const tabelaChamadosAdmin = document.getElementById('tabelaChamadosAdmin');
+                if (tabelaChamadosAdmin) {
+                    tabelaChamadosAdmin.innerHTML = '';
+                    if (snapshot.empty) {
+                        tabelaChamadosAdmin.innerHTML = '<tr><td colspan="6" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum chamado encontrado.</td></tr>';
+                        return;
+                    }
                     
-                    const unreadDot = ch.unreadByAdmin ? '<span style="width: 8px; height: 8px; background: #ef4444; border-radius: 50%; display: inline-block; margin-right: 8px;" title="Nova mensagem"></span>' : '';
+                    snapshot.forEach(docSnap => {
+                        const ch = docSnap.data();
+                        const docId = docSnap.id;
+                        let statusColor = ch.status === 'Resolvido' ? '#22c55e' : (ch.status === 'Em Análise' ? '#3b82f6' : '#f59e0b');
+                        let statusBg = ch.status === 'Resolvido' ? 'rgba(34,197,94,0.1)' : (ch.status === 'Em Análise' ? 'rgba(59,130,246,0.1)' : 'rgba(245,158,11,0.1)');
+                        
+                        const unreadDot = ch.unreadByAdmin ? '<span style="width: 8px; height: 8px; background: #ef4444; border-radius: 50%; display: inline-block; margin-right: 8px;" title="Nova mensagem"></span>' : '';
 
+                        const tr = document.createElement('tr');
+                        tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                        tr.innerHTML = `
+                            <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${ch.dataAbertura || 'N/A'}</td>
+                            <td style="padding: 16px 24px; color: #fff; font-weight: 500;">${ch.cliente || 'N/A'}</td>
+                            <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${ch.email || 'N/A'}</td>
+                            <td style="padding: 16px 24px; color: #fff;">${unreadDot}${ch.assunto || 'N/A'}</td>
+                            <td style="padding: 16px 24px;"><span style="color: ${statusColor}; font-size: 0.85rem; background: ${statusBg}; padding: 4px 10px; border-radius: 20px;">${ch.status || 'Aberto'}</span></td>
+                            <td style="padding: 16px 24px; display: flex; gap: 8px;">
+                                <button class="btn btn-outline btn-open-chat" data-id="${docId}" data-cliente="${ch.cliente}" data-assunto="${ch.assunto}" data-status="${ch.status}">Ver / Chat</button>
+                                <button class="btn-delete-chamado" data-id="${docId}" style="padding: 6px 12px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #ef4444; border-radius: 6px; cursor: pointer;" title="Excluir"><i data-lucide="trash-2" width="14"></i></button>
+                            </td>
+                        `;
+                        tabelaChamadosAdmin.appendChild(tr);
+                    });
+                    lucide.createIcons();
+                }
+            });
+
+            // Lógica do Modal de Chat (Admin)
+            const modalChamado = document.getElementById('modalChamadoDetalhes');
+            const btnFecharModal = document.getElementById('btnFecharModalChamado');
+            const chatHistory = document.getElementById('chat-history');
+            const chatInput = document.getElementById('chat-input');
+            const btnEnviarComentario = document.getElementById('btnEnviarComentario');
+            const btnAtualizarStatusOnly = document.getElementById('btnAtualizarStatusOnly');
+            let currentTicketId = null;
+
+            if (btnFecharModal) {
+                btnFecharModal.addEventListener('click', () => {
+                    modalChamado.style.display = 'none';
+                    if (unsubscribeChat) unsubscribeChat();
+                });
+            }
+            
+            if (modalChamado) {
+                modalChamado.addEventListener('click', (e) => {
+                    if (e.target === modalChamado) {
+                        modalChamado.style.display = 'none';
+                        if (unsubscribeChat) unsubscribeChat();
+                    }
+                });
+            }
+
+            const tabelaChamadosAdminRef = document.getElementById('tabelaChamadosAdmin');
+            if (tabelaChamadosAdminRef) {
+                tabelaChamadosAdminRef.addEventListener('click', async (e) => {
+                    const btnDelete = e.target.closest('.btn-delete-chamado');
+                    if (btnDelete) {
+                        const idChamado = btnDelete.getAttribute('data-id');
+                        if (confirm('Tem certeza que deseja excluir este chamado?')) {
+                            try { await deleteDoc(doc(db, 'chamados', idChamado)); } 
+                            catch (error) { alert('Erro ao excluir: ' + error.message); }
+                        }
+                        return;
+                    }
+
+                    const btnOpen = e.target.closest('.btn-open-chat');
+                    if (btnOpen) {
+                        const docId = btnOpen.getAttribute('data-id');
+                        currentTicketId = docId;
+                        const cliente = btnOpen.getAttribute('data-cliente');
+                        const assunto = btnOpen.getAttribute('data-assunto');
+                        const status = btnOpen.getAttribute('data-status');
+
+                        document.getElementById('chat-cliente-nome').textContent = cliente;
+                        document.getElementById('chat-chamado-assunto').textContent = assunto;
+                        document.getElementById('novoStatusChamado').value = status;
+                        
+                        // Marcar como lido pelo admin
+                        await updateDoc(doc(db, 'chamados', docId), { unreadByAdmin: false });
+
+                        // Carregar histórico de mensagens
+                        if (unsubscribeChat) unsubscribeChat();
+                        const msgRef = collection(db, 'chamados', docId, 'mensagens');
+                        const qMsg = msgRef; // Removido orderBy para evitar erro de index necessário
+                        
+                        unsubscribeChat = onSnapshot(qMsg, (msgSnap) => {
+                            chatHistory.innerHTML = '';
+                            if (msgSnap.empty) {
+                                chatHistory.innerHTML = '<div class="text-muted" style="text-align: center; padding-top: 50px;">Nenhuma mensagem ainda.</div>';
+                            }
+                            msgSnap.forEach(mDoc => {
+                                const m = mDoc.data();
+                                const isMe = m.autor === 'admin';
+                                const div = document.createElement('div');
+                                div.style.alignSelf = isMe ? 'flex-end' : 'flex-start';
+                                div.style.background = isMe ? 'var(--primary)' : 'rgba(255,255,255,0.05)';
+                                div.style.padding = '10px 15px';
+                                div.style.borderRadius = '12px';
+                                div.style.maxWidth = '85%';
+                                div.style.fontSize = '0.9rem';
+                                div.style.color = isMe ? '#fff' : '#e2e8f0';
+                                div.style.border = isMe ? 'none' : '1px solid rgba(255,255,255,0.05)';
+                                
+                                div.innerHTML = `
+                                    <div style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 4px;">${m.nome}</div>
+                                    <div>${m.texto}</div>
+                                `;
+                                chatHistory.appendChild(div);
+                            });
+                            chatHistory.scrollTop = chatHistory.scrollHeight;
+                        });
+
+                        modalChamado.style.display = 'flex';
+                    }
+                });
+            }
+
+            if (btnEnviarComentario) {
+                btnEnviarComentario.addEventListener('click', async () => {
+                    const texto = chatInput.value.trim();
+                    if (!texto || !currentTicketId) return;
+
+                    btnEnviarComentario.disabled = true;
+                    try {
+                        await addDoc(collection(db, 'chamados', currentTicketId, 'mensagens'), {
+                            autor: 'admin',
+                            nome: 'WebStart Suporte',
+                            texto: texto,
+                            criadoEm: serverTimestamp()
+                        });
+                        
+                        await updateDoc(doc(db, 'chamados', currentTicketId), {
+                            unreadByClient: true,
+                            lastMessageBy: 'admin',
+                            lastMessageAt: serverTimestamp()
+                        });
+                        
+                        chatInput.value = '';
+                    } catch (err) {
+                        alert('Erro ao enviar: ' + err.message);
+                    } finally {
+                        btnEnviarComentario.disabled = false;
+                    }
+                });
+                
+                chatInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') btnEnviarComentario.click();
+                });
+            }
+
+            if (btnAtualizarStatusOnly) {
+                btnAtualizarStatusOnly.addEventListener('click', async () => {
+                    const novoStatus = document.getElementById('novoStatusChamado').value;
+                    if (!currentTicketId) return;
+                    try {
+                        await updateDoc(doc(db, 'chamados', currentTicketId), { status: novoStatus });
+                        alert('Status atualizado!');
+                    } catch (err) {
+                        alert('Erro ao atualizar: ' + err.message);
+                    }
+                });
+            }
+
+            // Event Delegation para Botoes de Arquivar/Excluir Projeto
+            if (listaProjetosDOM) {
+                listaProjetosDOM.addEventListener('click', async (e) => {
+                    const btn = e.target.closest('.btn-delete-proj');
+                    if (btn) {
+                        if (confirm('Tem certeza que deseja deletar ou arquivar este projeto?')) {
+                            const id = btn.getAttribute('data-id');
+                            try {
+                                await deleteDoc(doc(db, 'projetos', id));
+                            } catch (error) {
+                                alert("Erro ao excluir: " + error.message);
+                            }
+                        }
+                    }
+                });
+            }
+
+            /* Lógica do Blog CMS */
+            const blogRef = collection(db, 'posts');
+            const btnNovoPost = document.getElementById('btnNovoPost');
+            const modalNovoPost = document.getElementById('modalNovoPost');
+            const closeModalPost = document.getElementById('closeModalPost');
+            const formNovoPost = document.getElementById('formNovoPost');
+            const listaPostsDOM = document.getElementById('listaPostsDOM');
+
+            if(btnNovoPost) {
+                btnNovoPost.addEventListener('click', () => {
+                    modalNovoPost.style.display = 'flex';
+                    lucide.createIcons();
+                });
+                closeModalPost.addEventListener('click', () => modalNovoPost.style.display = 'none');
+            }
+
+            if(formNovoPost) {
+                formNovoPost.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const btn = formNovoPost.querySelector('button[type="submit"]');
+                    btn.disabled = true;
+                    btn.textContent = 'Publicando...';
+
+                    try {
+                        await addDoc(blogRef, {
+                            titulo: document.getElementById('postTitulo').value,
+                            categoria: document.getElementById('postCategoria').value,
+                            resumo: document.getElementById('postResumo').value,
+                            conteudo: document.getElementById('postConteudo').value,
+                            data: new Date().toLocaleDateString('pt-BR'),
+                            createdAt: serverTimestamp()
+                        });
+                        formNovoPost.reset();
+                        modalNovoPost.style.display = 'none';
+                    } catch (error) {
+                        alert('Erro ao publicar post: ' + error.message);
+                    } finally {
+                        btn.disabled = false;
+                        btn.textContent = 'Publicar no Site';
+                    }
+                });
+            }
+
+            onSnapshot(blogRef, (snapshot) => {
+                if(!listaPostsDOM) return;
+                listaPostsDOM.innerHTML = '';
+                
+                if(snapshot.empty) {
+                    listaPostsDOM.innerHTML = '<tr><td colspan="4" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum post publicado.</td></tr>';
+                    return;
+                }
+
+                snapshot.forEach(docSnap => {
+                    const post = docSnap.data();
                     const tr = document.createElement('tr');
                     tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
                     tr.innerHTML = `
-                        <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${ch.dataAbertura || 'N/A'}</td>
-                        <td style="padding: 16px 24px; color: #fff; font-weight: 500;">${ch.cliente || 'N/A'}</td>
-                        <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${ch.email || 'N/A'}</td>
-                        <td style="padding: 16px 24px; color: #fff;">${unreadDot}${ch.assunto || 'N/A'}</td>
-                        <td style="padding: 16px 24px;"><span style="color: ${statusColor}; font-size: 0.85rem; background: ${statusBg}; padding: 4px 10px; border-radius: 20px;">${ch.status || 'Aberto'}</span></td>
-                        <td style="padding: 16px 24px; display: flex; gap: 8px;">
-                            <button class="btn btn-outline btn-open-chat" data-id="${docId}" data-cliente="${ch.cliente}" data-assunto="${ch.assunto}" data-status="${ch.status}">Ver / Chat</button>
-                            <button class="btn-delete-chamado" data-id="${docId}" style="padding: 6px 12px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #ef4444; border-radius: 6px; cursor: pointer;" title="Excluir"><i data-lucide="trash-2" width="14"></i></button>
+                        <td style="padding: 16px 24px; color: #fff; font-size: 0.9rem;">${post.titulo}</td>
+                        <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.85rem;">${post.categoria}</td>
+                        <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.85rem;">${post.data}</td>
+                        <td style="padding: 16px 24px; text-align: center;">
+                            <button class="btn btn-outline btn-delete-post" data-id="${docSnap.id}" style="padding: 6px; border: none; color: #ef4444;" title="Excluir Post"><i data-lucide="trash-2" width="16"></i></button>
                         </td>
                     `;
-                    tabelaChamadosAdmin.appendChild(tr);
+                    listaPostsDOM.appendChild(tr);
                 });
                 lucide.createIcons();
-            }
-        });
-
-        // Lógica do Modal de Chat (Admin)
-        const modalChamado = document.getElementById('modalChamadoDetalhes');
-        const btnFecharModal = document.getElementById('btnFecharModalChamado');
-        const chatHistory = document.getElementById('chat-history');
-        const chatInput = document.getElementById('chat-input');
-        const btnEnviarComentario = document.getElementById('btnEnviarComentario');
-        const btnAtualizarStatusOnly = document.getElementById('btnAtualizarStatusOnly');
-        let currentTicketId = null;
-
-        if (btnFecharModal) {
-            btnFecharModal.addEventListener('click', () => {
-                modalChamado.style.display = 'none';
-                if (unsubscribeChat) unsubscribeChat();
             });
-        }
-        
-        if (modalChamado) {
-            modalChamado.addEventListener('click', (e) => {
-                if (e.target === modalChamado) {
-                    modalChamado.style.display = 'none';
-                    if (unsubscribeChat) unsubscribeChat();
-                }
-            });
-        }
 
-        const tabelaChamadosAdmin = document.getElementById('tabelaChamadosAdmin');
-        if (tabelaChamadosAdmin) {
-            tabelaChamadosAdmin.addEventListener('click', async (e) => {
-                const btnDelete = e.target.closest('.btn-delete-chamado');
-                if (btnDelete) {
-                    const idChamado = btnDelete.getAttribute('data-id');
-                    if (confirm('Tem certeza que deseja excluir este chamado?')) {
-                        try { await deleteDoc(doc(db, 'chamados', idChamado)); } 
-                        catch (error) { alert('Erro ao excluir: ' + error.message); }
+            // Delegação de evento para deletar post
+            if (listaPostsDOM) {
+                listaPostsDOM.addEventListener('click', async (e) => {
+                    const btn = e.target.closest('.btn-delete-post');
+                    if(btn) {
+                        if(confirm('Deseja realmente excluir este artigo?')) {
+                            const id = btn.getAttribute('data-id');
+                            try {
+                                await deleteDoc(doc(db, 'posts', id));
+                            } catch (error) {
+                                alert('Erro ao excluir post: ' + error.message);
+                            }
+                        }
                     }
+                });
+            }
+
+            /* Lógica de Leads da Calculadora */
+            const leadsRef = collection(db, 'leads');
+            const listaLeadsDOM = document.getElementById('listaLeadsDOM');
+
+            onSnapshot(leadsRef, (snapshot) => {
+                if(!listaLeadsDOM) return;
+                listaLeadsDOM.innerHTML = '';
+                
+                if(snapshot.empty) {
+                    listaLeadsDOM.innerHTML = '<tr><td colspan="5" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum lead capturado ainda.</td></tr>';
                     return;
                 }
 
-                const btnOpen = e.target.closest('.btn-open-chat');
-                if (btnOpen) {
-                    const docId = btnOpen.getAttribute('data-id');
-                    currentTicketId = docId;
-                    const cliente = btnOpen.getAttribute('data-cliente');
-                    const assunto = btnOpen.getAttribute('data-assunto');
-                    const status = btnOpen.getAttribute('data-status');
-
-                    document.getElementById('chat-cliente-nome').textContent = cliente;
-                    document.getElementById('chat-chamado-assunto').textContent = assunto;
-                    document.getElementById('novoStatusChamado').value = status;
+                snapshot.forEach(docSnap => {
+                    const lead = docSnap.data();
+                    const tr = document.createElement('tr');
+                    tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
                     
-                    // Marcar como lido pelo admin
-                    await updateDoc(doc(db, 'chamados', docId), { unreadByAdmin: false });
-
-                    // Carregar histórico de mensagens
-                    if (unsubscribeChat) unsubscribeChat();
-                    const msgRef = collection(db, 'chamados', docId, 'mensagens');
-                    const qMsg = query(msgRef, orderBy('criadoEm', 'asc'));
+                    const dataFormatada = lead.createdAt ? new Date(lead.createdAt.seconds * 1000).toLocaleDateString('pt-BR') : 'Recente';
                     
-                    unsubscribeChat = onSnapshot(qMsg, (msgSnap) => {
-                        chatHistory.innerHTML = '';
-                        if (msgSnap.empty) {
-                            chatHistory.innerHTML = '<div class="text-muted" style="text-align: center; padding-top: 50px;">Nenhuma mensagem ainda.</div>';
-                        }
-                        msgSnap.forEach(mDoc => {
-                            const m = mDoc.data();
-                            const isMe = m.autor === 'admin';
-                            const div = document.createElement('div');
-                            div.style.alignSelf = isMe ? 'flex-end' : 'flex-start';
-                            div.style.background = isMe ? 'var(--primary)' : 'rgba(255,255,255,0.05)';
-                            div.style.padding = '10px 15px';
-                            div.style.borderRadius = '12px';
-                            div.style.maxWidth = '85%';
-                            div.style.fontSize = '0.9rem';
-                            div.style.color = isMe ? '#fff' : '#e2e8f0';
-                            div.style.border = isMe ? 'none' : '1px solid rgba(255,255,255,0.05)';
-                            
-                            div.innerHTML = `
-                                <div style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 4px;">${m.nome}</div>
-                                <div>${m.texto}</div>
-                            `;
-                            chatHistory.appendChild(div);
-                        });
-                        chatHistory.scrollTop = chatHistory.scrollHeight;
-                    });
-
-                    modalChamado.style.display = 'flex';
-                }
-            });
-        }
-
-        if (btnEnviarComentario) {
-            btnEnviarComentario.addEventListener('click', async () => {
-                const texto = chatInput.value.trim();
-                if (!texto || !currentTicketId) return;
-
-                btnEnviarComentario.disabled = true;
-                try {
-                    await addDoc(collection(db, 'chamados', currentTicketId, 'mensagens'), {
-                        autor: 'admin',
-                        nome: 'WebStart Suporte',
-                        texto: texto,
-                        criadoEm: serverTimestamp()
-                    });
-                    
-                    await updateDoc(doc(db, 'chamados', currentTicketId), {
-                        unreadByClient: true,
-                        lastMessageBy: 'admin',
-                        lastMessageAt: serverTimestamp()
-                    });
-                    
-                    chatInput.value = '';
-                } catch (err) {
-                    alert('Erro ao enviar: ' + err.message);
-                } finally {
-                    btnEnviarComentario.disabled = false;
-                }
-            });
-            
-            chatInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') btnEnviarComentario.click();
-            });
-        }
-
-        if (btnAtualizarStatusOnly) {
-            btnAtualizarStatusOnly.addEventListener('click', async () => {
-                const novoStatus = document.getElementById('novoStatusChamado').value;
-                if (!currentTicketId) return;
-                try {
-                    await updateDoc(doc(db, 'chamados', currentTicketId), { status: novoStatus });
-                    alert('Status atualizado!');
-                } catch (err) {
-                    alert('Erro ao atualizar: ' + err.message);
-                }
-            });
-        }
-
-        // Event Delegation para Botoes de Arquivar/Excluir Projeto
-        if (listaProjetosDOM) {
-            listaProjetosDOM.addEventListener('click', async (e) => {
-                const btn = e.target.closest('.btn-delete-proj');
-                if (btn) {
-                    if (confirm('Tem certeza que deseja deletar ou arquivar este projeto?')) {
-                        const id = btn.getAttribute('data-id');
-                        try {
-                            await deleteDoc(doc(db, 'projetos', id));
-                        } catch (error) {
-                            alert("Erro ao excluir: " + error.message);
-                        }
-                    }
-                }
-            });
-        }
-
-        /* Lógica do Blog CMS */
-        const blogRef = collection(db, 'posts');
-        const btnNovoPost = document.getElementById('btnNovoPost');
-        const modalNovoPost = document.getElementById('modalNovoPost');
-        const closeModalPost = document.getElementById('closeModalPost');
-        const formNovoPost = document.getElementById('formNovoPost');
-        const listaPostsDOM = document.getElementById('listaPostsDOM');
-
-        if(btnNovoPost) {
-            btnNovoPost.addEventListener('click', () => {
-                modalNovoPost.style.display = 'flex';
+                    tr.innerHTML = `
+                        <td style="padding: 16px 24px;">
+                            <strong style="display: block; color: #fff;">${lead.nome}</strong>
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">${lead.email}</span>
+                        </td>
+                        <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.85rem;">
+                            ${lead.tipoProjeto}
+                            <br><small style="color: var(--primary);">${lead.extras ? lead.extras.join(', ') : ''}</small>
+                        </td>
+                        <td style="padding: 16px 24px; color: #fff; font-weight: 600;">${lead.valorTotal}</td>
+                        <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.85rem;">${dataFormatada}</td>
+                        <td style="padding: 16px 24px; text-align: center;">
+                            <a href="https://wa.me/55${lead.whatsapp ? lead.whatsapp.replace(/\D/g, '') : ''}" class="btn btn-outline" style="padding: 6px 12px; border-color: #25D366; color: #25D366; font-size: 0.8rem;" title="Chamar no WhatsApp">
+                                <i data-lucide="message-circle" width="14"></i> Contato
+                            </a>
+                        </td>
+                    `;
+                    listaLeadsDOM.appendChild(tr);
+                });
                 lucide.createIcons();
             });
-            closeModalPost.addEventListener('click', () => modalNovoPost.style.display = 'none');
-        }
 
-        if(formNovoPost) {
-            formNovoPost.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const btn = formNovoPost.querySelector('button[type="submit"]');
-                btn.disabled = true;
-                btn.textContent = 'Publicando...';
+            /* Lógica Mobile Sidebar */
+            const sidebar = document.getElementById('sidebar');
+            const btnToggleSidebar = document.getElementById('btnToggleSidebar');
+            const btnCloseSidebar = document.getElementById('btnCloseSidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-                try {
-                    await addDoc(blogRef, {
-                        titulo: document.getElementById('postTitulo').value,
-                        categoria: document.getElementById('postCategoria').value,
-                        resumo: document.getElementById('postResumo').value,
-                        conteudo: document.getElementById('postConteudo').value,
-                        data: new Date().toLocaleDateString('pt-BR'),
-                        createdAt: serverTimestamp()
+            function toggleSidebarMobile() {
+                if(sidebar) sidebar.classList.toggle('active');
+                if(sidebarOverlay) sidebarOverlay.classList.toggle('active');
+            }
+
+            if(btnToggleSidebar) btnToggleSidebar.addEventListener('click', toggleSidebarMobile);
+            if(btnCloseSidebar) btnCloseSidebar.addEventListener('click', toggleSidebarMobile);
+            if(sidebarOverlay) sidebarOverlay.addEventListener('click', toggleSidebarMobile);
+
+            // Ao clicar em link da sidebar, fecha-a no mobile
+            if (links) {
+                links.forEach(link => {
+                    link.addEventListener('click', () => {
+                        if(window.innerWidth <= 900) toggleSidebarMobile();
                     });
-                    formNovoPost.reset();
-                    modalNovoPost.style.display = 'none';
-                } catch (error) {
-                    alert('Erro ao publicar post: ' + error.message);
-                } finally {
-                    btn.disabled = false;
-                    btn.textContent = 'Publicar no Site';
-                }
-            });
-        }
-
-        onSnapshot(blogRef, (snapshot) => {
-            if(!listaPostsDOM) return;
-            listaPostsDOM.innerHTML = '';
-            
-            if(snapshot.empty) {
-                listaPostsDOM.innerHTML = '<tr><td colspan="4" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum post publicado.</td></tr>';
-                return;
+                });
             }
 
-            snapshot.forEach(docSnap => {
-                const post = docSnap.data();
-                const tr = document.createElement('tr');
-                tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
-                tr.innerHTML = `
-                    <td style="padding: 16px 24px; color: #fff; font-size: 0.9rem;">${post.titulo}</td>
-                    <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.85rem;">${post.categoria}</td>
-                    <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.85rem;">${post.data}</td>
-                    <td style="padding: 16px 24px; text-align: center;">
-                        <button class="btn btn-outline btn-delete-post" data-id="${docSnap.id}" style="padding: 6px; border: none; color: #ef4444;" title="Excluir Post"><i data-lucide="trash-2" width="16"></i></button>
-                    </td>
-                `;
-                listaPostsDOM.appendChild(tr);
-            });
-            lucide.createIcons();
-        });
-
-        // Delegação de evento para deletar post
-        listaPostsDOM.addEventListener('click', async (e) => {
-            const btn = e.target.closest('.btn-delete-post');
-            if(btn) {
-                if(confirm('Deseja realmente excluir este artigo?')) {
-                    const id = btn.getAttribute('data-id');
-                    try {
-                        await deleteDoc(doc(db, 'posts', id));
-                    } catch (error) {
-                        alert('Erro ao excluir post: ' + error.message);
-                    }
-                }
-            }
-        });
-
-        /* Lógica de Leads da Calculadora */
-        const leadsRef = collection(db, 'leads');
-        const listaLeadsDOM = document.getElementById('listaLeadsDOM');
-
-        onSnapshot(query(leadsRef, orderBy('createdAt', 'desc')), (snapshot) => {
-            if(!listaLeadsDOM) return;
-            listaLeadsDOM.innerHTML = '';
-            
-            if(snapshot.empty) {
-                listaLeadsDOM.innerHTML = '<tr><td colspan="5" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum lead capturado ainda.</td></tr>';
-                return;
-            }
-
-            snapshot.forEach(docSnap => {
-                const lead = docSnap.data();
-                const tr = document.createElement('tr');
-                tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
-                
-                const dataFormatada = lead.createdAt ? new Date(lead.createdAt.seconds * 1000).toLocaleDateString('pt-BR') : 'Recente';
-                
-                tr.innerHTML = `
-                    <td style="padding: 16px 24px;">
-                        <strong style="display: block; color: #fff;">${lead.nome}</strong>
-                        <span style="font-size: 0.8rem; color: var(--text-muted);">${lead.email}</span>
-                    </td>
-                    <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.85rem;">
-                        ${lead.tipoProjeto}
-                        <br><small style="color: var(--primary);">${lead.extras ? lead.extras.join(', ') : ''}</small>
-                    </td>
-                    <td style="padding: 16px 24px; color: #fff; font-weight: 600;">${lead.valorTotal}</td>
-                    <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.85rem;">${dataFormatada}</td>
-                    <td style="padding: 16px 24px; text-align: center;">
-                        <a href="https://wa.me/55${lead.whatsapp ? lead.whatsapp.replace(/\D/g, '') : ''}" class="btn btn-outline" style="padding: 6px 12px; border-color: #25D366; color: #25D366; font-size: 0.8rem;" title="Chamar no WhatsApp">
-                            <i data-lucide="message-circle" width="14"></i> Contato
-                        </a>
-                    </td>
-                `;
-                listaLeadsDOM.appendChild(tr);
-            });
-            lucide.createIcons();
-        });
-
-        /* Lógica Mobile Sidebar */
-        const sidebar = document.getElementById('sidebar');
-        const btnToggleSidebar = document.getElementById('btnToggleSidebar');
-        const btnCloseSidebar = document.getElementById('btnCloseSidebar');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-
-        function toggleSidebarMobile() {
-            if(sidebar) sidebar.classList.toggle('active');
-            if(sidebarOverlay) sidebarOverlay.classList.toggle('active');
-        }
-
-        if(btnToggleSidebar) btnToggleSidebar.addEventListener('click', toggleSidebarMobile);
-        if(btnCloseSidebar) btnCloseSidebar.addEventListener('click', toggleSidebarMobile);
-        if(sidebarOverlay) sidebarOverlay.addEventListener('click', toggleSidebarMobile);
-
-        // Ao clicar em link da sidebar, fecha-a no mobile
-        if (links) {
-            links.forEach(link => {
-                link.addEventListener('click', () => {
-                    if(window.innerWidth <= 900) toggleSidebarMobile();
+            // Lógica de relatórios (Simples Impressão)
+            document.querySelectorAll('.btn-gerar-relatorio').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    window.print();
                 });
             });
-        }
 
-        // Lógica de relatórios (Simples Impressão)
-        document.querySelectorAll('.btn-gerar-relatorio').forEach(btn => {
-            btn.addEventListener('click', () => {
-                window.print();
-            });
-        });
-
-        // Lógica de Navegação Externa (Links "Ver Todos")
-        document.querySelectorAll('.btn-navigate-projetos').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const tabProjetos = document.querySelector('.sidebar-link[data-target="view-projetos"]');
-                if(tabProjetos) {
-                    tabProjetos.click();
-                    // Scroll suave para o topo se necessário
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-            });
-        });
-
-        /* Configurações: Carregamento e Persistência */
-        const formConfigAgencia = document.getElementById('formConfigAgencia');
-        const formConfigPix = document.getElementById('formConfigPix');
-
-        if (db) {
-            // Carregar configurações existentes (usamos um doc fixo 'geral' na collection 'configuracoes')
-            onSnapshot(doc(db, 'configuracoes', 'geral'), (docSnap) => {
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    if(data.nome && document.getElementById('cfgNome')) document.getElementById('cfgNome').value = data.nome;
-                    if(data.email && document.getElementById('cfgEmail')) document.getElementById('cfgEmail').value = data.email;
-                    if(data.whatsapp && document.getElementById('cfgWhatsapp')) document.getElementById('cfgWhatsapp').value = data.whatsapp;
-                    if(data.site && document.getElementById('cfgSite')) document.getElementById('cfgSite').value = data.site;
-                }
+            // Lógica de Navegação Externa (Links "Ver Todos")
+            document.querySelectorAll('.btn-navigate-projetos').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const tabProjetos = document.querySelector('.sidebar-link[data-target="view-projetos"]');
+                    if(tabProjetos) {
+                        tabProjetos.click();
+                        // Scroll suave para o topo se necessário
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                });
             });
 
-            onSnapshot(doc(db, 'configuracoes', 'pix'), (docSnap) => {
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    if(data.chave && document.getElementById('cfgPixKey')) document.getElementById('cfgPixKey').value = data.chave;
-                    if(data.banco && document.getElementById('cfgBanco')) document.getElementById('cfgBanco').value = data.banco;
-                    if(data.titular && document.getElementById('cfgTitular')) document.getElementById('cfgTitular').value = data.titular;
-                }
-            });
-        }
+            /* Configurações: Carregamento e Persistência */
+            const formConfigAgencia = document.getElementById('formConfigAgencia');
+            const formConfigPix = document.getElementById('formConfigPix');
 
-        if (formConfigAgencia) {
-            formConfigAgencia.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const btn = formConfigAgencia.querySelector('button[type="submit"]');
-                const orig = btn.innerHTML;
-                btn.innerHTML = 'Salvando...';
+            if (db) {
+                // Carregar configurações existentes (usamos um doc fixo 'geral' na collection 'configuracoes')
+                onSnapshot(doc(db, 'configuracoes', 'geral'), (docSnap) => {
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        if(data.nome && document.getElementById('cfgNome')) document.getElementById('cfgNome').value = data.nome;
+                        if(data.email && document.getElementById('cfgEmail')) document.getElementById('cfgEmail').value = data.email;
+                        if(data.whatsapp && document.getElementById('cfgWhatsapp')) document.getElementById('cfgWhatsapp').value = data.whatsapp;
+                        if(data.site && document.getElementById('cfgSite')) document.getElementById('cfgSite').value = data.site;
+                    }
+                });
 
-                try {
-                    await setDoc(doc(db, 'configuracoes', 'geral'), {
-                        nome: document.getElementById('cfgNome').value,
-                        email: document.getElementById('cfgEmail').value,
-                        whatsapp: document.getElementById('cfgWhatsapp').value,
-                        site: document.getElementById('cfgSite').value,
-                        updatedAt: serverTimestamp()
-                    }, { merge: true });
-                    alert('Configurações da agência salvas!');
-                } catch (err) {
-                    alert('Erro ao salvar: ' + err.message);
-                } finally {
-                    btn.innerHTML = orig;
-                }
-            });
-        }
+                onSnapshot(doc(db, 'configuracoes', 'pix'), (docSnap) => {
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        if(data.chave && document.getElementById('cfgPixKey')) document.getElementById('cfgPixKey').value = data.chave;
+                        if(data.banco && document.getElementById('cfgBanco')) document.getElementById('cfgBanco').value = data.banco;
+                        if(data.titular && document.getElementById('cfgTitular')) document.getElementById('cfgTitular').value = data.titular;
+                    }
+                });
+            }
 
-        if (formConfigPix) {
-            formConfigPix.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const btn = formConfigPix.querySelector('button[type="submit"]');
-                const orig = btn.innerHTML;
-                btn.innerHTML = 'Salvando...';
+            if (formConfigAgencia) {
+                formConfigAgencia.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const btn = formConfigAgencia.querySelector('button[type="submit"]');
+                    const orig = btn.innerHTML;
+                    btn.innerHTML = 'Salvando...';
 
-                try {
-                    await setDoc(doc(db, 'configuracoes', 'pix'), {
-                        chave: document.getElementById('cfgPixKey').value,
-                        banco: document.getElementById('cfgBanco').value,
-                        titular: document.getElementById('cfgTitular').value,
-                        updatedAt: serverTimestamp()
-                    }, { merge: true });
-                    alert('Dados de faturamento salvos!');
-                } catch (err) {
-                    alert('Erro ao salvar: ' + err.message);
-                } finally {
-                    btn.innerHTML = orig;
-                }
-            });
+                    try {
+                        await setDoc(doc(db, 'configuracoes', 'geral'), {
+                            nome: document.getElementById('cfgNome').value,
+                            email: document.getElementById('cfgEmail').value,
+                            whatsapp: document.getElementById('cfgWhatsapp').value,
+                            site: document.getElementById('cfgSite').value,
+                            updatedAt: serverTimestamp()
+                        }, { merge: true });
+                        alert('Configurações da agência salvas!');
+                    } catch (err) {
+                        alert('Erro ao salvar: ' + err.message);
+                    } finally {
+                        btn.innerHTML = orig;
+                    }
+                });
+            }
+
+            if (formConfigPix) {
+                formConfigPix.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const btn = formConfigPix.querySelector('button[type="submit"]');
+                    const orig = btn.innerHTML;
+                    btn.innerHTML = 'Salvando...';
+
+                    try {
+                        await setDoc(doc(db, 'configuracoes', 'pix'), {
+                            chave: document.getElementById('cfgPixKey').value,
+                            banco: document.getElementById('cfgBanco').value,
+                            titular: document.getElementById('cfgTitular').value,
+                            updatedAt: serverTimestamp()
+                        }, { merge: true });
+                        alert('Dados de faturamento salvos!');
+                    } catch (err) {
+                        alert('Erro ao salvar: ' + err.message);
+                    } finally {
+                        btn.innerHTML = orig;
+                    }
+                });
+            }
+
+                console.log("Admin Panel Inicializado com Sucesso.");
+            } catch (err) {
+                console.error("CRITICAL ERROR NO ADMIN PANEL:", err);
+                alert("Erro ao inicializar o painel: " + err.message);
+            }
         }
 
         console.log('Script Admin Finalizado.');
