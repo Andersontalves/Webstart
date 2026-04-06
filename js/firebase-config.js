@@ -17,4 +17,4 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firebase services
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export { onAuthStateChanged, signOut, collection, addDoc, serverTimestamp, query, where, onSnapshot, getDocs };
+export { onAuthStateChanged, signOut, collection, addDoc, serverTimestamp, query, where, onSnapshot, getDocs, updateDoc, doc, orderBy, deleteDoc, setDoc, getDoc };

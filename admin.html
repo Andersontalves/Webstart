@@ -64,7 +64,10 @@
                 <li><a href="#" class="sidebar-link" data-target="view-projetos"><i data-lucide="briefcase" width="18"></i> Projetos e Automações</a></li>
                 <li><a href="#" class="sidebar-link" data-target="view-faturamento"><i data-lucide="dollar-sign" width="18"></i> Faturamento</a></li>
                 <li><a href="#" class="sidebar-link" data-target="view-produtos"><i data-lucide="layout-template" width="18"></i> Templates e Produtos</a></li>
-                <li><a href="#" class="sidebar-link" data-target="view-chamados"><i data-lucide="message-square" width="18"></i> Chamados de Suporte</a></li>
+                <li><a href="#" class="sidebar-link" data-target="view-chamados" style="justify-content: space-between;">
+                    <span style="display: flex; align-items: center; gap: 12px;"><i data-lucide="message-square" width="18"></i> Chamados de Suporte</span>
+                    <span id="badgeChamadosAdmin" style="background: #ef4444; color: #fff; padding: 2px 6px; border-radius: 10px; font-size: 0.7rem; font-weight: 700; display: none;">0</span>
+                </a></li>
                 <li><a href="#" class="sidebar-link" data-target="view-blog"><i data-lucide="file-text" width="18"></i> Gestão do Blog</a></li>
                 <li><a href="#" class="sidebar-link" data-target="view-leads"><i data-lucide="calculator" width="18"></i> Leads e Orçamentos</a></li>
                 <li><a href="#" class="sidebar-link" data-target="view-config"><i data-lucide="settings" width="18"></i> Configurações</a></li>
@@ -89,7 +92,7 @@
                         <p class="text-muted" style="margin: 4px 0 0 0;">Desempenho financeiro e operacional.</p>
                     </div>
                     <div class="header-buttons">
-                        <button class="btn btn-outline" style="padding: 10px 16px;"><i data-lucide="download" width="18"></i> Relatório</button>
+                        <button class="btn btn-outline btn-gerar-relatorio" style="padding: 10px 16px;"><i data-lucide="download" width="18"></i> Relatório</button>
                         <button type="button" class="btn btn-primary" id="btnNovoProjetoTop" style="background: linear-gradient(135deg, #8b5cf6, #ec4899); padding: 10px 16px; cursor: pointer; position: relative; z-index: 99999 !important; pointer-events: auto !important;" title="Clique para criar novo projeto"><i data-lucide="plus" width="18"></i> Novo Projeto</button>
                     </div>
                 </header>
@@ -129,7 +132,7 @@
                 <div class="glass-card" style="padding: 0; overflow-x: auto;">
                     <div style="padding: 24px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; min-width: 500px;">
                         <h3 style="margin: 0; font-size: 1.1rem;">Projetos em Andamento</h3>
-                        <a href="#" style="color: var(--secondary); font-size: 0.85rem; text-decoration: none;">Ver todos</a>
+                        <a href="#" class="btn-navigate-projetos" style="color: var(--secondary); font-size: 0.85rem; text-decoration: none;">Ver todos</a>
                     </div>
                     <table style="width: 100%; border-collapse: collapse; text-align: left;">
                         <thead style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);">
@@ -308,13 +311,38 @@
             </div>
 
             <!-- MODAL: Detalhes do Chamado -->
-            <div id="modalChamadoDetalhes" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center;">
-                <div style="background: #1e293b; border-radius: 12px; padding: 30px; max-width: 500px; width: 90%; border: 1px solid rgba(255,255,255,0.1);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h3 style="margin: 0; font-size: 1.3rem;">Detalhes do Chamado</h3>
-                        <button id="btnFecharModalChamado" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.5rem;">&times;</button>
+            <!-- MODAL: Detalhes do Chamado (Agora com Chat de Comentários) -->
+            <div id="modalChamadoDetalhes" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+                <div style="background: #1e293b; border-radius: 12px; padding: 25px; max-width: 650px; width: 95%; max-height: 90vh; border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px;">
+                        <div>
+                            <h3 id="chat-cliente-nome" style="margin: 0; font-size: 1.2rem;">Chat do Chamado</h3>
+                            <p id="chat-chamado-assunto" class="text-muted" style="margin: 4px 0 0; font-size: 0.85rem;"></p>
+                        </div>
+                        <button id="btnFecharModalChamado" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.8rem; line-height: 1;">&times;</button>
                     </div>
-                    <div id="conteudoModalChamado"></div>
+                    
+                    <!-- Histórico do Chat -->
+                    <div id="chat-history" style="flex: 1; overflow-y: auto; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 15px; min-height: 300px;">
+                        <div class="text-muted" style="text-align: center; padding-top: 50px;">Carregando histórico...</div>
+                    </div>
+
+                    <div style="margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Atualizar Status</label>
+                            <select id="novoStatusChamado" style="width: 100%; padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.3); color: #fff; border: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem;">
+                                <option value="Aberto">Aberto</option>
+                                <option value="Em Análise">Em Análise</option>
+                                <option value="Resolvido">Resolvido</option>
+                            </select>
+                        </div>
+                        <button id="btnAtualizarStatusOnly" class="btn btn-outline" style="padding: 10px 14px; font-size: 0.85rem; margin-top: 15px;">Atualizar Status</button>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
+                        <input type="text" id="chat-input" placeholder="Escreva uma resposta oficial..." style="flex: 1; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: #fff; outline: none; font-size: 0.95rem;">
+                        <button id="btnEnviarComentario" class="btn btn-primary" style="padding: 10px 20px;"><i data-lucide="send" width="16"></i> Enviar</button>
+                    </div>
                 </div>
             </div>
             <div id="view-config" class="content-view" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
@@ -452,6 +480,35 @@
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary" style="margin-top: 10px; justify-content: center; background: var(--gradient-primary); font-size: 1.05rem; padding: 14px; border-radius: 8px;">Salvar no Banco (Firestore) <i data-lucide="hard-drive" width="18"></i></button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR CLIENTE -->
+    <div id="modalEditarCliente" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(5px); overscroll-behavior: contain;">
+        <div class="glass-card" style="width: 100%; max-width: 500px; padding: 40px; position: relative; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+            <button id="closeModalEditCliente" aria-label="Fechar modal" style="position: absolute; right: 20px; top: 20px; background: none; border: none; color: var(--text-muted); cursor: pointer; transition: color 0.2s; font-size: 1.5rem;">&times;</button>
+            <h3 style="margin: 0 0 25px 0; font-size: 1.5rem; text-align: center;">Editar Dados do Cliente</h3>
+            
+            <form id="formEditarCliente" style="display: flex; flex-direction: column; gap: 18px;">
+                <input type="hidden" id="editCliId">
+                <div>
+                    <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 8px; color: #e2e8f0;">Nome do Cliente / Empresa</label>
+                    <input type="text" id="editCliNome" required style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.3); color: #fff; font-size: 1rem; outline: none;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 8px; color: #e2e8f0;">E-mail (Login)</label>
+                    <input type="email" id="editCliEmail" required style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.3); color: #fff; font-size: 1rem; outline: none;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 8px; color: #e2e8f0;">Plano Contratado</label>
+                    <select id="editCliPlano" required style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.3); color: #fff; font-size: 1rem; outline: none;">
+                        <option value="Hospedagem Standard">Hospedagem Standard</option>
+                        <option value="Manutenção VIP">Manutenção VIP</option>
+                        <option value="Projetos (Site Novo)">Sem plano Recorrente</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px; justify-content: center; background: var(--gradient-primary); font-size: 1.05rem; padding: 14px; border-radius: 8px;">Salvar Alterações <i data-lucide="save" width="18"></i></button>
             </form>
         </div>
     </div>
@@ -735,7 +792,8 @@
                         <td style="padding: 16px 24px; color: var(--text-muted);">${cliente.email}</td>
                         <td style="padding: 16px 24px; color: var(--text-muted);">${cliente.plano}</td>
                         <td style="padding: 16px 24px;"><span style="color: var(--success); font-size: 0.85rem; background: rgba(16,185,129,0.1); padding: 4px 10px; border-radius: 20px;">${cliente.status || 'Ativo'}</span></td>
-                        <td style="padding: 16px 24px; text-align: center;">
+                        <td style="padding: 16px 24px; text-align: center; display: flex; justify-content: center; gap: 8px;">
+                            <button class="btn btn-outline btn-edit-cliente" data-id="${docSnap.id}" data-nome="${cliente.nome}" data-email="${cliente.email}" data-plano="${cliente.plano}" style="padding: 6px; border: none; color: var(--primary);" title="Editar"><i data-lucide="edit" width="16"></i></button>
                             <button class="btn btn-outline btn-delete" data-id="${docSnap.id}" style="padding: 6px; border: none; color: #ef4444;" title="Excluir"><i data-lucide="trash-2" width="16"></i></button>
                         </td>
                     `;
@@ -752,22 +810,59 @@
             lucide.createIcons();
         });
 
-        // Adiciona evento de excluir com delegação (Resolve erro do lixeirinho não clicar)
-        listaClientesDOM.addEventListener('click', async (e) => {
-            const btn = e.target.closest('.btn-delete');
+        // Adiciona evento de editar com delegação
+        listaClientesDOM.addEventListener('click', (e) => {
+            const btn = e.target.closest('.btn-edit-cliente');
             if (btn) {
-                if (confirm('Tem certeza que deseja apagar esse cliente para sempre?')) {
-                    const id = btn.getAttribute('data-id');
-                    try {
-                        await deleteDoc(doc(db, 'clientes', id));
-                        // Não precisa de alert, a tabela exibe instantaneamente que sumiu!
-                    } catch (error) {
-                        console.error("Erro na exclusão: ", error);
-                        alert("Não foi possível excluir: " + error.message);
-                    }
-                }
+                const id = btn.getAttribute('data-id');
+                const nome = btn.getAttribute('data-nome');
+                const email = btn.getAttribute('data-email');
+                const plano = btn.getAttribute('data-plano');
+
+                document.getElementById('editCliId').value = id;
+                document.getElementById('editCliNome').value = nome;
+                document.getElementById('editCliEmail').value = email;
+                document.getElementById('editCliPlano').value = plano;
+
+                document.getElementById('modalEditarCliente').style.display = 'flex';
+                lucide.createIcons();
             }
         });
+
+        // Fechar modal editar
+        const closeModalEditCliente = document.getElementById('closeModalEditCliente');
+        if(closeModalEditCliente) {
+            closeModalEditCliente.addEventListener('click', () => {
+                document.getElementById('modalEditarCliente').style.display = 'none';
+            });
+        }
+
+        // Salvar Edição de Cliente
+        const formEditarCliente = document.getElementById('formEditarCliente');
+        if (formEditarCliente) {
+            formEditarCliente.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const id = document.getElementById('editCliId').value;
+                const nome = document.getElementById('editCliNome').value;
+                const email = document.getElementById('editCliEmail').value;
+                const plano = document.getElementById('editCliPlano').value;
+                
+                const btn = formEditarCliente.querySelector('button[type="submit"]');
+                const orig = btn.innerHTML;
+                btn.innerHTML = 'Salvando...';
+
+                try {
+                    await updateDoc(doc(db, 'clientes', id), {
+                        nome, email, plano
+                    });
+                    document.getElementById('modalEditarCliente').style.display = 'none';
+                } catch (err) {
+                    alert('Erro ao salvar: ' + err.message);
+                } finally {
+                    btn.innerHTML = orig;
+                }
+            });
+        }
 
         /* Lógica do Modal Novo Projeto */
         const btnNovoProjetoTop = document.getElementById('btnNovoProjetoTop');
@@ -1112,70 +1207,86 @@
             });
         }
 
-        // Mock para Chamados Abertos apenas no painel
+        // Lógica de Chamados e Chat (Sincronização Admin <-> Cliente)
         const chamadosRef = collection(db, 'chamados');
+        let unsubscribeChat = null; // Para limpar o listener do chat ao fechar modal
+
+        // Badge de notificações no Sidebar Admin (Chamados não lidos)
+        onSnapshot(query(chamadosRef, where('unreadByAdmin', '==', true)), (snap) => {
+            const badge = document.getElementById('badgeChamadosAdmin');
+            if (badge) {
+                if (snap.empty) {
+                    badge.style.display = 'none';
+                } else {
+                    badge.textContent = snap.size;
+                    badge.style.display = 'inline-block';
+                }
+            }
+        });
+
         onSnapshot(chamadosRef, (snapshot) => {
             if(document.getElementById('dash-chamados')) {
-                // Conta por status
-                let abertos = 0;
-                let andamento = 0;
-                let fechados = 0;
-                
-                snapshot.forEach(doc => {
-                    const status = doc.data().status;
+                let abertos = 0, andamento = 0, fechados = 0;
+                snapshot.forEach(docSnap => {
+                    const status = docSnap.data().status;
                     if (status === 'Aberto') abertos++;
                     else if (status === 'Em Análise') andamento++;
                     else if (status === 'Resolvido') fechados++;
                 });
-                
-                // Atualiza o total e os detalhes
                 document.getElementById('dash-chamados').textContent = abertos + andamento;
                 document.getElementById('chamados-abertos').textContent = abertos;
                 document.getElementById('chamados-analise').textContent = andamento;
                 document.getElementById('chamados-resolvidos').textContent = fechados;
             }
             
-            // Popula a tabela de chamados no admin
             const tabelaChamadosAdmin = document.getElementById('tabelaChamadosAdmin');
             if (tabelaChamadosAdmin) {
                 tabelaChamadosAdmin.innerHTML = '';
-                
                 if (snapshot.empty) {
                     tabelaChamadosAdmin.innerHTML = '<tr><td colspan="6" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum chamado encontrado.</td></tr>';
                     return;
                 }
                 
-                snapshot.forEach(doc => {
-                    const ch = doc.data();
-                    const docId = doc.id;
+                snapshot.forEach(docSnap => {
+                    const ch = docSnap.data();
+                    const docId = docSnap.id;
                     let statusColor = ch.status === 'Resolvido' ? '#22c55e' : (ch.status === 'Em Análise' ? '#3b82f6' : '#f59e0b');
                     let statusBg = ch.status === 'Resolvido' ? 'rgba(34,197,94,0.1)' : (ch.status === 'Em Análise' ? 'rgba(59,130,246,0.1)' : 'rgba(245,158,11,0.1)');
                     
+                    const unreadDot = ch.unreadByAdmin ? '<span style="width: 8px; height: 8px; background: #ef4444; border-radius: 50%; display: inline-block; margin-right: 8px;" title="Nova mensagem"></span>' : '';
+
                     const tr = document.createElement('tr');
                     tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
                     tr.innerHTML = `
                         <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${ch.dataAbertura || 'N/A'}</td>
                         <td style="padding: 16px 24px; color: #fff; font-weight: 500;">${ch.cliente || 'N/A'}</td>
                         <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${ch.email || 'N/A'}</td>
-                        <td style="padding: 16px 24px; color: #fff;">${ch.assunto || 'N/A'}</td>
+                        <td style="padding: 16px 24px; color: #fff;">${unreadDot}${ch.assunto || 'N/A'}</td>
                         <td style="padding: 16px 24px;"><span style="color: ${statusColor}; font-size: 0.85rem; background: ${statusBg}; padding: 4px 10px; border-radius: 20px;">${ch.status || 'Aberto'}</span></td>
                         <td style="padding: 16px 24px; display: flex; gap: 8px;">
-                            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;" data-id="${docId}" data-ch='${JSON.stringify(ch).replace(/'/g, "\\'")}'>Ver/Editar</button>
+                            <button class="btn btn-outline btn-open-chat" data-id="${docId}" data-cliente="${ch.cliente}" data-assunto="${ch.assunto}" data-status="${ch.status}">Ver / Chat</button>
                             <button class="btn-delete-chamado" data-id="${docId}" style="padding: 6px 12px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #ef4444; border-radius: 6px; cursor: pointer;" title="Excluir"><i data-lucide="trash-2" width="14"></i></button>
                         </td>
                     `;
                     tabelaChamadosAdmin.appendChild(tr);
                 });
+                lucide.createIcons();
             }
         });
 
-        // Modal de detalhes do chamado
+        // Lógica do Modal de Chat (Admin)
         const modalChamado = document.getElementById('modalChamadoDetalhes');
         const btnFecharModal = document.getElementById('btnFecharModalChamado');
-        
+        const chatHistory = document.getElementById('chat-history');
+        const chatInput = document.getElementById('chat-input');
+        const btnEnviarComentario = document.getElementById('btnEnviarComentario');
+        const btnAtualizarStatusOnly = document.getElementById('btnAtualizarStatusOnly');
+        let currentTicketId = null;
+
         if (btnFecharModal) {
             btnFecharModal.addEventListener('click', () => {
                 modalChamado.style.display = 'none';
+                if (unsubscribeChat) unsubscribeChat();
             });
         }
         
@@ -1183,76 +1294,119 @@
             modalChamado.addEventListener('click', (e) => {
                 if (e.target === modalChamado) {
                     modalChamado.style.display = 'none';
+                    if (unsubscribeChat) unsubscribeChat();
                 }
             });
         }
 
-        // Delegação de evento para botões Ver/Editar e Deletar Chamados
         const tabelaChamadosAdmin = document.getElementById('tabelaChamadosAdmin');
         if (tabelaChamadosAdmin) {
             tabelaChamadosAdmin.addEventListener('click', async (e) => {
-
-                // Botão de Deletar Chamado
                 const btnDelete = e.target.closest('.btn-delete-chamado');
                 if (btnDelete) {
                     const idChamado = btnDelete.getAttribute('data-id');
                     if (confirm('Tem certeza que deseja excluir este chamado?')) {
-                        try {
-                            await deleteDoc(doc(db, 'chamados', idChamado));
-                        } catch (error) {
-                            alert('Erro ao excluir: ' + error.message);
-                        }
+                        try { await deleteDoc(doc(db, 'chamados', idChamado)); } 
+                        catch (error) { alert('Erro ao excluir: ' + error.message); }
                     }
                     return;
                 }
 
-                // Botão Ver/Editar
-                const btn = e.target.closest('button[data-id]');
-                if (!btn) return;
-                
-                const docId = btn.getAttribute('data-id');
-                const ch = JSON.parse(btn.getAttribute('data-ch').replace(/\\'/g, "'"));
-                
-                const conteudo = document.getElementById('conteudoModalChamado');
-                conteudo.innerHTML = `
-                    <div style="margin-bottom: 20px;">
-                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 4px;">Cliente</p>
-                        <p style="font-weight: 600; font-size: 1.1rem;">${ch.cliente || 'N/A'}</p>
-                        <p style="color: var(--text-muted); font-size: 0.85rem;">${ch.email || 'N/A'}</p>
-                    </div>
-                    <div style="margin-bottom: 20px;">
-                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 4px;">Assunto</p>
-                        <p style="font-weight: 600;">${ch.assunto || 'N/A'}</p>
-                    </div>
-                    <div style="margin-bottom: 20px;">
-                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px;">Mensagem</p>
-                        <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 8px; font-size: 0.95rem; line-height: 1.5;">${ch.mensagem || 'N/A'}</div>
-                    </div>
-                    <div style="margin-bottom: 20px;">
-                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px;">Alterar Status</p>
-                        <select id="novoStatusChamado" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.3); color: #fff; border: 1px solid rgba(255,255,255,0.2); font-size: 1rem;">
-                            <option value="Aberto" ${ch.status === 'Aberto' ? 'selected' : ''}>Aberto</option>
-                            <option value="Em Análise" ${ch.status === 'Em Análise' ? 'selected' : ''}>Em Análise</option>
-                            <option value="Resolvido" ${ch.status === 'Resolvido' ? 'selected' : ''}>Resolvido</option>
-                        </select>
-                    </div>
-                    <button id="btnAtualizarStatus" data-id="${docId}" class="btn btn-primary" style="width: 100%; justify-content: center;">Atualizar Status</button>
-                `;
-                
-                modalChamado.style.display = 'flex';
-                
-                // Evento para atualizar status
-                document.getElementById('btnAtualizarStatus').addEventListener('click', async () => {
-                    const novoStatus = document.getElementById('novoStatusChamado').value;
-                    try {
-                        await updateDoc(doc(db, 'chamados', docId), {
-                            status: novoStatus
+                const btnOpen = e.target.closest('.btn-open-chat');
+                if (btnOpen) {
+                    const docId = btnOpen.getAttribute('data-id');
+                    currentTicketId = docId;
+                    const cliente = btnOpen.getAttribute('data-cliente');
+                    const assunto = btnOpen.getAttribute('data-assunto');
+                    const status = btnOpen.getAttribute('data-status');
+
+                    document.getElementById('chat-cliente-nome').textContent = cliente;
+                    document.getElementById('chat-chamado-assunto').textContent = assunto;
+                    document.getElementById('novoStatusChamado').value = status;
+                    
+                    // Marcar como lido pelo admin
+                    await updateDoc(doc(db, 'chamados', docId), { unreadByAdmin: false });
+
+                    // Carregar histórico de mensagens
+                    if (unsubscribeChat) unsubscribeChat();
+                    const msgRef = collection(db, 'chamados', docId, 'mensagens');
+                    const qMsg = query(msgRef, orderBy('criadoEm', 'asc'));
+                    
+                    unsubscribeChat = onSnapshot(qMsg, (msgSnap) => {
+                        chatHistory.innerHTML = '';
+                        if (msgSnap.empty) {
+                            chatHistory.innerHTML = '<div class="text-muted" style="text-align: center; padding-top: 50px;">Nenhuma mensagem ainda.</div>';
+                        }
+                        msgSnap.forEach(mDoc => {
+                            const m = mDoc.data();
+                            const isMe = m.autor === 'admin';
+                            const div = document.createElement('div');
+                            div.style.alignSelf = isMe ? 'flex-end' : 'flex-start';
+                            div.style.background = isMe ? 'var(--primary)' : 'rgba(255,255,255,0.05)';
+                            div.style.padding = '10px 15px';
+                            div.style.borderRadius = '12px';
+                            div.style.maxWidth = '85%';
+                            div.style.fontSize = '0.9rem';
+                            div.style.color = isMe ? '#fff' : '#e2e8f0';
+                            div.style.border = isMe ? 'none' : '1px solid rgba(255,255,255,0.05)';
+                            
+                            div.innerHTML = `
+                                <div style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 4px;">${m.nome}</div>
+                                <div>${m.texto}</div>
+                            `;
+                            chatHistory.appendChild(div);
                         });
-                        modalChamado.style.display = 'none';
-                    } catch (error) {
-                        alert('Erro ao atualizar: ' + error.message);
-                    }
-                });
+                        chatHistory.scrollTop = chatHistory.scrollHeight;
+                    });
+
+                    modalChamado.style.display = 'flex';
+                }
+            });
+        }
+
+        if (btnEnviarComentario) {
+            btnEnviarComentario.addEventListener('click', async () => {
+                const texto = chatInput.value.trim();
+                if (!texto || !currentTicketId) return;
+
+                btnEnviarComentario.disabled = true;
+                try {
+                    await addDoc(collection(db, 'chamados', currentTicketId, 'mensagens'), {
+                        autor: 'admin',
+                        nome: 'WebStart Suporte',
+                        texto: texto,
+                        criadoEm: serverTimestamp()
+                    });
+                    
+                    await updateDoc(doc(db, 'chamados', currentTicketId), {
+                        unreadByClient: true,
+                        lastMessageBy: 'admin',
+                        lastMessageAt: serverTimestamp()
+                    });
+                    
+                    chatInput.value = '';
+                } catch (err) {
+                    alert('Erro ao enviar: ' + err.message);
+                } finally {
+                    btnEnviarComentario.disabled = false;
+                }
+            });
+            
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') btnEnviarComentario.click();
+            });
+        }
+
+        if (btnAtualizarStatusOnly) {
+            btnAtualizarStatusOnly.addEventListener('click', async () => {
+                const novoStatus = document.getElementById('novoStatusChamado').value;
+                if (!currentTicketId) return;
+                try {
+                    await updateDoc(doc(db, 'chamados', currentTicketId), { status: novoStatus });
+                    alert('Status atualizado!');
+                } catch (err) {
+                    alert('Erro ao atualizar: ' + err.message);
+                }
             });
         }
 
@@ -1423,6 +1577,100 @@
             });
         }
 
+        // Lógica de relatórios (Simples Impressão)
+        document.querySelectorAll('.btn-gerar-relatorio').forEach(btn => {
+            btn.addEventListener('click', () => {
+                window.print();
+            });
+        });
+
+        // Lógica de Navegação Externa (Links "Ver Todos")
+        document.querySelectorAll('.btn-navigate-projetos').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tabProjetos = document.querySelector('.sidebar-link[data-target="view-projetos"]');
+                if(tabProjetos) {
+                    tabProjetos.click();
+                    // Scroll suave para o topo se necessário
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+        });
+
+        /* Configurações: Carregamento e Persistência */
+        const formConfigAgencia = document.getElementById('formConfigAgencia');
+        const formConfigPix = document.getElementById('formConfigPix');
+
+        if (db) {
+            // Carregar configurações existentes (usamos um doc fixo 'geral' na collection 'configuracoes')
+            onSnapshot(doc(db, 'configuracoes', 'geral'), (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if(data.nome && document.getElementById('cfgNome')) document.getElementById('cfgNome').value = data.nome;
+                    if(data.email && document.getElementById('cfgEmail')) document.getElementById('cfgEmail').value = data.email;
+                    if(data.whatsapp && document.getElementById('cfgWhatsapp')) document.getElementById('cfgWhatsapp').value = data.whatsapp;
+                    if(data.site && document.getElementById('cfgSite')) document.getElementById('cfgSite').value = data.site;
+                }
+            });
+
+            onSnapshot(doc(db, 'configuracoes', 'pix'), (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if(data.chave && document.getElementById('cfgPixKey')) document.getElementById('cfgPixKey').value = data.chave;
+                    if(data.banco && document.getElementById('cfgBanco')) document.getElementById('cfgBanco').value = data.banco;
+                    if(data.titular && document.getElementById('cfgTitular')) document.getElementById('cfgTitular').value = data.titular;
+                }
+            });
+        }
+
+        if (formConfigAgencia) {
+            formConfigAgencia.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = formConfigAgencia.querySelector('button[type="submit"]');
+                const orig = btn.innerHTML;
+                btn.innerHTML = 'Salvando...';
+
+                try {
+                    await setDoc(doc(db, 'configuracoes', 'geral'), {
+                        nome: document.getElementById('cfgNome').value,
+                        email: document.getElementById('cfgEmail').value,
+                        whatsapp: document.getElementById('cfgWhatsapp').value,
+                        site: document.getElementById('cfgSite').value,
+                        updatedAt: serverTimestamp()
+                    }, { merge: true });
+                    alert('Configurações da agência salvas!');
+                } catch (err) {
+                    alert('Erro ao salvar: ' + err.message);
+                } finally {
+                    btn.innerHTML = orig;
+                }
+            });
+        }
+
+        if (formConfigPix) {
+            formConfigPix.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = formConfigPix.querySelector('button[type="submit"]');
+                const orig = btn.innerHTML;
+                btn.innerHTML = 'Salvando...';
+
+                try {
+                    await setDoc(doc(db, 'configuracoes', 'pix'), {
+                        chave: document.getElementById('cfgPixKey').value,
+                        banco: document.getElementById('cfgBanco').value,
+                        titular: document.getElementById('cfgTitular').value,
+                        updatedAt: serverTimestamp()
+                    }, { merge: true });
+                    alert('Dados de faturamento salvos!');
+                } catch (err) {
+                    alert('Erro ao salvar: ' + err.message);
+                } finally {
+                    btn.innerHTML = orig;
+                }
+            });
+        }
+
+        console.log('Script Admin Finalizado.');
     </script>
 </body>
 </html>

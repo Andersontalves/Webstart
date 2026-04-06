@@ -152,7 +152,7 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header" style="display: flex; justify-content: space-between; align-items: center;">
                 <a href="index.html" class="nav-brand" style="margin: 0; font-size: 1.4rem;">
-                    <i data-lucide="rocket" style="color: var(--primary);"></i> WebStart
+                    <i data-lucide="rocket" style="color: var(--primary);"></i> <span id="agencyNameTop">WebStart</span>
                 </a>
                 <button class="close-sidebar" id="btnCloseSidebar" aria-label="Fechar menu"><i data-lucide="x"></i></button>
             </div>
@@ -377,15 +377,16 @@
                     <p class="text-muted" style="margin-bottom: 20px; font-size: 0.95rem;">Escaneie o QR Code abaixo para pagar sua fatura de instante.</p>
                     
                     <div style="background: #fff; padding: 20px; border-radius: 12px; display: inline-block; margin-bottom: 20px;">
-                        <!-- QR Code Falso -->
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126420014br.gov.bcb.pix0120exemplo@webstart.com5204000053039865802BR5915WebStart Design6009Sao Paulo62070503***63041234" alt="QR Code Pix para pagamento" width="200" height="200" style="width: 200px; height: 200px;" loading="lazy">
+                    <div style="background: #fff; padding: 15px; border-radius: 12px; margin-bottom: 24px; display: inline-block;">
+                        <!-- QR Code Dinâmico baseado na chave Pix do Admin -->
+                        <img id="pixQRCode" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126420014br.gov.bcb.pix0120" alt="QR Code Pix" width="200" height="200" style="width: 200px; height: 200px;" loading="lazy">
                     </div>
                     
                     <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Ou copie o código "Pix Copia e Cola" abaixo:</p>
                     
                     <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); display: flex; gap: 10px; align-items: center;">
-                        <input type="text" value="00020126420014br.gov.bcb.pix..." readonly style="flex: 1; background: transparent; border: none; color: #fff; outline: none;">
-                        <button class="btn btn-outline" style="padding: 6px 12px;" onclick="alert('Código copiado!')">Copiar</button>
+                        <input type="text" id="pixCopiaCola" value="..." readonly style="flex: 1; background: transparent; border: none; color: #fff; outline: none; font-size: 0.8rem;">
+                        <button class="btn btn-outline" style="padding: 6px 12px;" onclick="const inp = document.getElementById('pixCopiaCola'); inp.select(); document.execCommand('copy'); alert('Código copiado!')">Copiar</button>
                     </div>
                 </div>
             </div>
@@ -412,6 +413,24 @@
                             <button type="submit" class="btn btn-primary" id="btnSalvarChamado" aria-label="Enviar solicitação de suporte">Enviar Solicitação</button>
                         </div>
                     </form>
+                </div>
+            </div>
+
+            <!-- Modal UI: Chat de Chamado (Cliente) -->
+            <div id="modalChatCliente" class="modal-overlay" style="display: none; overscroll-behavior: contain; backdrop-filter: blur(5px);">
+                <div class="modal-box" style="max-width: 600px; display: flex; flex-direction: column; max-height: 85vh; width: 95%;">
+                    <button class="btn-close" id="btnCloseChatCliente" aria-label="Fechar chat"><i data-lucide="x"></i></button>
+                    <h3 id="chatCliente_assunto" style="margin-bottom: 5px; font-size: 1.3rem;">Chat de Suporte</h3>
+                    <p class="text-muted" style="margin-bottom: 20px; font-size: 0.85rem;">Converse com nossa equipe técnica abaixo.</p>
+                    
+                    <div id="chatCliente_history" style="flex: 1; overflow-y: auto; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 15px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 12px; min-height: 350px;">
+                        <div class="text-muted" style="text-align: center; padding-top: 50px;">Carregando histórico...</div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+                        <input type="text" id="chatCliente_input" placeholder="Escreva sua mensagem..." style="flex: 1; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: #fff; outline: none; font-size: 0.95rem;">
+                        <button id="btnEnviarChatCliente" class="btn btn-primary">Enviar</button>
+                    </div>
                 </div>
             </div>
 
@@ -700,51 +719,52 @@
             // 4. Ouvinte: Chamados do Cliente (busca por nome ou email)
             let qChamados;
             if (typeof nomeDoClienteFiltro !== 'undefined' && nomeDoClienteFiltro && nomeDoClienteFiltro !== "DESCONHECIDO") {
-                // Filtra por nome do cliente
                 qChamados = query(collection(db, 'chamados'), where('cliente', '==', nomeDoClienteFiltro));
             } else {
-                // Fallback: busca por email do usuário logado
                 qChamados = query(collection(db, 'chamados'), where('email', '==', currentUser.email));
             }
             
             onSnapshot(qChamados, (snap) => {
                 if (tabelaChamadosDOM) tabelaChamadosDOM.innerHTML = '';
-                let chamadosAbertosContador = 0;
+                let unreadContador = 0;
 
                 if (snap.empty) {
                     if (tabelaChamadosDOM) tabelaChamadosDOM.innerHTML = '<tr><td colspan="4" style="padding: 16px 24px; text-align: center; color: var(--text-muted);">Nenhum chamado aberto.</td></tr>';
-                    if (document.getElementById('badgeChamados')) document.getElementById('badgeChamados').style.display = 'none';
+                    const b = document.getElementById('badgeChamados');
+                    if (b) b.style.display = 'none';
                     return;
                 }
 
                 snap.forEach(docSnap => {
                     const ch = docSnap.data();
-                    if (ch.status === 'Aberto' || ch.status === 'Em Análise') chamadosAbertosContador++;
+                    const docId = docSnap.id;
+                    if (ch.unreadByClient) unreadContador++;
 
                     let statusColor = ch.status === 'Resolvido' ? 'var(--success)' : (ch.status === 'Em Análise' ? '#3b82f6' : '#f59e0b');
                     let statusBg = ch.status === 'Resolvido' ? 'rgba(16,185,129,0.1)' : (ch.status === 'Em Análise' ? 'rgba(59,130,246,0.1)' : 'rgba(245,158,11,0.1)');
 
-                    const respostaVisual = ch.status === 'Resolvido' || ch.status === 'Em Análise' 
-                        ? `<button class="btn btn-outline" onclick="alert('Histórico / Resposta do Administrador:\\n\\n${ch.respostaAdmin ? ch.respostaAdmin : 'Nossa equipe está avaliando seu chamado. Por favor aguarde atualizações finais.'}')" style="padding: 4px 10px; font-size: 0.8rem; border-color: ${statusColor}; color: ${statusColor};">Ver Resposta</button>`
-                        : '<span style="color: var(--text-muted); font-size: 0.8rem;">Aguardando equipe...</span>';
+                    const unreadDot = ch.unreadByClient ? '<span style="width: 8px; height: 8px; background: var(--primary); border-radius: 50%; display: inline-block; margin-right: 8px;"></span>' : '';
 
                     const tr = document.createElement('tr');
                     tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
                     tr.innerHTML = `
-                        <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${ch.dataAbertura}</td>
-                        <td style="padding: 16px 24px; color: #fff; font-weight: 500;">${ch.assunto}</td>
-                        <td style="padding: 16px 24px;"><span style="color: ${statusColor}; font-size: 0.85rem; background: ${statusBg}; padding: 4px 10px; border-radius: 20px;">${ch.status}</span></td>
-                        <td style="padding: 16px 24px;">${respostaVisual}</td>
+                        <td style="padding: 16px 24px; color: var(--text-muted); font-size: 0.9rem;">${ch.dataAbertura || 'N/A'}</td>
+                        <td style="padding: 16px 24px; color: #fff; font-weight: 500;">${unreadDot}${ch.assunto || 'N/A'}</td>
+                        <td style="padding: 16px 24px;"><span style="color: ${statusColor}; font-size: 0.85rem; background: ${statusBg}; padding: 4px 10px; border-radius: 20px;">${ch.status || 'Aberto'}</span></td>
+                        <td style="padding: 16px 24px;">
+                            <button class="btn btn-outline btn-open-chat-cliente" data-id="${docId}" data-assunto="${ch.assunto}" style="padding: 4px 12px; font-size: 0.8rem;">Ver Chat / Responder</button>
+                        </td>
                     `;
                     if (tabelaChamadosDOM) tabelaChamadosDOM.appendChild(tr);
                 });
 
-                // Atualiza Badge Sidebar
+                // Atualiza Badge Sidebar (Notificações não lidas)
                 const badgeChamados = document.getElementById('badgeChamados');
                 if (badgeChamados) {
-                    if (chamadosAbertosContador > 0) {
-                        badgeChamados.textContent = chamadosAbertosContador;
+                    if (unreadContador > 0) {
+                        badgeChamados.textContent = unreadContador;
                         badgeChamados.style.display = 'inline-block';
+                        badgeChamados.style.background = 'var(--primary)';
                     } else {
                         badgeChamados.style.display = 'none';
                     }
@@ -753,89 +773,206 @@
         });
 
         // ==========================================
-        // Lógica de Modais (Pix e Chamado)
+        // Lógica de Modais e Chat (Cliente)
         // ==========================================
         const modalPix = document.getElementById('modalPix');
         const modalChamado = document.getElementById('modalChamado');
-        const btnPagarPix = document.getElementById('btnPagarPix');
+        const modalChatCliente = document.getElementById('modalChatCliente');
+        const chatHistoryCliente = document.getElementById('chatCliente_history');
+        const chatInputCliente = document.getElementById('chatCliente_input');
+        const btnEnviarChatCliente = document.getElementById('btnEnviarChatCliente');
+        let currentChatId = null;
+        let unsubscribeChatCliente = null;
+
+        if (document.getElementById('btnClosePix')) document.getElementById('btnClosePix').addEventListener('click', () => modalPix.style.display = 'none');
+        if (document.getElementById('btnCloseChamado')) document.getElementById('btnCloseChamado').addEventListener('click', () => modalChamado.style.display = 'none');
+        if (document.getElementById('btnCloseChatCliente')) {
+            document.getElementById('btnCloseChatCliente').addEventListener('click', () => {
+                modalChatCliente.style.display = 'none';
+                if (unsubscribeChatCliente) unsubscribeChatCliente();
+            });
+        }
+
         const btnAbrirChamado = document.getElementById('btnAbrirChamado');
-
-        if(btnPagarPix) {
-            btnPagarPix.addEventListener('click', () => {
-                modalPix.style.display = 'flex';
-                lucide.createIcons(); // renderiza os icones do modal se necessário
-            });
-        }
-        document.getElementById('btnClosePix').addEventListener('click', () => modalPix.style.display = 'none');
-
-        if(btnAbrirChamado) {
-            btnAbrirChamado.addEventListener('click', () => {
-                modalChamado.style.display = 'flex';
-            });
-        }
+        if(btnAbrirChamado) btnAbrirChamado.addEventListener('click', () => modalChamado.style.display = 'flex');
         
         const btnAbrirChamadoTab = document.getElementById('btnAbrirChamadoTab');
-        if(btnAbrirChamadoTab) {
-            btnAbrirChamadoTab.addEventListener('click', () => {
-                modalChamado.style.display = 'flex';
+        if(btnAbrirChamadoTab) btnAbrirChamadoTab.addEventListener('click', () => modalChamado.style.display = 'flex');
+
+        // Abrir Chat pela tabela (Event Delegation)
+        const tabelaChamadosDOM_local = document.getElementById('tabelaChamadosDOM');
+        if (tabelaChamadosDOM_local) {
+            tabelaChamadosDOM_local.addEventListener('click', async (e) => {
+                const btn = e.target.closest('.btn-open-chat-cliente');
+                if (!btn) return;
+
+                const docId = btn.getAttribute('data-id');
+                const assunto = btn.getAttribute('data-assunto');
+                currentChatId = docId;
+
+                document.getElementById('chatCliente_assunto').textContent = assunto;
+                modalChatCliente.style.display = 'flex';
+
+                // Marcar como lido pelo cliente
+                await updateDoc(doc(db, 'chamados', docId), { unreadByClient: false });
+
+                // Carregar histórico
+                if (unsubscribeChatCliente) unsubscribeChatCliente();
+                const qMsg = query(collection(db, 'chamados', docId, 'mensagens'), orderBy('criadoEm', 'asc'));
+                unsubscribeChatCliente = onSnapshot(qMsg, (snap) => {
+                    chatHistoryCliente.innerHTML = '';
+                    if (snap.empty) {
+                        chatHistoryCliente.innerHTML = '<div class="text-muted" style="text-align: center; padding-top: 50px;">Nenhuma mensagem ainda.</div>';
+                    }
+                    snap.forEach(mDoc => {
+                        const m = mDoc.data();
+                        const isMe = m.autor === 'cliente';
+                        const div = document.createElement('div');
+                        div.style.alignSelf = isMe ? 'flex-end' : 'flex-start';
+                        div.style.background = isMe ? 'var(--primary)' : 'rgba(255,255,255,0.05)';
+                        div.style.padding = '10px 15px';
+                        div.style.borderRadius = '12px';
+                        div.style.maxWidth = '85%';
+                        div.style.fontSize = '0.9rem';
+                        div.style.color = isMe ? '#fff' : '#e2e8f0';
+                        div.style.border = isMe ? 'none' : '1px solid rgba(255,255,255,0.05)';
+                        
+                        div.innerHTML = `
+                            <div style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 4px;">${m.nome}</div>
+                            <div>${m.texto}</div>
+                        `;
+                        chatHistoryCliente.appendChild(div);
+                    });
+                    chatHistoryCliente.scrollTop = chatHistoryCliente.scrollHeight;
+                });
             });
         }
-        
-        document.getElementById('btnCloseChamado').addEventListener('click', () => modalChamado.style.display = 'none');
 
-        // Lógica de Envio de Chamado ao Firestore
+        // Enviar mensagem no chat
+        if (btnEnviarChatCliente) {
+            btnEnviarChatCliente.addEventListener('click', async () => {
+                const texto = chatInputCliente.value.trim();
+                const clienteTop_nome = document.getElementById('clienteTop_nome');
+                if (!texto || !currentChatId) return;
+
+                btnEnviarChatCliente.disabled = true;
+                try {
+                    let nomeCliente = clienteTop_nome?.textContent || "Cliente";
+                    if (nomeCliente === "Buscando..." || nomeCliente === "Sua Conta") {
+                        nomeCliente = auth.currentUser?.email || "Cliente";
+                    }
+
+                    await addDoc(collection(db, 'chamados', currentChatId, 'mensagens'), {
+                        autor: 'cliente',
+                        nome: nomeCliente,
+                        texto: texto,
+                        criadoEm: serverTimestamp()
+                    });
+
+                    await updateDoc(doc(db, 'chamados', currentChatId), {
+                        unreadByAdmin: true,
+                        lastMessageBy: 'cliente',
+                        lastMessageAt: serverTimestamp()
+                    });
+
+                    chatInputCliente.value = '';
+                } catch (err) {
+                    alert('Erro ao enviar: ' + err.message);
+                } finally {
+                    btnEnviarChatCliente.disabled = false;
+                }
+            });
+
+            chatInputCliente.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') btnEnviarChatCliente.click();
+            });
+        }
+
+        // Lógica de Envio de Novo Chamado
         const formChamado = document.getElementById('formChamado');
         const btnSalvarChamado = document.getElementById('btnSalvarChamado');
         
-        formChamado.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            btnSalvarChamado.textContent = 'Enviando...';
-            btnSalvarChamado.disabled = true;
+        if (formChamado) {
+            formChamado.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                btnSalvarChamado.textContent = 'Enviando...';
+                btnSalvarChamado.disabled = true;
 
-            const assunto = document.getElementById('chamadoAssunto').value;
-            const mensagem = document.getElementById('chamadoMensagem').value;
-            
-            // O nome do cliente é extraído do Dashboard renderizado, caso tenha carregado.
-            let clienteResponsavel = "";
+                const assunto = document.getElementById('chamadoAssunto').value;
+                const mensagem = document.getElementById('chamadoMensagem').value;
+                const clienteTop_nome = document.getElementById('clienteTop_nome');
+                
+                let clienteResponsavel = clienteTop_nome?.textContent || auth.currentUser?.email || "Cliente";
+                if (clienteResponsavel === "Buscando..." || clienteResponsavel === "Sua Conta") {
+                    clienteResponsavel = auth.currentUser?.email || "Cliente";
+                }
 
-            // Tenta obter o nome do cliente do elemento
-            if (clienteTop_nome && clienteTop_nome.textContent && clienteTop_nome.textContent !== "Buscando..." && clienteTop_nome.textContent !== "Sua Conta") {
-                clienteResponsavel = clienteTop_nome.textContent;
-            } else if (typeof nomeDoClienteFiltro !== 'undefined' && nomeDoClienteFiltro && nomeDoClienteFiltro !== "DESCONHECIDO") {
-                // Fallback: usa o nomeDoClienteFiltro que veio do Firestore
-                clienteResponsavel = nomeDoClienteFiltro;
-            } else if (currentUser && currentUser.email) {
-                // Último fallback: usa o email do currentUser
-                clienteResponsavel = currentUser.email;
-            } else {
-                // Fallback final
-                clienteResponsavel = "email nao identificado";
-            }
+                try {
+                    // 1. Cria o documento do chamado
+                    const docRef = await addDoc(collection(db, 'chamados'), {
+                        cliente: clienteResponsavel,
+                        email: auth.currentUser ? auth.currentUser.email : "",
+                        assunto: assunto,
+                        mensagem: mensagem,
+                        status: 'Aberto',
+                        dataAbertura: new Date().toLocaleDateString('pt-BR'),
+                        unreadByAdmin: true,
+                        unreadByClient: false,
+                        lastMessageBy: 'cliente',
+                        lastMessageAt: serverTimestamp()
+                    });
 
-            console.log("Enviando chamado para cliente:", clienteResponsavel);
+                    // 2. Cria a primeira mensagem no chat
+                    await addDoc(collection(db, 'chamados', docRef.id, 'mensagens'), {
+                        autor: 'cliente',
+                        nome: clienteResponsavel,
+                        texto: mensagem,
+                        criadoEm: serverTimestamp()
+                    });
 
-            try {
-                await addDoc(collection(db, 'chamados'), {
-                    cliente: clienteResponsavel,
-                    email: currentUser ? currentUser.email : "",
-                    assunto: assunto,
-                    mensagem: mensagem,
-                    status: 'Aberto',
-                    dataAbertura: new Date().toLocaleDateString('pt-BR')
-                });
+                    alert('Chamado enviado com sucesso!');
+                    formChamado.reset();
+                    modalChamado.style.display = 'none';
 
-                alert('Chamado enviado com sucesso!');
-                formChamado.reset();
-                modalChamado.style.display = 'none';
+                } catch (error) {
+                    console.error("Erro ao abrir chamado: ", error);
+                    alert("Ocorreu um erro. Tente novamente.");
+                } finally {
+                    btnSalvarChamado.textContent = 'Enviar Solicitação';
+                    btnSalvarChamado.disabled = false;
+                }
+            });
+        }
 
-            } catch (error) {
-                console.error("Erro ao abrir chamado: ", error);
-                alert("Ocorreu um erro. Tente novamente.");
-            } finally {
-                btnSalvarChamado.textContent = 'Enviar Solicitação';
-                btnSalvarChamado.disabled = false;
-            }
-        });
+        // 5. Sincronização de Configurações Administrativas (Pix e Nome da Agência)
+        if (db) {
+            onSnapshot(doc(db, 'configuracoes', 'geral'), (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if(data.nome) {
+                        const agencySpans = document.querySelectorAll('#agencyNameTop');
+                        agencySpans.forEach(s => s.textContent = data.nome);
+                    }
+                }
+            });
+
+            onSnapshot(doc(db, 'configuracoes', 'pix'), (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    const pixKey = data.chave || 'exemplo@webstart.com';
+                    const titular = data.titular || 'WebStart';
+                    const banco = data.banco || 'Banco';
+                    
+                    // Atualiza QR Code (Simples via API pública)
+                    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126420014br.gov.bcb.pix0120${pixKey}`;
+                    const imgQr = document.getElementById('pixQRCode');
+                    if(imgQr) imgQr.src = qrUrl;
+
+                    const inputCC = document.getElementById('pixCopiaCola');
+                    if(inputCC) inputCC.value = `Chave: ${pixKey} (${titular} - ${banco})`;
+                }
+            });
+        }
 
     </script>
 </body>
